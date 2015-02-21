@@ -27,7 +27,7 @@ function Game() {
      * Agents
      */
     this.player1 = {
-        agent: new Agent1,
+        agent: new Agent1(),
         baseHP: config.tower.hp * 4,
         units: [
             new unit.Minion(1, 0, 4),
@@ -38,7 +38,7 @@ function Game() {
         ]
     };
     this.player2 = {
-        agent: new Agent2,
+        agent: new Agent2(),
         baseHP: config.tower.hp * 4,
         units: [
             new unit.Minion(2, 15, 19),
@@ -64,9 +64,7 @@ function Game() {
  * Runs the game's loop until it's finished.
  */
 Game.prototype.start = function () {
-    var worldCopy = new Array(config.worldSize),
-        actions = new Array(2),
-        states = new Array();
+    var states = new Array();
 
     while (!this.finished()) {
         /*
@@ -86,13 +84,13 @@ Game.prototype.start = function () {
     }) + '\n';
     fs.writeFile(jsonFileName, str, function () {
         return jsonFileName;
-    })
+    });
 
 };
 
 
 Game.prototype.getCurrentPlayer = function () {
-    this.player = (this.player + 1) % 2
+    this.player = (this.player + 1) % 2;
     return this['player' + (this.player + 1)];
 };
 
@@ -102,7 +100,8 @@ Game.prototype.getCurrentPlayer = function () {
  */
 Game.prototype.finished = function () {
     this.tickNumber++;
-    return this.player1.baseHP < 0 || this.player2.baseHP < 0 || this.tickNumber > config.maxGameTicks;
+    return this.player1.baseHP < 0 || this.player2.baseHP < 0 ||
+           this.tickNumber > config.maxGameTicks;
 };
 
 
