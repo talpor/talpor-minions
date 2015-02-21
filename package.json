@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/talpor/talpor-minions",
   "dependencies": {
-    "lodash-node": "^3.3.0"
+    "lodash": "~3.3.0"
   }
 }
