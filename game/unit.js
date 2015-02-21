@@ -1,16 +1,22 @@
+/* global module */
 /* exported Unit, Minon */
 
 var config = require('./config'),
     uuid = require('node-uuid'),
-    _ = require('lodash-node');
+    _ = require('lodash');
 
-function Unit(hp, x, y) {
+module.exports = {
+    Minon: Minon,
+    Tower: Tower
+};
+
+function Unit(player, hp, x, y) {
     if (!(typeof x === 'number' && typeof y === 'number' &&
         x < config.worldSize && y < config.worldSize &&
         x >= 0 && y >= 0)) {
         throw new Error('You must specify a valid location');
     }
-
+    this.player = player;
     this.id = uuid.v4();
     this.x = x;
     this.y = y;
