@@ -5,6 +5,12 @@ var config = require('./config'),
     _ = require('lodash-node');
 
 function Unit(hp, x, y) {
+    if (!(typeof x === 'number' && typeof y === 'number' &&
+        x < config.worldSize && y < config.worldSize &&
+        x >= 0 && y >= 0)) {
+        throw new Error('You must specify a valid location');
+    }
+
     this.id = uuid.v4();
     this.x = x;
     this.y = y;
@@ -23,9 +29,6 @@ function Minon(x, y) {
     Unit.call(this, config.minon.hp, x, y);
     this.range = config.minon.range;
     this.attack = config.minon.attack;
-    this.currentAction = {
-        // pass
-    };
 }
 Minon.prototype = Object.create(Unit.prototype);
 Minon.prototype.constructor = Minon;
@@ -38,12 +41,8 @@ Minon.prototype.getStats = function () {
     });
 };
 
-Minon.prototype.validMove = function() {
-    //
-};
-
-function Tower() {
-    Unit.call(this);
+function Tower(x, y) {
+    Unit.call(this, config.tower.hp, x, y);
     this.range = config.tower.range;
     this.attack = config.tower.attack;
 }
@@ -57,8 +56,3 @@ Tower.prototype.getStats = function () {
         attack: self.attack
     });
 };
-
-
-
-
-

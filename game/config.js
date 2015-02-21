@@ -2,6 +2,7 @@
 
 module.exports = {
     config: {
+        worldSize: 20,
         minon: {
             hp: 15,
             range: 1,
