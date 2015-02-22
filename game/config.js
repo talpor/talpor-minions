@@ -3,7 +3,7 @@
 module.exports = {
     worldSize: 20,
     maxGameTicks: 1000,
-    minon: {
+    minion: {
         hp: 15,
         range: 1,
         attack: 4
