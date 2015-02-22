@@ -13,12 +13,13 @@ function World(size) {
 
 
 World.prototype.safeClone = function () {
-    var clone = new Array(this.size);
+    var self = this,
+        clone = new Array(this.size);
 
     for (var i = 0; i < this.size; i++) {
         clone[i] = new Array(this.size);
         for (var j = 0; j < this.size; j++)
-            if (self.array[i][j] !== null)
+            if (self.array[i][j])
                 clone[i][j] = self.array[i][j].getStats();
     }
 };
