@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <title>Minions</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='libs/bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-superhero.css') }}">
-  </head>
-  <body id="home">
+</head>
+<body id="home">
     <nav class="navbar navbar-default navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <button type="button" class="btn btn-default navbar-btn">Upload your army <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></button>
@@ -27,19 +27,21 @@
                     <li><a href="#">volrath -vs- <b>ctaloc</b></a></li>
                 </ul>
             </div>
-            <div class="col-md-6 main-battle">
+            <div class="col-md-7 main-battle">
                 <div>
                     <h2>Random Fight</h2>
-
-                    <div id="game"></div>
-
+                    <div id="cr-stage">
+                        <div id="frontCover">
+                            <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <b>max -vs- volrath</b>
                     <span class="pull-right">22-02-15 13:18:32</span>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <h3>Top armies</h3>
                 <ul>
                     <li><a href="#"><b>max</b> 1520 flops</a></li>
@@ -52,10 +54,26 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.js') }}"></script>
-
     <script src="{{ url_for('static', filename='js/crafty.js') }}"></script>
-
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>
     <script src="{{ url_for('static', filename='js/minion.js') }}"></script>
-    </body>
+    <script>
+        /* global $ */
+        var stage = $('#cr-stage');
+        stage.find('#frontCover').click(function() {
+            $(this).fadeOut(function() {
+                stage.animate({height: '600px'}, 300, function() {
+                    // start game
+                });
+                $('html, body').animate({
+                    scrollTop: stage.offset().top
+                }, 700);
+            });
+        });
+        setTimeout(function() {
+            stage.css({'height': '300px'});
+            stage.slideDown('slow');
+        }, 300);
+    </script>
+</body>
 </html>

@@ -66,7 +66,7 @@ window.onload = function() {
 
 
 
-    Crafty.init(600,600, document.getElementById('game'));
+    Crafty.init(600,600);
 
     //turn the sprite map into usable components
     Crafty.sprite(
