@@ -163,7 +163,7 @@ Game.prototype.executeActions = function (actions) {
     var self = this;
 
     var state = {};
-    _.each(self.units, function (unit, unitID) {
+    _.each(_.filter(self.units, function (unit) { return unit.kind == 'moving' }), function (unit, unitID) {
         if (unit.isDead()) {
             delete self.units[unitID];
             delete actions[unitID];
