@@ -21,6 +21,7 @@ function Unit(x, y, hp, options) {
     this.x = x;
     this.y = y;
     this.hp = hp;
+    this.kind = 'stationary';
 
     if (options && options.player)
         this.player = options.player;
@@ -34,7 +35,8 @@ Unit.prototype.getStats = function() {
         player: this.player.number,
         x: this.x,
         y: this.y,
-        hp: this.hp
+        hp: this.hp,
+        kind: this.kind
     };
 };
 
@@ -55,6 +57,8 @@ function AttackUnit(x, y, hp, range, attack) {
     Unit.call(this, x, y, hp);
     this.range = range;
     this.attack = attack;
+
+    this.kind = 'moving';
 }
 AttackUnit.prototype = Object.create(Unit.prototype);
 AttackUnit.prototype.constructor = AttackUnit;
