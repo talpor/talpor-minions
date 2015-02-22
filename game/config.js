@@ -2,14 +2,15 @@
 
 module.exports = {
     worldSize: 20,
-    maxGameTicks: 1000,
+    maxGameTicks: 1440,
+    newUnitsNumberOfTicks: 48,
     minion: {
-        hp: 15,
+        hp: 12,
         range: 1,
         attack: 4
     },
     tower: {
-        hp: 30,
+        hp: 24,
         range: 2,
         attack: 4
     }
