@@ -1,10 +1,15 @@
-var Agent = function(world) {
-    this.actions = {};
-    this.world = world;
+var Agent = function() {
 };
 
 Agent.prototype = {
     constructor: Agent,
+
+    _doTurn: function (world) {
+        this.actions = {};
+        this.getAction(world);
+        return this.actions;
+    },
+
     getMyMinons: function() {
         // pass
     },
@@ -47,3 +52,5 @@ Agent.prototype = {
         };
     }
 };
+
+module.exports = Agent;
