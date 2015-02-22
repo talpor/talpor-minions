@@ -5,6 +5,7 @@ var _ = require('lodash'),
     uuid = require('node-uuid'),
     config = require('./config'),
     unit = require('./unit'),
+    utils = require('./utils'),
     World = require('./world');
 
 
@@ -129,9 +130,14 @@ Game.prototype.getWinner = function () {
  * Returns the current state for all of the game units in play.
  */
 Game.prototype.executeActions = function (actions) {
+    var self = this;
 
-    // We need to define what are `actions` first.
+    _.each(actions, function (action, unitID) {
+        var unit = self.units[unitID];
 
+        if (!self.world.isValidAction(unit, action)) return;
+        self.world.execAction(unit, action);
+    });
 };
 
 new Game().start();
