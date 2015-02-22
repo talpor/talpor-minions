@@ -5,11 +5,6 @@ var config = require('./config'),
     uuid = require('node-uuid'),
     _ = require('lodash');
 
-module.exports = {
-    Minon: Minon,
-    Tower: Tower
-};
-
 function Unit(player, hp, x, y) {
     if (!(typeof x === 'number' && typeof y === 'number' &&
         x < config.worldSize && y < config.worldSize &&
@@ -36,10 +31,10 @@ function Minon(x, y) {
     this.range = config.minon.range;
     this.attack = config.minon.attack;
 }
-Minon.prototype = Object.create(Unit.prototype);
-Minon.prototype.constructor = Minon;
+Minion.prototype = Object.create(Unit.prototype);
+Minion.prototype.constructor = Minion;
 
-Minon.prototype.getStats = function () {
+Minion.prototype.getStats = function () {
     var self = this;
     return _.extend(Unit.prototype.getStats.call(this), {
         range: self.range,
@@ -61,4 +56,10 @@ Tower.prototype.getStats = function () {
         range: self.range,
         attack: self.attack
     });
+};
+
+
+module.exports = {
+    Minion: Minion,
+    Tower: Tower
 };
