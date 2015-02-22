@@ -1,9 +1,10 @@
+/* global module */
+
 var config = require('./config');
 
-
-function Player(number, agentConstructor) {
+function Player(number, AgentConstructor) {
     this.number = number;
-    this.agent = new agentConstructor(number);
+    this.agent = new AgentConstructor(number);
     this.units = [];
     this.hp = config.player.hp;
 }
@@ -19,7 +20,7 @@ Player.prototype.getDamage = function (damage) {
 };
 
 Player.prototype.isDead = function () {
-    return this.hp <= 0
+    return this.hp <= 0;
 };
 
 

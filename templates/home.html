@@ -20,11 +20,19 @@
             <div class="col-md-3">
                 <h3>Fight for 22-02-15</h3>
                 <ul>
-                    <li><a href="#">max -vs- <b>volrath</b></a></li>
-                    <li><a href="#"><b>ctaloc</b> -vs- i7</a></li>
-                    <li><a href="#"><b>i7</b> -vs- volrath</a></li>
-                    <li><a href="#">i7 -vs- <b>max</b></a></li>
-                    <li><a href="#">volrath -vs- <b>ctaloc</b></a></li>
+                    {% for fight in fights_today %}
+                    <li>
+                        <a href="#">
+                            {% if fight.p1 == fight.winner %}<b>{% endif %}
+                            {{ fight.p1 }}
+                            {% if fight.p1 == fight.winner %}</b>{% endif %}
+                            <span> -vs- </span>
+                            {% if fight.p2 == fight.winner %}<b>{% endif %}
+                            {{ fight.p2 }}
+                            {% if fight.p2 == fight.winner %}</b>{% endif %}
+                        </a>
+                    </li>
+                    {% endfor %}
                 </ul>
             </div>
             <div class="col-md-7 main-battle">
@@ -44,10 +52,9 @@
             <div class="col-md-2">
                 <h3>Top armies</h3>
                 <ul>
-                    <li><a href="#"><b>max</b> 1520 flops</a></li>
-                    <li><a href="#"><b>volrath</b> 1250 flops</a></li>
-                    <li><a href="#"><b>ctaloc</b> 1235 flops</a></li>
-                    <li><a href="#"><b>i7</b> 1200 flops</a></li>
+                {% for army in top_armies %}
+                <li><a href="#"><b>{{ army.commander }}</b> {{ army.flops }} flops</a></li>
+                {% endfor %}
                 </ul>
             </div>
         </div>

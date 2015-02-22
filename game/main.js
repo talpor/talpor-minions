@@ -10,7 +10,6 @@ var _ = require('lodash'),
 
 
 function Game() {
-    var self = this;
     this.tickNumber = 0;
     this.playerNumber = 1;
     this.units = {};
@@ -38,17 +37,17 @@ function Game() {
     /*
      * Set units in place
      */
-    this.newUnit(this.player1, unit.Minion, 0, 4)
-    this.newUnit(this.player1, unit.Minion, 2, 4)
-    this.newUnit(this.player1, unit.Minion, 4, 4)
-    this.newUnit(this.player1, unit.Minion, 4, 2)
-    this.newUnit(this.player1, unit.Minion, 4, 0)
+    this.newUnit(this.player1, unit.Minion, 0, 4);
+    this.newUnit(this.player1, unit.Minion, 2, 4);
+    this.newUnit(this.player1, unit.Minion, 4, 4);
+    this.newUnit(this.player1, unit.Minion, 4, 2);
+    this.newUnit(this.player1, unit.Minion, 4, 0);
 
-    this.newUnit(this.player2, unit.Minion, 15, 19)
-    this.newUnit(this.player2, unit.Minion, 15, 17)
-    this.newUnit(this.player2, unit.Minion, 15, 15)
-    this.newUnit(this.player2, unit.Minion, 17, 15)
-    this.newUnit(this.player2, unit.Minion, 19, 15)
+    this.newUnit(this.player2, unit.Minion, 15, 19);
+    this.newUnit(this.player2, unit.Minion, 15, 17);
+    this.newUnit(this.player2, unit.Minion, 15, 15);
+    this.newUnit(this.player2, unit.Minion, 17, 15);
+    this.newUnit(this.player2, unit.Minion, 19, 15);
 
     /*
      * Sets bases  -- TO-DO: Find a automatic way to select good places to place bases.
@@ -98,6 +97,7 @@ Game.prototype.start = function () {
     fs.writeFile(jsonFileName, str, function () {
         return jsonFileName;
     });
+    process.stdout.write(jsonFileName);
 };
 
 /**
