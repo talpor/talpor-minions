@@ -2,9 +2,11 @@ import os
 import subprocess
 
 from flask import Flask, render_template, send_file
-
+from flask.ext.pymongo import PyMongo
 
 app = Flask(__name__)
+
+mongo = PyMongo(app)
 
 
 def run_game(agent1_name, agent2_name):

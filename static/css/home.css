@@ -1,0 +1,31 @@
+#home .navbar h1 {
+    margin: 3px 0;
+    text-align: center;
+    float: none;
+}
+#home .navbar button {
+    position: absolute;
+    margin-top: 5px;
+}
+#home .main-battle {
+    background-color: #385067;
+    margin-top: -21px;
+    padding-bottom: 30px;
+}
+#home ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    margin-top: 14px;
+    line-height: 24px;
+}
+#home ul a:before {
+   content: "\00a0";
+}
+#home ul a:after {
+   content: "\00a0";
+}
+#home ul a:hover {
+    text-decoration: overline;
+    background-color: #385067;
+}
