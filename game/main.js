@@ -9,14 +9,18 @@ var _ = require('lodash'),
 
 
 function Game() {
+    var self = this;
     this.tickNumber = 0;
     this.player = 1;
 
     /*
      * Parse arguments
      */
-    var Agent1 = require(process.argv[0]),
-        Agent2 = require(process.argv[1]);
+    var agents = _.map(process.argv.slice(2), function (arg) {
+        return './agents/' + arg;
+    });
+    var Agent1 = require(agents[0]),
+        Agent2 = require(agents[1]);
 
     /*
      * New World
@@ -50,10 +54,10 @@ function Game() {
     };
 
     _.each(this.player1.units, function (minion) {
-        this.world[minion.x][minion.y] = minion;
+        self.world.setUnit(minion.x, minion.y, minion)
     });
     _.each(this.player2.units, function (minion) {
-        this.world[minion.x][minion.y] = minion;
+        self.world.setUnit(minion.x, minion.y, minion)
     });
 }
 
