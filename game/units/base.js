@@ -1,12 +1,16 @@
 /* global module */
 /* exported Unit, Minion */
 
-var config = require('./config'),
+var config = require('../config'),
     uuid = require('node-uuid'),
     _ = require('lodash');
 
 var pkAutoIncrement = 0;
 
+/**
+ * Base Unit
+ * ----------------------------------------------------------------------------
+ */
 function Unit(player, hp, x, y) {
     if (!(typeof x === 'number' && typeof y === 'number' &&
           x < config.worldSize && y < config.worldSize &&
@@ -39,6 +43,10 @@ Unit.prototype.isDead = function () {
 };
 
 
+/**
+ * Attacking Unit
+ * ----------------------------------------------------------------------------
+ */
 function AttackUnit(player, hp, range, attack,  x, y) {
     Unit.call(this, player, hp, x, y);
     this.range = range;
@@ -59,35 +67,7 @@ AttackUnit.prototype.doDamage = function () {
 };
 
 
-function Minion(player, x, y) {
-    AttackUnit.call(
-        this,
-        player,
-        config.minion.hp,
-        config.minion.range,
-        config.minion.attack,
-        x, y
-    );
-}
-Minion.prototype = Object.create(AttackUnit.prototype);
-Minion.prototype.constructor = Minion;
-
-
-function Tower(player, x, y) {
-    AttackUnit.call(
-        this,
-        player,
-        config.tower.hp,
-        config.tower.range,
-        config.tower.attack,
-        x, y
-    );
-}
-Tower.prototype = Object.create(Unit.prototype);
-Tower.prototype.constructor = Unit;
-
-
 module.exports = {
-    Minion: Minion,
-    Tower: Tower
+    Unit: Unit,
+    AttackUnit: AttackUnit
 };

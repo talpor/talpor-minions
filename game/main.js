@@ -4,7 +4,7 @@ var _ = require('lodash'),
     fs = require('fs'),
     uuid = require('node-uuid'),
     config = require('./config'),
-    unit = require('./unit'),
+    unit = require('./units/common'),
     World = require('./world');
 
 
