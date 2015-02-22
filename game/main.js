@@ -75,7 +75,7 @@ Game.prototype.start = function () {
          * Current player moves.
          */
         var state = this.executeActions(
-            this.getCurrentPlayer().agent.getAction(this.world.safeClone())
+            this.getCurrentPlayer().agent._doTurn(this.world.safeClone())
         );
         states.push(state);
     }
