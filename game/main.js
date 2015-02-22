@@ -49,6 +49,19 @@ function Game() {
     this.newUnit(this.player2, unit.Minion, 15, 15)
     this.newUnit(this.player2, unit.Minion, 17, 15)
     this.newUnit(this.player2, unit.Minion, 19, 15)
+
+    /*
+     * Sets bases  -- TO-DO: Find a automatic way to select good places to place bases.
+     */
+    this.newUnit(this.player1, unit.Base, 1, 1);
+    this.newUnit(this.player1, unit.Base, 1, 2);
+    this.newUnit(this.player1, unit.Base, 2, 1);
+    this.newUnit(this.player1, unit.Base, 2, 2);
+
+    this.newUnit(this.player2, unit.Base, 17, 17);
+    this.newUnit(this.player2, unit.Base, 17, 18);
+    this.newUnit(this.player2, unit.Base, 18, 17);
+    this.newUnit(this.player2, unit.Base, 18, 18);
 }
 
 
