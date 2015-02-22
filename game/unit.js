@@ -1,5 +1,5 @@
 /* global module */
-/* exported Unit, Minon */
+/* exported Unit, Minion */
 
 var config = require('./config'),
     uuid = require('node-uuid'),
@@ -26,15 +26,20 @@ Unit.prototype.getStats = function() {
     };
 };
 
-function Minion(player, x, y) {
-    Unit.call(this, player, config.minon.hp, x, y);
-    this.range = config.minon.range;
-    this.attack = config.minon.attack;
-}
-Minion.prototype = Object.create(Unit.prototype);
-Minion.prototype.constructor = Minion;
+Unit.prototype.getDamage = function (damage) {
+    this.hp -= damage;
+};
 
-Minion.prototype.getStats = function () {
+
+function AttackUnit(player, hp, range, attack,  x, y) {
+    Unit.call(this, player, hp, x, y);
+    this.range = range;
+    this.attack = attack;
+}
+AttackUnit.prototype = Object.create(Unit.prototype);
+AttackUnit.prototype.constructor = AttackUnit;
+
+AttackUnit.prototype.getStats = function () {
     var self = this;
     return _.extend(Unit.prototype.getStats.call(this), {
         range: self.range,
@@ -42,21 +47,37 @@ Minion.prototype.getStats = function () {
     });
 };
 
+AttackUnit.prototype.doDamage = function () {
+    return self.attack;
+};
+
+
+function Minion(player, x, y) {
+    AttackUnit.call(
+        this,
+        player,
+        config.minion.hp,
+        config.minion.range,
+        config.minion.attack,
+        x, y
+    );
+}
+Minion.prototype = Object.create(AttackUnit.prototype);
+Minion.prototype.constructor = Minion;
+
+
 function Tower(player, x, y) {
-    Unit.call(this, player, config.tower.hp, x, y);
-    this.range = config.tower.range;
-    this.attack = config.tower.attack;
+    AttackUnit.call(
+        this,
+        player,
+        config.tower.hp,
+        config.tower.range,
+        config.tower.attack,
+        x, y
+    );
 }
 Tower.prototype = Object.create(Unit.prototype);
 Tower.prototype.constructor = Unit;
-
-Tower.prototype.getStats = function () {
-    var self = this;
-    return _.extend(Unit.prototype.getStats.call(this), {
-        range: self.range,
-        attack: self.attack
-    });
-};
 
 
 module.exports = {
