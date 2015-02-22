@@ -132,8 +132,8 @@ Game.prototype.newUnit = function (player, unitConstructor, x, y) {
  * Adds new units if the time is right.
  */
 Game.prototype.addNewUnits = function () {
-    if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0)
-        return;
+    if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0) return;
+
 };
 
 
@@ -164,8 +164,10 @@ Game.prototype.executeActions = function (actions) {
 
     var state = {};
     _.each(self.units, function (unit, unitID) {
-        if (unit.isDead())
+        if (unit.isDead()) {
             delete self.units[unitID];
+            delete actions[unitID];
+        }
 
         state[unit.id] = unit.getStats();
     });
