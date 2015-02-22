@@ -34,6 +34,10 @@ Unit.prototype.getDamage = function (damage) {
     this.hp -= damage;
 };
 
+Unit.prototype.isDead = function () {
+    return this.hp <= 0
+};
+
 
 function AttackUnit(player, hp, range, attack,  x, y) {
     Unit.call(this, player, hp, x, y);
