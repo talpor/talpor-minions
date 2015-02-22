@@ -26,8 +26,8 @@ Unit.prototype.getStats = function() {
     };
 };
 
-function Minon(x, y) {
-    Unit.call(this, config.minon.hp, x, y);
+function Minion(player, x, y) {
+    Unit.call(this, player, config.minon.hp, x, y);
     this.range = config.minon.range;
     this.attack = config.minon.attack;
 }
@@ -42,8 +42,8 @@ Minion.prototype.getStats = function () {
     });
 };
 
-function Tower(x, y) {
-    Unit.call(this, config.tower.hp, x, y);
+function Tower(player, x, y) {
+    Unit.call(this, player, config.tower.hp, x, y);
     this.range = config.tower.range;
     this.attack = config.tower.attack;
 }
