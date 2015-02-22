@@ -137,6 +137,15 @@ Game.prototype.executeActions = function (actions) {
         if (!self.world.isValidAction(unit, action)) return;
         self.world.execAction(unit, action);
     });
+
+    var state = {};
+    _.each(self.units, function (unit, index) {
+        if (unit.isDead())
+            self.units.splice(index, 1);
+
+        state[unit.id] = unit.getStats();
+    });
+    return state;
 };
 
 new Game().start();
