@@ -31,7 +31,7 @@ function Game() {
      * Agents
      */
     this.player1 = {
-        agent: new Agent1(),
+        agent: new Agent1(1),
         baseHP: config.tower.hp * 4,
         units: [
             new unit.Minion(1, 0, 4),
@@ -42,7 +42,7 @@ function Game() {
         ]
     };
     this.player2 = {
-        agent: new Agent2(),
+        agent: new Agent2(2),
         baseHP: config.tower.hp * 4,
         units: [
             new unit.Minion(2, 15, 19),
