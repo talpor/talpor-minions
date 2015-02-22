@@ -1,54 +1,69 @@
-var Agent = function() {
-};
+var Agent = function(player) {
+        this.player = player;
+    },
+    directions = {
+        n: {x: 0, y: -1},
+        s: {x: 0, y: 1},
+        e: {x: 1, y: 0},
+        w: {x: -1, y: 0},
+    };
 
 Agent.prototype = {
     constructor: Agent,
 
     _doTurn: function (world) {
         this.actions = {};
-        this.getAction(world);
+        this.world = world;
+        this.getAction();
         return this.actions;
     },
 
-    getMyMinons: function() {
+    getMyMinons: function(world) {
+        var myMinons = [];
+        world.forEach(function(col) {
+            col.forEach(function(tile) {
+                if (tile && tile.player === this.player) {
+                    myMinons.push(tile);
+                }
+            });
+        });
+        return myMinons;
+    },
+    getMyBase: function(world) {
         // pass
     },
-    getMyBase: function() {
+    getEnemyMinons: function(world) {
+        var enemyMinons = [];
+        world.forEach(function(col) {
+            col.forEach(function(tile) {
+                if (tile && tile.player !== this.player) {
+                    enemyMinons.push(tile);
+                }
+            });
+        });
+        return enemyMinons;
+    },
+    getEnemyBase: function(world) {
         // pass
     },
-    getEnemyMinons: function() {
+    isUnoccupied: function(world, x, y) {
+        return Boolean(world[x][y]);
+    },
+    getDistance: function(world, loc1, loc2) {
         // pass
     },
-    getEnemyBase: function() {
-        // pass
-    },
-    getTile: function(x, y) {
-        return this.world[x][y];
-    },
-    isUnoccupied: function(location) {
-        // pass
-    },
-    isPassable: function(location) {
-        // pass
-    },
-    getDistance: function(loc1, loc2) {
-        // pass
-    },
-    getWorld: function() {
-        return this.world;
-    },
-    walk: function(minion, x, y) {
+    walk: function(world, minion, dir) {
         this.actions[minion.id] = {
             name: 'walk',
-            x: x,
-            y: y
+            x: directions[dir].x,
+            y: directions[dir].y
         };
     },
-    attack: function(minion, x, y) {
+    attack: function(world, minion, dir) {
         this.actions[minion.id] = {
             name: 'attack',
-            x: x,
-            y: y
+            x: directions[dir].x,
+            y: directions[dir].y
         };
     }
 };
