@@ -4,11 +4,31 @@
     <meta charset="utf-8">
     <title>Minions</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<style>
+		body {
+			margin: 0;
+			padding: 0;
+			background-color: #000000;
+		}
+	</style>
+	<script src="{{ url_for('static', filename='js/pixi.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/crafty.js') }}"></script>
+
   </head>
 
-  <body id="home">
+  <body>
 
-    <h1>Minons, bitch!</h1>
+	<script>
+	
+	
+	</script>
+	<div id="game"></div>
 
   </body>
+	
+<!--	<script src="{{ url_for('static', filename='js/game_render.js') }}"></script>
+	-->
+	<script src="{{ url_for('static', filename='js/game.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/minion.js') }}"></script>
+
 </html>
