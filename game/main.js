@@ -5,7 +5,6 @@ var _ = require('lodash'),
     uuid = require('node-uuid'),
     config = require('./config'),
     unit = require('./unit'),
-    utils = require('./utils'),
     World = require('./world');
 
 
