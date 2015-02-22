@@ -12,6 +12,7 @@ function Game() {
     var self = this;
     this.tickNumber = 0;
     this.player = 1;
+    this.units = {};
 
     /*
      * Parse arguments
@@ -28,7 +29,7 @@ function Game() {
     this.world = new World(config.worldSize);
 
     /*
-     * Agents
+     * Players
      */
     this.player1 = {
         agent: new Agent1(1),
@@ -53,11 +54,16 @@ function Game() {
         ]
     };
 
-    _.each(this.player1.units, function (minion) {
-        self.world.setUnit(minion.x, minion.y, minion)
+    /*
+     * Set units in place
+     */
+    _.each(this.player1.units, function (unit) {
+        self.units[unit.id] = unit;
+        self.world.setUnit(unit.x, unit.y, unit)
     });
-    _.each(this.player2.units, function (minion) {
-        self.world.setUnit(minion.x, minion.y, minion)
+    _.each(this.player2.units, function (unit) {
+        self.units[unit.id] = unit;
+        self.world.setUnit(unit.x, unit.y, unit)
     });
 }
 
@@ -71,6 +77,11 @@ Game.prototype.start = function () {
     var states = new Array();
 
     while (!this.finished()) {
+        /*
+         * Is it time to add new units?
+         */
+        this.addNewUnits();
+
         /*
          * Current player moves.
          */
@@ -89,10 +100,11 @@ Game.prototype.start = function () {
     fs.writeFile(jsonFileName, str, function () {
         return jsonFileName;
     });
-
 };
 
-
+/**
+ * Swaps the current player.
+ */
 Game.prototype.getCurrentPlayer = function () {
     this.player = (this.player + 1) % 2;
     return this['player' + (this.player + 1)];
@@ -105,7 +117,15 @@ Game.prototype.getCurrentPlayer = function () {
 Game.prototype.finished = function () {
     this.tickNumber++;
     return this.player1.baseHP < 0 || this.player2.baseHP < 0 ||
-           this.tickNumber > config.maxGameTicks;
+        this.tickNumber > config.maxGameTicks;
+};
+
+/**
+ * Adds new units if the time is right.
+ */
+Game.prototype.addNewUnits = function () {
+    if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0)
+        return;
 };
 
 
@@ -139,9 +159,9 @@ Game.prototype.executeActions = function (actions) {
     });
 
     var state = {};
-    _.each(self.units, function (unit, index) {
+    _.each(self.units, function (unit, unitID) {
         if (unit.isDead())
-            self.units.splice(index, 1);
+            delete self.units[unitID];
 
         state[unit.id] = unit.getStats();
     });

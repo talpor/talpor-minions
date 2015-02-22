@@ -1,4 +1,5 @@
-var _ = require('lodash');
+var _ = require('lodash'),
+    config = require('./config');
 
 
 var Agent = function(player) {
@@ -12,22 +13,29 @@ Agent.prototype = {
      * Asks for the players public API to obtain possible actions,
      * invoking `getAction`.
      *
-     * Every action is store in `this.actions` object, which is a
+     * Every action is store in `this._actions` object, which is a
      * brand new object every time this method gets called.
      *
      * Private method, keep it this way.
      */
     _doTurn: function (world) {
-        this.actions = {};
-        this.world = world;
-        this.getAction();
-        return this.actions;
+        this._actions = {};
+        this.getAction(world);
+        return this._actions;
+    },
+
+    /**
+     * Returns a world's tile or false if position is invalid
+     */
+    getTile: function (world, x, y) {
+        if (x < 0 || x >= config.worldSize || y < 0 || y >= config.worldSize) return false;
+        return world[x][y];
     },
 
     /**
      * Returns a list with the player's current minions.
      */
-    getMyMinions: function(world) {
+    getMyMinions: function (world) {
         var self = this,
             myMinons = [];
 
@@ -73,7 +81,8 @@ Agent.prototype = {
      * not occupied in the current `world`. False otherwise.
      */
     isDirectionUnoccupied: function(world, minion, dir) {
-        return !Boolean(world[minion.x + dir.x][minion.y + dir.y]);
+        var tile = this.getTile(world, minion.x + dir.x, minion.y + dir.y)
+        return !Boolean(tile || tile == false);
     },
 
     getDistance: function(world, loc1, loc2) {
@@ -84,10 +93,10 @@ Agent.prototype = {
      * Stores a 'walk' action into the private `_actions` attr.
      */
     walk: function(world, minion, dir) {
-        this.actions[minion.id] = {
+        this._actions[minion.id] = {
             name: 'walk',
-            x: dir.x,
-            y: dir.y
+            dx: dir.x,
+            dy: dir.y
         };
     },
 
@@ -95,10 +104,10 @@ Agent.prototype = {
      * Stores an 'attack' action into the private `_actions` attr.
      */
     attack: function(world, minion, dir) {
-        this.actions[minion.id] = {
+        this._actions[minion.id] = {
             name: 'attack',
-            x: dir.x,
-            y: dir.y
+            dx: dir.x,
+            dy: dir.y
         };
     }
 };
