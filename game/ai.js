@@ -25,6 +25,32 @@ Agent.prototype = {
     },
 
     /**
+     * Returns a list of units. They can be of a specific `kind`. If
+     * `own` is true, this method will return only the current
+     * player's units, if not, it will return their enemies. `own` is
+     * true by default.
+     */
+    _getUnits: function (world, kind, own) {
+        var self = this,
+            units = [];
+
+        if (_.isUndefined(own)) own = true;
+
+        _.each(world, function(col) {
+            _.each(col, function(tile) {
+                if (!tile) return;
+                if (own && tile.player !== this.playerNumber) return;
+                if (!own && tile.player === this.playerNumber) return;
+                if (kind && tile.kind !== kind) return;
+
+                units.push(tile);
+            });
+        });
+
+        return units;
+    },
+
+    /**
      * Returns a world's tile or false if position is invalid
      */
     getTile: function (world, x, y) {
@@ -36,44 +62,22 @@ Agent.prototype = {
      * Returns a list with the player's current minions.
      */
     getMyMinions: function (world) {
-        var self = this,
-            myMinons = [];
-
-        _.each(world, function(col) {
-            _.each(col, function(tile) {
-                if (tile && tile.player === self.playerNumber) {
-                    myMinons.push(tile);
-                }
-            });
-        });
-
-        return myMinons;
+        return this._getUnits(world, 'moving');
     },
 
     getMyBase: function(world) {
-        // pass
+        return this._getUnits(world, 'stationary');
     },
 
     /**
      * Returns a list with the enemy's current minions.
      */
     getEnemyMinons: function(world) {
-        var self = this,
-            enemyMinons = [];
-
-        _.each(world, function(col) {
-            _.each(col, function(tile) {
-                if (tile && tile.player !== this.playerNumber) {
-                    enemyMinons.push(tile);
-                }
-            });
-        });
-
-        return enemyMinons;
+        return this._getUnits(world, 'moving', false);
     },
 
     getEnemyBase: function(world) {
-        // pass
+        return this._getUnits(world, 'stationary', false);
     },
 
     /**
