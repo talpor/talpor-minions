@@ -2,18 +2,18 @@ var _ = require('lodash'),
     config = require('./config');
 
 
-var Agent = function(player) {
-    this.player = player;
+var Agent = function(playerNumber) {
+    this.playerNumber = playerNumber;
 };
 
 Agent.prototype = {
     constructor: Agent,
 
     /**
-     * Asks for the players public API to obtain possible actions,
+     * Asks for the agent's public API to obtain possible actions,
      * invoking `getAction`.
      *
-     * Every action is store in `this._actions` object, which is a
+     * Every action is stored in `this._actions` object, which is a
      * brand new object every time this method gets called.
      *
      * Private method, keep it this way.
@@ -41,7 +41,7 @@ Agent.prototype = {
 
         _.each(world, function(col) {
             _.each(col, function(tile) {
-                if (tile && tile.player === self.player) {
+                if (tile && tile.player === self.playerNumber) {
                     myMinons.push(tile);
                 }
             });
@@ -63,7 +63,7 @@ Agent.prototype = {
 
         _.each(world, function(col) {
             _.each(col, function(tile) {
-                if (tile && tile.player !== this.player) {
+                if (tile && tile.player !== this.playerNumber) {
                     enemyMinons.push(tile);
                 }
             });

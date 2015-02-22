@@ -32,10 +32,10 @@ World.prototype.safeClone = function () {
 };
 
 
-World.prototype.setUnit = function (x, y, unit) {
-    if (x < 0 || x >= config.worldSize || y < 0 || y >= config.worldSize) return false;
-    this.array[x][y] = unit;
-    return true;
+World.prototype.addUnit = function (unitConstructor, x, y, options) {
+    if (x < 0 || x >= config.worldSize || y < 0 || y >= config.worldSize) return null;
+    this.array[x][y] = new unitConstructor(x, y, options);
+    return this.array[x][y];
 };
 
 
@@ -49,7 +49,7 @@ World.prototype.isValidAction = function (unit, action) {
     if (!tile) return false;
     if (tile.id !== unit.id) return false;
     if (action.name == 'walk' && this.isOccupied(location.x, location.y)) return false;
-    if (action.name == 'attack' && (!this.isOccupied(location.x, location.y) || this.array[location.x][location.y].player == unit.player)) return false;
+    if (action.name == 'attack' && (!this.isOccupied(location.x, location.y) || this.array[location.x][location.y].player.number == unit.player.number)) return false;
 
     return true;
 };

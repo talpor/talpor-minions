@@ -6,8 +6,8 @@ var baseUnits = require('./base'),
  * Base
  * ----------------------------------------------------------------------------
  */
-function Base(player, x, y) {
-    baseUnits.Unit.call(this, player, config.base.hp, x, y);
+function Base(x, y, options) {
+    baseUnits.Unit.call(this, x, y, config.base.hp);
 }
 Base.prototype = Object.create(baseUnits.Unit.prototype);
 Base.prototype.constructor = Base;
@@ -17,14 +17,13 @@ Base.prototype.constructor = Base;
  * Minion
  * ----------------------------------------------------------------------------
  */
-function Minion(player, x, y) {
+function Minion(x, y, options) {
     baseUnits.AttackUnit.call(
         this,
-        player,
+        x, y,
         config.minion.hp,
         config.minion.range,
-        config.minion.attack,
-        x, y
+        config.minion.attack
     );
 }
 Minion.prototype = Object.create(baseUnits.AttackUnit.prototype);
@@ -35,14 +34,13 @@ Minion.prototype.constructor = Minion;
  * Tower
  * ----------------------------------------------------------------------------
  */
-function Tower(player, x, y) {
+function Tower(x, y, options) {
     baseUnits.AttackUnit.call(
         this,
-        player,
+        x, y,
         config.tower.hp,
         config.tower.range,
-        config.tower.attack,
-        x, y
+        config.tower.attack
     );
 }
 Tower.prototype = Object.create(baseUnits.AttackUnit.prototype);

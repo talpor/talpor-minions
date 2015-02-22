@@ -11,23 +11,27 @@ var pkAutoIncrement = 0;
  * Base Unit
  * ----------------------------------------------------------------------------
  */
-function Unit(player, hp, x, y) {
+function Unit(x, y, hp, options) {
     if (!(typeof x === 'number' && typeof y === 'number' &&
           x < config.worldSize && y < config.worldSize &&
           x >= 0 && y >= 0)) {
         throw new Error('You must specify a valid location');
     }
-    this.player = player;
     this.id = pkAutoIncrement++;
     this.x = x;
     this.y = y;
     this.hp = hp;
+
+    if (options && options.player)
+        this.player = options.player;
+    else
+        this.player = null;
 }
 
 Unit.prototype.getStats = function() {
     return {
         id: this.id,
-        player: this.player,
+        player: this.player.number,
         x: this.x,
         y: this.y,
         hp: this.hp
@@ -47,8 +51,8 @@ Unit.prototype.isDead = function () {
  * Attacking Unit
  * ----------------------------------------------------------------------------
  */
-function AttackUnit(player, hp, range, attack,  x, y) {
-    Unit.call(this, player, hp, x, y);
+function AttackUnit(x, y, hp, range, attack) {
+    Unit.call(this, x, y, hp);
     this.range = range;
     this.attack = attack;
 }
