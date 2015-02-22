@@ -77,8 +77,9 @@ Game.prototype.start = function () {
 
     // Write results to some json file
     var jsonFileName = '/tmp/' + uuid.v4() + '.json';
+    var winner = this.getWinner();
     var str = JSON.stringify({
-        winner: this.getWinner(),
+        winner: winner ? winner.player : winner,
         states: states
     }) + '\n';
     fs.writeFile(jsonFileName, str, function () {
@@ -100,8 +101,7 @@ Game.prototype.getCurrentPlayer = function () {
  */
 Game.prototype.finished = function () {
     this.tickNumber++;
-    return this.player1.baseHP < 0 || this.player2.baseHP < 0 ||
-        this.tickNumber > config.maxGameTicks;
+    return this.player1.isDead() || this.player2.isDead() || this.tickNumber > config.maxGameTicks;
 };
 
 
@@ -120,7 +120,6 @@ Game.prototype.newUnit = function (player, unitConstructor, x, y) {
  */
 Game.prototype.addNewUnits = function () {
     if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0)
-
         return;
 };
 
@@ -129,11 +128,14 @@ Game.prototype.addNewUnits = function () {
  * Returns who won the game, or null if draw.
  */
 Game.prototype.getWinner = function () {
-    if (this.player1.baseHP < 0) return 2;
-    else if (this.player2.baseHP < 0) return 1;
+    if (this.player1.isDead()) return this.player2;
+    else if (this.player2.isDead()) return this.player1;
 
-    if (this.player1.units.length < this.player2.units.length) return 2;
-    else if (this.player1.units.length > this.player2.units.length) return 1;
+    if (this.player1.hp > this.player2.hp) return this.player1;
+    else if (this.player1.hp < this.player2.hp) return this.player2;
+
+    if (this.player1.units.length < this.player2.units.length) return this.player2;
+    else if (this.player1.units.length > this.player2.units.length) return this.player1;
 
     return null;
 };

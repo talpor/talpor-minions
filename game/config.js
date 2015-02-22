@@ -4,7 +4,7 @@ module.exports = {
     worldSize: 20,
     maxGameTicks: 1440,
     newUnitsNumberOfTicks: 48,
-    base: {
+    player: {
         hp: 96
     },
     minion: {
