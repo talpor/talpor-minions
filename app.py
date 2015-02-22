@@ -7,9 +7,9 @@ from flask import Flask, render_template, send_file
 app = Flask(__name__)
 
 
-def run_game(agent1_file_path, agent2_file_path):
+def run_game(agent1_name, agent2_name):
     command = 'node {} {} {}'.format(
-        os.path.join('game', 'main.js'), agent1_file_path, agent2_file_path
+        os.path.join('game', 'main.js'), agent1_name, agent2_name
     )
     try:
         return subprocess.check_output(command, shell=True)
@@ -26,9 +26,7 @@ def home():
 @app.route('/play')
 def play():
     """Play the game."""
-    states_file = run_game(
-        os.path.join('game', 'agent1.js'), os.path.join('game', 'agent2.js')
-    )
+    states_file = run_game('agent1', 'agent2')
     return send_file(states_file, mimetype='json')
 
 
