@@ -151,13 +151,6 @@ Game.prototype.getWinner = function () {
 Game.prototype.executeActions = function (actions) {
     var self = this;
 
-    _.each(actions, function (action, unitID) {
-        var unit = self.units[unitID];
-
-        if (!self.world.isValidAction(unit, action)) return;
-        self.world.execAction(unit, action);
-    });
-
     var state = {};
     _.each(self.units, function (unit, unitID) {
         if (unit.isDead())
@@ -165,6 +158,15 @@ Game.prototype.executeActions = function (actions) {
 
         state[unit.id] = unit.getStats();
     });
+
+    _.each(actions, function (action, unitID) {
+        var unit = self.units[unitID];
+        if (!self.world.isValidAction(unit, action)) return;
+
+        self.world.execAction(unit, action);
+        state[unitID].action = action;
+    });
+
     return state;
 };
 
