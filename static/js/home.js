@@ -1,4 +1,4 @@
-/* global jQuery, rivets */
+/* global jQuery, rivets, moment */
 
 (function(global, $, rivets, game) {
     'use strict';
