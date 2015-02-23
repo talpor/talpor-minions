@@ -2,18 +2,18 @@ var _ = require('lodash'),
     config = require('./config');
 
 
-var Agent = function(player) {
-    this.player = player;
+var Agent = function(playerNumber) {
+    this.playerNumber = playerNumber;
 };
 
 Agent.prototype = {
     constructor: Agent,
 
     /**
-     * Asks for the players public API to obtain possible actions,
+     * Asks for the agent's public API to obtain possible actions,
      * invoking `getAction`.
      *
-     * Every action is store in `this._actions` object, which is a
+     * Every action is stored in `this._actions` object, which is a
      * brand new object every time this method gets called.
      *
      * Private method, keep it this way.
@@ -22,6 +22,32 @@ Agent.prototype = {
         this._actions = {};
         this.getAction(world);
         return this._actions;
+    },
+
+    /**
+     * Returns a list of units. They can be of a specific `kind`. If
+     * `own` is true, this method will return only the current
+     * player's units, if not, it will return their enemies. `own` is
+     * true by default.
+     */
+    _getUnits: function (world, kind, own) {
+        var self = this,
+            units = [];
+
+        if (_.isUndefined(own)) own = true;
+
+        _.each(world, function(col) {
+            _.each(col, function(tile) {
+                if (!tile) return;
+                if (own && tile.player !== self.playerNumber) return;
+                if (!own && tile.player === self.playerNumber) return;
+                if (kind && tile.kind !== kind) return;
+
+                units.push(tile);
+            });
+        });
+
+        return units;
     },
 
     /**
@@ -36,44 +62,22 @@ Agent.prototype = {
      * Returns a list with the player's current minions.
      */
     getMyMinions: function (world) {
-        var self = this,
-            myMinons = [];
-
-        _.each(world, function(col) {
-            _.each(col, function(tile) {
-                if (tile && tile.player === self.player) {
-                    myMinons.push(tile);
-                }
-            });
-        });
-
-        return myMinons;
+        return this._getUnits(world, 'moving');
     },
 
     getMyBase: function(world) {
-        // pass
+        return this._getUnits(world, 'stationary');
     },
 
     /**
      * Returns a list with the enemy's current minions.
      */
     getEnemyMinons: function(world) {
-        var self = this,
-            enemyMinons = [];
-
-        _.each(world, function(col) {
-            _.each(col, function(tile) {
-                if (tile && tile.player !== this.player) {
-                    enemyMinons.push(tile);
-                }
-            });
-        });
-
-        return enemyMinons;
+        return this._getUnits(world, 'moving', false);
     },
 
     getEnemyBase: function(world) {
-        // pass
+        return this._getUnits(world, 'stationary', false);
     },
 
     /**

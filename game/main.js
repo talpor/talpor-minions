@@ -4,14 +4,15 @@ var _ = require('lodash'),
     fs = require('fs'),
     uuid = require('node-uuid'),
     config = require('./config'),
-    unit = require('./unit'),
+    unit = require('./units/common'),
+    Player = require('./player'),
     World = require('./world');
 
 
 function Game() {
     var self = this;
     this.tickNumber = 0;
-    this.player = 1;
+    this.playerNumber = 1;
     this.units = {};
 
     /*
@@ -31,40 +32,36 @@ function Game() {
     /*
      * Players
      */
-    this.player1 = {
-        agent: new Agent1(1),
-        baseHP: config.tower.hp * 4,
-        units: [
-            new unit.Minion(1, 0, 4),
-            new unit.Minion(1, 2, 4),
-            new unit.Minion(1, 4, 4),
-            new unit.Minion(1, 4, 2),
-            new unit.Minion(1, 4, 0)
-        ]
-    };
-    this.player2 = {
-        agent: new Agent2(2),
-        baseHP: config.tower.hp * 4,
-        units: [
-            new unit.Minion(2, 15, 19),
-            new unit.Minion(2, 15, 17),
-            new unit.Minion(2, 15, 15),
-            new unit.Minion(2, 17, 15),
-            new unit.Minion(2, 19, 15)
-        ]
-    };
+    this.player1 = new Player(1, Agent1);
+    this.player2 = new Player(2, Agent2);
 
     /*
      * Set units in place
      */
-    _.each(this.player1.units, function (unit) {
-        self.units[unit.id] = unit;
-        self.world.setUnit(unit.x, unit.y, unit)
-    });
-    _.each(this.player2.units, function (unit) {
-        self.units[unit.id] = unit;
-        self.world.setUnit(unit.x, unit.y, unit)
-    });
+    this.newUnit(this.player1, unit.Minion, 0, 4)
+    this.newUnit(this.player1, unit.Minion, 2, 4)
+    this.newUnit(this.player1, unit.Minion, 4, 4)
+    this.newUnit(this.player1, unit.Minion, 4, 2)
+    this.newUnit(this.player1, unit.Minion, 4, 0)
+
+    this.newUnit(this.player2, unit.Minion, 15, 19)
+    this.newUnit(this.player2, unit.Minion, 15, 17)
+    this.newUnit(this.player2, unit.Minion, 15, 15)
+    this.newUnit(this.player2, unit.Minion, 17, 15)
+    this.newUnit(this.player2, unit.Minion, 19, 15)
+
+    /*
+     * Sets bases  -- TO-DO: Find a automatic way to select good places to place bases.
+     */
+    this.newUnit(this.player1, unit.Base, 1, 1);
+    this.newUnit(this.player1, unit.Base, 1, 2);
+    this.newUnit(this.player1, unit.Base, 2, 1);
+    this.newUnit(this.player1, unit.Base, 2, 2);
+
+    this.newUnit(this.player2, unit.Base, 17, 17);
+    this.newUnit(this.player2, unit.Base, 17, 18);
+    this.newUnit(this.player2, unit.Base, 18, 17);
+    this.newUnit(this.player2, unit.Base, 18, 18);
 }
 
 
@@ -93,8 +90,9 @@ Game.prototype.start = function () {
 
     // Write results to some json file
     var jsonFileName = '/tmp/' + uuid.v4() + '.json';
+    var winner = this.getWinner();
     var str = JSON.stringify({
-        winner: this.getWinner(),
+        winner: winner ? winner.player : winner,
         states: states
     }) + '\n';
     fs.writeFile(jsonFileName, str, function () {
@@ -106,8 +104,8 @@ Game.prototype.start = function () {
  * Swaps the current player.
  */
 Game.prototype.getCurrentPlayer = function () {
-    this.player = (this.player + 1) % 2;
-    return this['player' + (this.player + 1)];
+    this.playerNumber = (this.playerNumber + 1) % 2;
+    return this['player' + (this.playerNumber + 1)];
 };
 
 
@@ -116,16 +114,26 @@ Game.prototype.getCurrentPlayer = function () {
  */
 Game.prototype.finished = function () {
     this.tickNumber++;
-    return this.player1.baseHP < 0 || this.player2.baseHP < 0 ||
-        this.tickNumber > config.maxGameTicks;
+    return this.player1.isDead() || this.player2.isDead() || this.tickNumber > config.maxGameTicks;
+};
+
+
+/**
+ * Adds a single new unit for a specific player.
+ */
+Game.prototype.newUnit = function (player, unitConstructor, x, y) {
+    var u = this.world.addUnit(unitConstructor, x, y);
+    player.addUnit(u);
+    this.units[u.id] = u;
+
 };
 
 /**
  * Adds new units if the time is right.
  */
 Game.prototype.addNewUnits = function () {
-    if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0)
-        return;
+    if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0) return;
+
 };
 
 
@@ -133,11 +141,14 @@ Game.prototype.addNewUnits = function () {
  * Returns who won the game, or null if draw.
  */
 Game.prototype.getWinner = function () {
-    if (this.player1.baseHP < 0) return 2;
-    else if (this.player2.baseHP < 0) return 1;
+    if (this.player1.isDead()) return this.player2;
+    else if (this.player2.isDead()) return this.player1;
 
-    if (this.player1.units.length < this.player2.units.length) return 2;
-    else if (this.player1.units.length > this.player2.units.length) return 1;
+    if (this.player1.hp > this.player2.hp) return this.player1;
+    else if (this.player1.hp < this.player2.hp) return this.player2;
+
+    if (this.player1.units.length < this.player2.units.length) return this.player2;
+    else if (this.player1.units.length > this.player2.units.length) return this.player1;
 
     return null;
 };
@@ -152,9 +163,11 @@ Game.prototype.executeActions = function (actions) {
     var self = this;
 
     var state = {};
-    _.each(self.units, function (unit, unitID) {
-        if (unit.isDead())
+    _.each(_.filter(self.units, function (unit) { return unit.kind == 'moving' }), function (unit, unitID) {
+        if (unit.isDead()) {
             delete self.units[unitID];
+            delete actions[unitID];
+        }
 
         state[unit.id] = unit.getStats();
     });
