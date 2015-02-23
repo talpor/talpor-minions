@@ -14,8 +14,11 @@
     scope.loadState = function() {
         // loadState
         if (scope.armies.length < 2) {
-            alert('Random fight not implemented :(');
-            return;
+            // alert('Random fight not implemented :(');
+            global.scope.armies = [
+                $($('.army')[0]).data('army'), $($('.army')[0]).data('army')
+            ];
+            scope.title = scope.armies[0] + ' -vs- ' + scope.armies[0];
         }
         game.initEngine();
         scope.playing = true;
@@ -28,8 +31,7 @@
             scope.armies.shift();
         }
         if (scope.armies.length === 2) {
-            scope.title = scope.armies[0] + ' -vs- ' +
-                          scope.armies[1];
+            scope.title = scope.armies[0] + ' -vs- ' + scope.armies[1];
         }
     };
     rivets.binders['play-game'] = function(el, value) {
@@ -51,7 +53,6 @@
     };
     rivets.bind(app, scope);
 
-    game.drawCanvas();
     setTimeout(function() {
         stage.css({'height': '300px'});
         stage.slideDown('slow');

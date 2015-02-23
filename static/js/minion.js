@@ -6,16 +6,16 @@
     function addMinion(minionId, playerNumber, xPosition, yPosition){
 
         // create our player entity with some premade components
-        var player = Crafty.e('2D, Canvas, ' + playerNumber + 
+        var player = Crafty.e('2D, Canvas, ' + playerNumber +
                               ', Controls, CustomControls, ' +
                               'SpriteAnimation, Collision')
-            .attr({
-                w: global.BOX_SIZE,
-                h: global.BOX_SIZE,
-                x: xPosition*global.BOX_SIZE,
-                y: yPosition*global.BOX_SIZE,
-                z: 1
-            });
+                .attr({
+                    w: global.BOX_SIZE,
+                    h: global.BOX_SIZE,
+                    x: xPosition*global.BOX_SIZE,
+                    y: yPosition*global.BOX_SIZE,
+                    z: 1
+                });
 
         player._step = global.BOX_SIZE;
         player._moving = global.NONE;
@@ -28,7 +28,7 @@
             .animate('walk_right', [[2,0], [2,1], [2,2],[2,3], [2,4]])
             .animate('walk_up', [[0,0], [0,1], [0,2],[0,3], [0,4]])
             .animate('walk_down', [[4,0], [4,1], [4,2],[4,3], [4,4]])
-            
+
             .animate('walk_up_right', [[1,0], [1,1], [1,2],[1,3], [1,4]])
             .animate('walk_down_right', [[3,0], [3,1], [3,2],[3,3], [3,4]])
             .animate('walk_up_left', [[1,0], [1,1], [1,2],[1,3], [1,4]])
@@ -67,7 +67,7 @@
                     }
                     this.animate('walk_right', 1);
                     player.x += 1;
-                
+
                 } else if (player._moving == global.UPRIGHT) {
                     if (player._direction == global.LEFT) {
                         this.unflip('X');
@@ -109,16 +109,16 @@
                 //    player.stop();
                 }
             } else {
-            player._moving = global.NONE;
-            player._moved = 0;
+                player._moving = global.NONE;
+                player._moved = 0;
             }
 
             if (player.dying) {
-            player.alpha -= 0.01;
+                player.alpha -= 0.01;
 
-            if (player.alpha <= 0){
-                player.destroy();
-            }
+                if (player.alpha <= 0){
+                    player.destroy();
+                }
             }
 
         });
@@ -178,7 +178,7 @@
                 minion._direction = global.LEFT;
             }
             minion.animate('attack_down_left', 1);
-            
+
         }  else if(direction == global.DOWNRIGHT) {
             if (minion._direction == global.LEFT){
                 minion.unflip('X');

@@ -53,7 +53,7 @@
                 <h3>Top armies</h3>
                 <ul>
                 {% for army in top_armies %}
-                <li><a href="#" rv-on-click="selectArmyToBattle" data-army="{{ army.commander }}"><b>{{ army.commander }}</b> {{ army.flops }} flops</a></li>
+                <li><a class="army" href="#" rv-on-click="selectArmyToBattle" data-army="{{ army.commander }}"><b>{{ army.commander }}</b> {{ army.flops }} flops</a></li>
                 {% endfor %}
                 </ul>
             </div>

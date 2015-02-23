@@ -1,88 +1,79 @@
 /* global $, Crafty */
 
-(function (global, minion) {
+(function (global, minionCraft) {
     'use strict';
-    var stateIndex = 0,
-        drawCanvas = function() {
-            Crafty.init(600, 600);
+    var stateIndex = 0;
+
+    var initEngine = function() {
+        Crafty.init(600, 600);
+
+        Crafty.scene('main', function() {
             Crafty.background('url("/static/img/bg.png")');
-        },
-        initEngine = function() {
-            $.ajax('/play/' + global.scope.armies[0] + '/' +
-                              global.scope.armies[1], {
+            Crafty.e('2D, Canvas, redHome').attr({x: 15, y: 15, w: 90, h:90, z: 2});
+            Crafty.e('2D, Canvas, blueHome').attr({x: (30*17-15), y: (30*17-15), w: 90, h:90, z: 2});
+
+            initMinions(global.states[0]);
+            renderAction(global.states[0]);
+        });
+
+        //the loading screen that will display while our assets load
+        Crafty.scene('loading', function() {
+            Crafty.load(
+                [
+                    '/static/img/chavestias.png',
+                    '/static/img/miraflores.png',
+                    '/static/img/escualidos.png',
+                    '/static/img/ramoverde.png'
+                ],
+                initGame,
+                function () {},
+                function (e) { console.log('err', e); }
+            );
+
+            // black background with some loading text
+            Crafty.background('#000');
+            Crafty.e('2D, DOM, Text').attr({w: 100, h: 20, x: 150, y: 120})
+                .text('Loading')
+                .css({'text-align': 'center'});
+        });
+        //automatically play the loading scene
+        Crafty.scene('loading');
+    };
+
+
+    function initGame() {
+        Crafty.sprite(54, '/static/img/chavestias.png', { 1: [0, 0] }, 18, 18);
+        Crafty.sprite(54, '/static/img/escualidos.png', { 2: [0, 0] }, 18, 18);
+        Crafty.sprite(92, '/static/img/miraflores.png', { redHome: [0, 0] });
+        Crafty.sprite(92, '/static/img/ramoverde.png', { blueHome: [0, 0] });
+
+        $.ajax(
+            '/play/' + global.scope.armies[0] + '/' + global.scope.armies[1],
+            {
                 aync: true,
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function(game) {
                     global.states = game.states;
-                    console.log(global.states.length);
-                    startGame();
+                    Crafty.scene('main');
                 }
-            });
-
-
-            //turn the sprite map into usable components
-            Crafty.sprite(
-                54, '/static/img/chavestias.png', { 1: [0, 0] }, 18, 18
-            );
-            Crafty.sprite(
-                54, '/static/img/escualidos.png', { 2: [0, 0] }, 18, 18
-            );
-            Crafty.sprite(
-                92, '/static/img/miraflores.png', { redHome: [0, 0] }
-            );
-            Crafty.sprite(
-                92, '/static/img/ramoverde.png', { blueHome: [0, 0] }
-            );
-
-            // method to randomy generate the map
-            function generateWorld() {
-                Crafty.background('url("/static/img/bg.png")');
-                Crafty.e('2D, Canvas, redHome')
-                    .attr({x: 15, y: 15, w: 90, h:90, z: 2});
-                Crafty.e('2D, Canvas, blueHome')
-                    .attr({x: (30*17-15), y: (30*17-15), w: 90, h:90, z: 2});
             }
+        );
+    }
 
-            //the loading screen that will display while our assets load
-            Crafty.scene('loading', function() {
-                //load takes an array of assets and a callback when complete
-                Crafty.load(
-                    ['/static/img/chavestias.png',
-                    '/static/img/miraflores.png',
-                    '/static/img/escualidos.png',
-                    '/static/img/ramoverde.png'],
-                    function () {
-                    Crafty.scene('main'); //when everything is loaded, run the main scene
-                },
-                    function () {},
-                    function (e) { console.log('err', e); }
-                );
-
-                // black background with some loading text
-                Crafty.background('#000');
-                Crafty.e('2D, DOM, Text').attr({w: 100, h: 20, x: 150, y: 120})
-                .text('Loading')
-                .css({'text-align': 'center'});
-            });
-
-            //automatically play the loading scene
-            Crafty.scene('loading');
-
-            Crafty.scene('main', function() {
-                generateWorld();
-            });
-        };
 
     function onAnimationEnds() {
         global.animationsRunning--;
         if (global.animationsRunning === 0) {
             stateIndex++;
             if (stateIndex < global.states.length) {
-                setTimeout(renderAction.bind(null, global.states[stateIndex]), 100);
+                setTimeout(function () {
+                    renderAction(global.states[stateIndex])
+                }, 100);
             }
         }
     }
+
 
     function renderAction(state) {
         if (stateIndex + 1 < global.states.length) checkAliveMinions();
@@ -118,6 +109,7 @@
         }
     }
 
+
     function initMinions(state0) {
         var minionStats;
         for (var minionId in state0) {
@@ -126,10 +118,6 @@
         }
     }
 
-    function startGame() {
-        initMinions(global.states[0]);
-        renderAction(global.states[0]);
-    }
 
     /*
      * Utils
@@ -159,8 +147,7 @@
 
     global.onAnimationEnds = onAnimationEnds;
     global.game = {
-        start: startGame,
-        initEngine: initEngine,
-        drawCanvas: drawCanvas
+        initEngine: initEngine
     };
+
 }(window, window.minionCraft));
