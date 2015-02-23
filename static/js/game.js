@@ -4,15 +4,6 @@
 var t, states,
     scope = window.scope;
 
-$.ajax('/play/' + scope.armies[0] + '/' + scope.armies[1], {
-    aync: true,
-    contentType: 'application/json',
-    dataType: 'json',
-    success: function(game) {
-        t = game;
-        states = t.states;
-    }
-});
 
 var NONE = 0,
     UP = 1,
@@ -28,7 +19,17 @@ var NONE = 0,
 var BOX_SIZE = 30;
 var stateIndex = 0;
 
-window.onload = function() {
+var initEngine = function() {
+
+    $.ajax('/play/' + scope.armies[0] + '/' + scope.armies[1], {
+        aync: true,
+        contentType: 'application/json',
+        dataType: 'json',
+        success: function(game) {
+            t = game;
+            states = t.states;
+        }
+    });
 
     Crafty.init(600,600);
 

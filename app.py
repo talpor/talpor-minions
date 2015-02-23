@@ -34,14 +34,15 @@ def home():
             'winner': 'i7',
             'id': 2
         }]
-    top_armies = [{
-            'commander': 'max',
+
+    agents_dir = os.listdir(os.path.join('game', 'agents'))
+    top_armies = []
+    for agent in [f for f in agents_dir]:
+        top_armies.append({
+            'commander': agent.replace('.js', ''),
             'flops': 1245
-        },
-        {
-            'commander': 'volrath',
-            'flops': 1123
-        }]
+            })
+
     return render_template('home.html',
                            fights_today=fights_today,
                            top_armies=top_armies)

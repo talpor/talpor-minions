@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Minions, please!</title>
+    <title>Vikings, please!</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='libs/bootstrap/css/bootstrap.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet/bootstrap-superhero.css') }}">
     <link rel="stylesheet/less" type="text/css" href="{{ url_for('static', filename='stylesheet/home.less') }}">
@@ -11,7 +11,7 @@
     <nav class="navbar navbar-default navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <button type="button" class="btn btn-default navbar-btn">Upload your army <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></button>
-            <h1 class="navbar-text">Minions, please!</h1>
+            <h1 class="navbar-text">Vikings, please!</h1>
         </div>
     </nav>
 
@@ -53,7 +53,7 @@
                 <h3>Top armies</h3>
                 <ul>
                 {% for army in top_armies %}
-                <li><a href="#"><b>{{ army.commander }}</b> {{ army.flops }} flops</a></li>
+                <li><a href="#" rv-on-click="selectArmyToBattle" data-army="{{ army.commander }}"><b>{{ army.commander }}</b> {{ army.flops }} flops</a></li>
                 {% endfor %}
                 </ul>
             </div>

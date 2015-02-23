@@ -1,14 +1,28 @@
 /* global jQuery, rivets, startGame */
-(function(window, $, rivets, startGame) {
+(function(global, $, rivets, startGame) {
     var scope = {
-            title: 'Random Fight'
+            title: 'Random Fight',
+            armies: []
         },
         app = $('#home'),
         stage = app.find('#cr-stage'),
         cover = stage.find('#frontCover');
 
     scope.loadState = function() {
+        initEngine();
         scope.playing = true;
+    };
+    scope.selectArmyToBattle = function(e) {
+        e.preventDefault();
+        var target = e.currentTarget; // TODO: backward compatibility
+        scope.armies.push($(target).attr('data-army'));
+        if (scope.armies.length === 3) {
+            scope.armies.shift();
+        }
+        if (scope.armies.length === 2) {
+            scope.title = scope.armies[0] + ' -vs- ' +
+                          scope.armies[1];
+        }
     };
     rivets.binders['play-game'] = function(el, value) {
         if (value) {
@@ -36,5 +50,5 @@
         stage.slideDown('slow');
     }, 300);
 
-    window.scope = scope;
+    global.scope = scope;
 }(window, jQuery, rivets, startGame));
