@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8">
     <title>Minions, please!</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='libs/bootstrap/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-superhero.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet/bootstrap-superhero.css') }}">
+    <link rel="stylesheet/less" type="text/css" href="{{ url_for('static', filename='stylesheet/home.less') }}">
 </head>
 <body id="home">
     <nav class="navbar navbar-default navbar-inverse navbar-static-top">
@@ -38,9 +38,8 @@
             <div class="col-md-7 main-battle">
                 <div>
                     <h2>Random Fight</h2>
-                    <button class="btn btn-primary btn-sm">Fight!</button>
                     <div id="cr-stage">
-                        <div id="frontCover">
+                        <div id="frontCover" rv-on-click="playGame">
                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
                         </div>
                     </div>
@@ -61,28 +60,12 @@
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="{{ url_for('static', filename='libs/rivets.bundled.min.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/crafty.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/less/less.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/crafty/crafty.js') }}"></script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>
     <script src="{{ url_for('static', filename='js/minion.js') }}"></script>
-    <script>
-        /* global $ */
-        var stage = $('#cr-stage');
-        stage.find('#frontCover').click(function() {
-            $(this).fadeOut(function() {
-                stage.animate({height: '600px'}, 300, function() {
-                    // start game
-                });
-                $('html, body').animate({
-                    scrollTop: stage.offset().top
-                }, 700);
-                startGame();
-            });
-        });
-        setTimeout(function() {
-            stage.css({'height': '300px'});
-            stage.slideDown('slow');
-        }, 300);
-    </script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>
