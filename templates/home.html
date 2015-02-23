@@ -36,10 +36,10 @@
                 </ul>
             </div>
             <div class="col-md-7 main-battle">
-                <div>
-                    <h2>Random Fight</h2>
+                <div rv-play-game="playing">
+                    <h2>{ title }</h2>
                     <div id="cr-stage">
-                        <div id="frontCover" rv-on-click="playGame">
+                        <div id="frontCover" rv-on-click="loadState">
                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
                         </div>
                     </div>

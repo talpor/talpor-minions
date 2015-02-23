@@ -1,22 +1,40 @@
 /* global jQuery, rivets, startGame */
-(function($, rivets, startGame) {
-    var scope = {},
+(function(window, $, rivets, startGame) {
+    var scope = {
+            title: 'Random Fight'
+        },
         app = $('#home'),
-        stage = app.find('#cr-stage');
+        stage = app.find('#cr-stage'),
+        cover = stage.find('#frontCover');
 
-    scope.playGame = function() {
-        $(this).fadeOut(function() {
-            stage.animate({height: '600px'}, 300, function() {
-                startGame();
+    scope.loadState = function() {
+        scope.playing = true;
+    };
+    rivets.binders['play-game'] = function(el, value) {
+        if (value) {
+            cover.fadeOut(function() {
+                stage.animate({height: '600px'}, 300, function() {
+                    startGame();
+                });
+                $('html, body').animate({
+                    scrollTop: stage.offset().top
+                }, 700);
             });
-            $('html, body').animate({
-                scrollTop: stage.offset().top
-            }, 700);
-        });
+        }
+        else {
+            stage.animate({height: '300px'}, 300, function() {
+                cover.fadeIn(function() {
+                    //clearStage();
+                });
+            });
+        }
     };
     rivets.bind(app, scope);
+
     setTimeout(function() {
         stage.css({'height': '300px'});
         stage.slideDown('slow');
     }, 300);
-}(jQuery, rivets, startGame));
+
+    window.scope = scope;
+}(window, jQuery, rivets, startGame));
