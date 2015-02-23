@@ -155,7 +155,6 @@ window.onload = function() {
         generateWorld();
         initMinions(states[0]);
 
-        renderAction(states[stateIndex]);
     });
 };
 
@@ -194,4 +193,10 @@ function renderAction(state) {
 
 	
     }
+}
+
+function startGame (){
+	stateIndex = 0;
+    renderAction(states[stateIndex]);
+
 }
