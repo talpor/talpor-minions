@@ -1,5 +1,7 @@
-/* global jQuery, rivets, startGame */
-(function(global, $, rivets, startGame) {
+/* global jQuery, rivets */
+
+(function(global, $, rivets) {
+    'use strict';
     var scope = {
             title: 'Random Fight',
             armies: []
@@ -9,7 +11,7 @@
         cover = stage.find('#frontCover');
 
     scope.loadState = function() {
-        initEngine();
+        global.initEngine();
         scope.playing = true;
     };
     scope.selectArmyToBattle = function(e) {
@@ -28,7 +30,7 @@
         if (value) {
             cover.fadeOut(function() {
                 stage.animate({height: '600px'}, 300, function() {
-                    startGame();
+                    global.startGame();
                 });
                 $('html, body').animate({
                     scrollTop: stage.offset().top
@@ -51,4 +53,4 @@
     }, 300);
 
     global.scope = scope;
-}(window, jQuery, rivets, startGame));
+}(window, jQuery, rivets));
