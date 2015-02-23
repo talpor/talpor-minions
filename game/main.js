@@ -81,8 +81,9 @@ Game.prototype.start = function () {
         /*
          * Current player moves.
          */
+        this.currentPlayer = this.getCurrentPlayer();
         var state = this.executeActions(
-            this.getCurrentPlayer().agent._doTurn(this.world.safeClone())
+            this.currentPlayer.agent._doTurn(this.world.safeClone())
         );
         states.push(state);
     }
@@ -149,7 +150,10 @@ Game.prototype.killUnit = function (unitID, actions) {
  */
 Game.prototype.addNewUnits = function () {
     if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0) return;
-
+    if (!this.world.isOccupied(3, 3))
+        this.newUnit(this.currentPlayer, unit.Minion, 3, 3);
+    if (!this.world.isOccupied(16, 16))
+        this.newUnit(this.currentPlayer, unit.Minion, 16, 16);
 };
 
 
@@ -179,10 +183,9 @@ Game.prototype.executeActions = function (actions) {
     var self = this;
 
     var state = {};
-    _.each(_.filter(self.units, function (unit) { return unit.kind == 'moving' }), function (unit, unitID) {
-        if (unit.isDead()) {
+    _.each(_.filter(self.units, function (unit) { return unit.kind == 'moving' }), function (unit, index) {
+        if (unit.isDead())
             self.killUnit(unit.id, actions);
-        }
 
         state[unit.id] = unit.getStats();
     });
