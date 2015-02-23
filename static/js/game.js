@@ -49,9 +49,9 @@ window.onload = function() {
         Crafty.background('url("/static/img/bg.png")');
 		
 		Crafty.e("2D, Canvas, redHome")
-				.attr({x: 30, y: 30, w: 60, h:60, z: 2});
+				.attr({x: 15, y: 15, w: 90, h:90, z: 2});
 		Crafty.e("2D, Canvas, blueHome")
-				.attr({x: (30 * 17), y: (30 * 17), w: 60, h:60, z: 2});
+				.attr({x: (30*17-15), y: (30*17-15), w: 90, h:90, z: 2});
 	
 
     }
