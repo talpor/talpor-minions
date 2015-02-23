@@ -2,7 +2,7 @@
 /* exported NONE, BOX_SIZE, startGame */
 
 var t, states;
-$.ajax('/play/i7/i7', {
+$.ajax('/play/SimpleAgent/SimpleAgent', {
     aync: true,
     contentType: 'application/json',
     dataType: 'json',
@@ -38,21 +38,21 @@ window.onload = function() {
         54, '/static/img/escualidos.png', { 2: [0, 0] }, 18, 18
     );
     Crafty.sprite(
-        92, '/static/img/miraflores.png', { redHome: [0, 0] } 
+        92, '/static/img/miraflores.png', { redHome: [0, 0] }
     );
 	Crafty.sprite(
-        92, '/static/img/ramoverde.png', { blueHome: [0, 0] } 
+        92, '/static/img/ramoverde.png', { blueHome: [0, 0] }
     );
 
     // method to randomy generate the map
     function generateWorld() {
         Crafty.background('url("/static/img/bg.png")');
-		
+
 		Crafty.e("2D, Canvas, redHome")
 				.attr({x: 15, y: 15, w: 90, h:90, z: 2});
 		Crafty.e("2D, Canvas, blueHome")
 				.attr({x: (30*17-15), y: (30*17-15), w: 90, h:90, z: 2});
-	
+
 
     }
 
@@ -65,7 +65,7 @@ window.onload = function() {
         console.log('sprite loading');
 
         Crafty.load(
-            ['/static/img/chavestias.png', 
+            ['/static/img/chavestias.png',
             '/static/img/miraflores.png',
             '/static/img/escualidos.png',
             '/static/img/ramoverde.png'],
@@ -116,7 +116,7 @@ function renderAction(state) {
             } else if(minion.action.dy == -1) {
                 direction = UP;
             }
-        
+
             if (minion.action.name == 'walk') {
                 moveMinion(minions[minionkey], direction);
             } else if (minion.action.name == 'attack'){
@@ -125,7 +125,7 @@ function renderAction(state) {
             }
         }
 
-    
+
     }
 }
 
