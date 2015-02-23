@@ -33,15 +33,16 @@ Agent.prototype = {
      * true by default.
      */
     _getUnits: function (world, kind, own) {
-        var units = [];
+        var self = this,
+            units = [];
 
         if (_.isUndefined(own)) own = true;
 
         _.each(world, function(col) {
             _.each(col, function(tile) {
                 if (!tile) return;
-                if (own && tile.player !== this.playerNumber) return;
-                if (!own && tile.player === this.playerNumber) return;
+                if (own && tile.player !== self.playerNumber) return;
+                if (!own && tile.player === self.playerNumber) return;
                 if (kind && tile.kind !== kind) return;
 
                 units.push(tile);
