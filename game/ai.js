@@ -111,8 +111,8 @@ Agent.prototype = {
         range = range || 1;
         var tiles = [];
 
-        for (var i = x - range; i < x + range; i++) {
-            for (var j = y - range; j < y - range; j++) {
+        for (var i = x - range; i < (x + range); i++) {
+            for (var j = y - range; j < (y + range); j++) {
                 tiles.push(this.getTile(world, i, j));
             }
         }
