@@ -1,4 +1,4 @@
-(function(global) {
+(function (global) {
     global.NONE = 0;
     global.UP = 1;
     global.DOWN = 2;

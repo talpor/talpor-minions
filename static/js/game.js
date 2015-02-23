@@ -25,26 +25,27 @@
             54, '/static/img/escualidos.png', { 2: [0, 0] }, 18, 18
         );
         Crafty.sprite(
-            92, '/static/img/miraflores.png', { redHome: [0, 0] } 
+            92, '/static/img/miraflores.png', { redHome: [0, 0] }
         );
         Crafty.sprite(
-            92, '/static/img/ramoverde.png', { blueHome: [0, 0] } 
+            92, '/static/img/ramoverde.png', { blueHome: [0, 0] }
         );
 
         // method to randomy generate the map
         function generateWorld() {
             Crafty.background('url("/static/img/bg.png")');
-            
+
             Crafty.e('2D, Canvas, redHome')
                     .attr({x: 15, y: 15, w: 90, h:90, z: 2});
             Crafty.e('2D, Canvas, blueHome')
                     .attr({x: (30*17-15), y: (30*17-15), w: 90, h:90, z: 2});
         }
+
         //the loading screen that will display while our assets load
         Crafty.scene('loading', function() {
             //load takes an array of assets and a callback when complete
             Crafty.load(
-                ['/static/img/chavestias.png', 
+                ['/static/img/chavestias.png',
                 '/static/img/miraflores.png',
                 '/static/img/escualidos.png',
                 '/static/img/ramoverde.png'],
@@ -67,50 +68,28 @@
 
         Crafty.scene('main', function() {
             generateWorld();
-
         });
     };
 
     function onAnimationEnds() {
-        var killMinion = function(minion){
-                global.animationsRunning++;
-                minion.bind('AnimationEnd', onAnimationEnds);
-
-                minion.animate('die', 1).dying = true;
-            },
-            checkAliveMinions = function(oldMinions, currentMinions) {
-                oldMinions.forEach(function(minion) {
-                    if (currentMinions.indexOf(minion) == -1) {
-                        killMinion(global.minions[minion]);
-                    }
-                });
-                currentMinions.forEach(function(minion) {
-                    if (oldMinions.indexOf(minion) == -1) {
-                        var newMinion = global.states[stateIndex+1][minion];
-                        global.addMinion(newMinion.id, newMinion.player, newMinion.x, newMinion.y);
-                        //new minion
-                    }
-                });
-            };
-        if (stateIndex +1< global.states.length) {
-            var oldMinions = Object.keys(global.states[stateIndex]),
-                currentMinions = Object.keys(global.states[stateIndex+1]);
-            checkAliveMinions(oldMinions, currentMinions);
-        }
         global.animationsRunning--;
-        if (global.animationsRunning === 0){
+        if (global.animationsRunning === 0) {
             stateIndex++;
-            if (stateIndex < global.states.length){
-                setTimeout(function(){ renderAction(global.states[stateIndex]); }, 500); 
+            if (stateIndex < global.states.length) {
+                setTimeout(function(){ renderAction(global.states[stateIndex]); }, 100);
+                // renderAction(global.states[stateIndex]);
             }
         }
     }
 
     function renderAction(state) {
+        if (stateIndex + 1 < global.states.length)
+            checkAliveMinions();
+
         for (var minionkey in state) {
             var minion = state[minionkey],
                 direction;
-            if (minion.action){
+            if (minion.action) {
                 if (minion.action.dx == 1 && minion.action.dy == 1){
                     direction = global.DOWNRIGHT;
                 } else if (minion.action.dx == -1 && minion.action.dy == 1){
@@ -137,6 +116,7 @@
             }
         }
     }
+
     function initMinions(state0) {
         var minionStats;
         for (var minionId in state0) {
@@ -146,10 +126,35 @@
     }
 
     function startGame() {
-        stateIndex = 0;
         initMinions(global.states[0]);
-        renderAction(global.states[stateIndex]);
+        renderAction(global.states[0]);
     }
+
+    /*
+     * Utils
+     */
+    var killMinion = function (minion) {
+        global.animationsRunning++;
+        minion.bind('AnimationEnd', onAnimationEnds);
+        minion.animate('die', 1).dying = true;
+    };
+
+    var checkAliveMinions = function() {
+        var oldMinions = Object.keys(global.states[stateIndex]),
+            currentMinions = Object.keys(global.states[stateIndex+1]);
+
+        oldMinions.forEach(function(minion) {
+            if (currentMinions.indexOf(minion) == -1) {
+                killMinion(global.minions[minion]);
+            }
+        });
+        currentMinions.forEach(function(minion) {
+            if (oldMinions.indexOf(minion) == -1) {  // new minion
+                var newMinion = global.states[stateIndex+1][minion];
+                global.addMinion(newMinion.id, newMinion.player, newMinion.x, newMinion.y);
+            }
+        });
+    };
 
     // global.renderAction = renderAction;
     global.startGame = startGame;
