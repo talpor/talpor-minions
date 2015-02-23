@@ -2,7 +2,7 @@
 
 module.exports = {
     worldSize: 20,
-    maxGameTicks: 1440,
+    maxGameTicks: 50,
     newUnitsNumberOfTicks: 5,
     player: {
         hp: 96
