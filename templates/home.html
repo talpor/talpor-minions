@@ -18,7 +18,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-3">
-                <h3>Fight for 22-02-15</h3>
+                <h3>Fight for { today }</h3>
                 <ul>
                     {% for fight in fights_today %}
                     <li>
@@ -64,9 +64,10 @@
     <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/less/less.min.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/crafty/crafty.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/moment.js') }}"></script>
     <script src="{{ url_for('static', filename='js/globals.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
     <script src="{{ url_for('static', filename='js/minion.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/game.js') }}"></script>
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
 </body>
 </html>

@@ -1,9 +1,10 @@
 /* global jQuery, rivets */
 
-(function(global, $, rivets) {
+(function(global, $, rivets, game) {
     'use strict';
     var scope = {
             title: 'Random Fight',
+            today: moment().format('DD-MM-YY'),
             armies: []
         },
         app = $('#home'),
@@ -11,7 +12,12 @@
         cover = stage.find('#frontCover');
 
     scope.loadState = function() {
-        global.initEngine();
+        // loadState
+        if (scope.armies.length < 2) {
+            alert('Random fight unimplemented :(');
+            return;
+        }
+        game.initEngine();
         scope.playing = true;
     };
     scope.selectArmyToBattle = function(e) {
@@ -30,7 +36,7 @@
         if (value) {
             cover.fadeOut(function() {
                 stage.animate({height: '600px'}, 300, function() {
-                    global.startGame();
+                    game.start();
                 });
                 $('html, body').animate({
                     scrollTop: stage.offset().top
@@ -47,10 +53,11 @@
     };
     rivets.bind(app, scope);
 
+    game.drawCanvas();
     setTimeout(function() {
         stage.css({'height': '300px'});
         stage.slideDown('slow');
     }, 300);
 
     global.scope = scope;
-}(window, jQuery, rivets));
+}(window, jQuery, rivets, window.game));
