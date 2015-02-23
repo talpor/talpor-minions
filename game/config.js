@@ -7,7 +7,7 @@ module.exports = {
     player: {
         hp: 96
     },
-    minion: {
+    viking: {
         hp: 12,
         range: 1,
         attack: 4

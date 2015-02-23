@@ -1,5 +1,5 @@
 /* global module */
-/* exported Unit, Minion */
+/* exported Unit, Viking */
 
 var config = require('../config'),
     _ = require('lodash');

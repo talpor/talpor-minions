@@ -71,9 +71,9 @@ Agent.prototype = {
     },
 
     /**
-     * Returns a list with the player's current minions.
+     * Returns a list with the player's current vikings.
      */
-    getMyMinions: function (world) {
+    getMyVikings: function (world) {
         return this._getUnits(world, 'moving');
     },
 
@@ -82,7 +82,7 @@ Agent.prototype = {
     },
 
     /**
-     * Returns a list with the enemy's current minions.
+     * Returns a list with the enemy's current vikings.
      */
     getEnemyMinons: function (world) {
         return this._getUnits(world, 'moving', false);
@@ -93,11 +93,11 @@ Agent.prototype = {
     },
 
     /**
-     * Returns true if a given `direction` for the given `minion` is
+     * Returns true if a given `direction` for the given `viking` is
      * not occupied in the current `world`. False otherwise.
      */
-    isDirectionUnoccupied: function (world, minion, dir) {
-        var tile = this.getTile(world, minion.x + dir.x, minion.y + dir.y)
+    isDirectionUnoccupied: function (world, viking, dir) {
+        var tile = this.getTile(world, viking.x + dir.x, viking.y + dir.y)
         return !Boolean(tile || tile == false);
     },
 
@@ -135,9 +135,9 @@ Agent.prototype = {
     /**
      * Stores a 'walk' action into the private `_actions` attr.
      */
-    walk: function (world, minion, dir) {
-        this._actions[minion.id] = {
-            name: 'walk',
+    walk: function (world, viking, dir) {
+        this._actions[viking.id] = {
+            please: 'walk',
             dx: dir.x,
             dy: dir.y
         };
@@ -146,9 +146,9 @@ Agent.prototype = {
     /**
      * Stores an 'attack' action into the private `_actions` attr.
      */
-    attack: function (world, minion, dir) {
-        this._actions[minion.id] = {
-            name: 'attack',
+    attack: function (world, viking, dir) {
+        this._actions[viking.id] = {
+            please: 'attack',
             dx: dir.x,
             dy: dir.y
         };

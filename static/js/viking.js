@@ -3,7 +3,7 @@
 (function(global) {
     'use strict';
 
-    function addMinion(minionId, playerNumber, xPosition, yPosition){
+    function addViking(vikingId, playerNumber, xPosition, yPosition){
 
         // create our player entity with some premade components
         var player = Crafty.e('2D, Canvas, ' + playerNumber +
@@ -123,73 +123,73 @@
 
         });
 
-        player.id = minionId;
+        player.id = vikingId;
 
-        global.minions[minionId] = player;
+        global.vikings[vikingId] = player;
     }
 
-    function moveMinion(minion, direction){
+    function moveViking(viking, direction){
         global.animationsRunning++;
-        minion.bind('AnimationEnd', global.onAnimationEnds);
+        viking.bind('AnimationEnd', global.onAnimationEnds);
 
-        minion._moving = direction;
+        viking._moving = direction;
     }
 
-    function attackMinion(minion, direction){
+    function attackViking(viking, direction){
         global.animationsRunning++;
-        minion.bind('AnimationEnd', global.onAnimationEnds);
+        viking.bind('AnimationEnd', global.onAnimationEnds);
 
         if(direction == global.LEFT) {
-            if (minion._direction == global.RIGHT){
-                minion.flip('X');
-                minion._direction = global.LEFT;
+            if (viking._direction == global.RIGHT){
+                viking.flip('X');
+                viking._direction = global.LEFT;
             }
-            minion.animate('attack_left', 1);
+            viking.animate('attack_left', 1);
         } else if(direction == global.RIGHT) {
-            if (minion._direction == global.LEFT){
-                minion.unflip('X');
-                minion._direction = global.RIGHT;
+            if (viking._direction == global.LEFT){
+                viking.unflip('X');
+                viking._direction = global.RIGHT;
             }
-            minion.animate('attack_right', 1);
+            viking.animate('attack_right', 1);
 
         } else if(direction == global.UP) {
-            minion.animate('attack_up', 1);
+            viking.animate('attack_up', 1);
 
         } else if(direction == global.DOWN) {
-            minion.animate('attack_down', 1);
+            viking.animate('attack_down', 1);
 
         } else if(direction == global.UPLEFT) {
-            if (minion._direction == global.RIGHT){
-                minion.flip('X');
-                minion._direction = global.LEFT;
+            if (viking._direction == global.RIGHT){
+                viking.flip('X');
+                viking._direction = global.LEFT;
             }
-            minion.animate('attack_up_left', 1);
+            viking.animate('attack_up_left', 1);
 
         }  else if(direction == global.UPRIGHT) {
-            if (minion._direction == global.LEFT){
-                minion.unflip('X');
-                minion._direction = global.RIGHT;
+            if (viking._direction == global.LEFT){
+                viking.unflip('X');
+                viking._direction = global.RIGHT;
             }
-            minion.animate('attack_up_right', 1);
+            viking.animate('attack_up_right', 1);
 
         } else if(direction == global.DOWNLEFT) {
-            if (minion._direction == global.RIGHT){
-                minion.flip('X');
-                minion._direction = global.LEFT;
+            if (viking._direction == global.RIGHT){
+                viking.flip('X');
+                viking._direction = global.LEFT;
             }
-            minion.animate('attack_down_left', 1);
+            viking.animate('attack_down_left', 1);
 
         }  else if(direction == global.DOWNRIGHT) {
-            if (minion._direction == global.LEFT){
-                minion.unflip('X');
-                minion._direction = global.RIGHT;
+            if (viking._direction == global.LEFT){
+                viking.unflip('X');
+                viking._direction = global.RIGHT;
             }
-            minion.animate('attack_down_right', 1);
+            viking.animate('attack_down_right', 1);
         }
     }
-    global.minionCraft = {
-        add: addMinion,
-        move: moveMinion,
-        attack: attackMinion
+    global.vikingCraft = {
+        add: addViking,
+        move: moveViking,
+        attack: attackViking
     };
 })(window);

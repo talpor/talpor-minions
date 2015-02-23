@@ -1,6 +1,6 @@
 /* global $, Crafty */
 
-(function (global, minionCraft) {
+(function (global, vikingCraft) {
     'use strict';
     var stateIndex = 0;
 
@@ -12,7 +12,7 @@
             Crafty.e('2D, Canvas, redHome').attr({x: 15, y: 15, w: 90, h:90, z: 2});
             Crafty.e('2D, Canvas, blueHome').attr({x: (30*17-15), y: (30*17-15), w: 90, h:90, z: 2});
 
-            initMinions(global.states[0]);
+            initVikings(global.states[0]);
             renderAction(global.states[0]);
         });
 
@@ -76,45 +76,45 @@
 
 
     function renderAction(state) {
-        if (stateIndex + 1 < global.states.length) checkAliveMinions();
+        if (stateIndex + 1 < global.states.length) checkAliveVikings();
 
-        for (var minionkey in state) {
-            var minion = state[minionkey],
+        for (var vikingkey in state) {
+            var viking = state[vikingkey],
                 direction;
-            if (minion.action) {
-                if (minion.action.dx == 1 && minion.action.dy == 1) {
+            if (viking.action) {
+                if (viking.action.dx == 1 && viking.action.dy == 1) {
                     direction = global.DOWNRIGHT;
-                } else if (minion.action.dx == -1 && minion.action.dy == 1){
+                } else if (viking.action.dx == -1 && viking.action.dy == 1){
                     direction = global.DOWNLEFT;
-                } else if (minion.action.dx == -1 && minion.action.dy == -1){
+                } else if (viking.action.dx == -1 && viking.action.dy == -1){
                     direction = global.UPLEFT;
-                } else if (minion.action.dx == 1 && minion.action.dy == -1){
+                } else if (viking.action.dx == 1 && viking.action.dy == -1){
                     direction = global.UPRIGHT;
-                } else if (minion.action.dx == 1) {
+                } else if (viking.action.dx == 1) {
                     direction = global.RIGHT;
-                } else if(minion.action.dx == -1) {
+                } else if(viking.action.dx == -1) {
                     direction = global.LEFT;
-                } else if(minion.action.dy == 1) {
+                } else if(viking.action.dy == 1) {
                     direction = global.DOWN;
-                } else if(minion.action.dy == -1) {
+                } else if(viking.action.dy == -1) {
                     direction = global.UP;
                 }
-                if (minion.action.name == 'walk') {
-                    minionCraft.move(global.minions[minionkey], direction);
-                } else if (minion.action.name == 'attack'){
+                if (viking.action.please == 'walk') {
+                    vikingCraft.move(global.vikings[vikingkey], direction);
+                } else if (viking.action.please == 'attack'){
                     //fire explosions and michael bay stuff goes here
-                    minionCraft.attack(global.minions[minionkey], direction);
+                    vikingCraft.attack(global.vikings[vikingkey], direction);
                 }
             }
         }
     }
 
 
-    function initMinions(state0) {
-        var minionStats;
-        for (var minionId in state0) {
-            minionStats = state0[minionId];
-            minionCraft.add(minionId, minionStats.player, minionStats.x, minionStats.y);
+    function initVikings(state0) {
+        var vikingStats;
+        for (var vikingId in state0) {
+            vikingStats = state0[vikingId];
+            vikingCraft.add(vikingId, vikingStats.player, vikingStats.x, vikingStats.y);
         }
     }
 
@@ -122,25 +122,25 @@
     /*
      * Utils
      */
-    var killMinion = function (minion) {
+    var killViking = function (viking) {
         global.animationsRunning++;
-        minion.bind('AnimationEnd', onAnimationEnds);
-        minion.animate('die', 1).dying = true;
+        viking.bind('AnimationEnd', onAnimationEnds);
+        viking.animate('die', 1).dying = true;
     };
 
-    var checkAliveMinions = function() {
-        var oldMinions = Object.keys(global.states[stateIndex]),
-            currentMinions = Object.keys(global.states[stateIndex+1]);
+    var checkAliveVikings = function() {
+        var oldVikings = Object.keys(global.states[stateIndex]),
+            currentVikings = Object.keys(global.states[stateIndex+1]);
 
-        oldMinions.forEach(function(minion) {
-            if (currentMinions.indexOf(minion) == -1) {
-                killMinion(global.minions[minion]);
+        oldVikings.forEach(function(viking) {
+            if (currentVikings.indexOf(viking) == -1) {
+                killViking(global.vikings[viking]);
             }
         });
-        currentMinions.forEach(function(minion) {
-            if (oldMinions.indexOf(minion) == -1) {  // new minion
-                var newMinion = global.states[stateIndex+1][minion];
-                minionCraft.add(newMinion.id, newMinion.player, newMinion.x, newMinion.y);
+        currentVikings.forEach(function(viking) {
+            if (oldVikings.indexOf(viking) == -1) {  // new viking
+                var newViking = global.states[stateIndex+1][viking];
+                vikingCraft.add(newViking.id, newViking.player, newViking.x, newViking.y);
             }
         });
     };
@@ -150,4 +150,4 @@
         initEngine: initEngine
     };
 
-}(window, window.minionCraft));
+}(window, window.vikingCraft));

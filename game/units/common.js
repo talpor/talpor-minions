@@ -18,20 +18,20 @@ Base.prototype.getDamage = function (damage) {
 
 
 /**
- * Minion
+ * Viking
  * ----------------------------------------------------------------------------
  */
-function Minion(x, y, options) {
+function Viking(x, y, options) {
     baseUnits.AttackUnit.call(
         this,
         x, y,
-        config.minion.hp,
-        config.minion.range,
-        config.minion.attack
+        config.viking.hp,
+        config.viking.range,
+        config.viking.attack
     );
 }
-Minion.prototype = Object.create(baseUnits.AttackUnit.prototype);
-Minion.prototype.constructor = Minion;
+Viking.prototype = Object.create(baseUnits.AttackUnit.prototype);
+Viking.prototype.constructor = Viking;
 
 
 /**
@@ -53,6 +53,6 @@ Tower.prototype.constructor = Tower;
 
 module.exports = {
     Base: Base,
-    Minion: Minion,
+    Viking: Viking,
     Tower: Tower
 };

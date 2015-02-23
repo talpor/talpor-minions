@@ -14,22 +14,22 @@ SimpleAgent.prototype = _.extend(ai.Agent.prototype, {
         var self = this,
             weakestEnemy;
 
-        _.each(this.getMyMinions(world), function (minion) {
-            weakestEnemy = _.sortBy(self.getEnemiesInRange(world, minion), 'hp')[0];
+        _.each(this.getMyVikings(world), function (viking) {
+            weakestEnemy = _.sortBy(self.getEnemiesInRange(world, viking), 'hp')[0];
             if (weakestEnemy) {
                 self.attack(
-                    world, minion,
+                    world, viking,
                     {
-                        x: weakestEnemy.x - minion.x,
-                        y: weakestEnemy.y - minion.y
+                        x: weakestEnemy.x - viking.x,
+                        y: weakestEnemy.y - viking.y
                     }
                 )
                 return;
             }
 
             _.each(ai.DIRECTIONS, function (direction) {
-                if (self.isDirectionUnoccupied(world, minion, direction)) {
-                    self.walk(world, minion, direction);
+                if (self.isDirectionUnoccupied(world, viking, direction)) {
+                    self.walk(world, viking, direction);
                     return;
                 }
             });

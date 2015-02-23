@@ -50,17 +50,17 @@ function Game() {
     /*
      * Set units in place
      */
-    this.newUnit(this.player1, unit.Minion, 0, 4);
-    this.newUnit(this.player1, unit.Minion, 2, 4);
-    this.newUnit(this.player1, unit.Minion, 4, 4);
-    this.newUnit(this.player1, unit.Minion, 4, 2);
-    this.newUnit(this.player1, unit.Minion, 4, 0);
+    this.newUnit(this.player1, unit.Viking, 0, 4);
+    this.newUnit(this.player1, unit.Viking, 2, 4);
+    this.newUnit(this.player1, unit.Viking, 4, 4);
+    this.newUnit(this.player1, unit.Viking, 4, 2);
+    this.newUnit(this.player1, unit.Viking, 4, 0);
 
-    this.newUnit(this.player2, unit.Minion, 15, 19);
-    this.newUnit(this.player2, unit.Minion, 15, 17);
-    this.newUnit(this.player2, unit.Minion, 15, 15);
-    this.newUnit(this.player2, unit.Minion, 17, 15);
-    this.newUnit(this.player2, unit.Minion, 19, 15);
+    this.newUnit(this.player2, unit.Viking, 15, 19);
+    this.newUnit(this.player2, unit.Viking, 15, 17);
+    this.newUnit(this.player2, unit.Viking, 15, 15);
+    this.newUnit(this.player2, unit.Viking, 17, 15);
+    this.newUnit(this.player2, unit.Viking, 19, 15);
 }
 
 
@@ -153,9 +153,9 @@ Game.prototype.killUnit = function (unitID, actions) {
 Game.prototype.addNewUnits = function () {
     if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0) return;
     if (!this.world.isOccupied(3, 3))
-        this.newUnit(this.player1, unit.Minion, 3, 3);
+        this.newUnit(this.player1, unit.Viking, 3, 3);
     if (!this.world.isOccupied(16, 16))
-        this.newUnit(this.player2, unit.Minion, 16, 16);
+        this.newUnit(this.player2, unit.Viking, 16, 16);
 };
 
 

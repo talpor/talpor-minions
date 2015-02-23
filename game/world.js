@@ -56,8 +56,8 @@ World.prototype.isValidAction = function (unit, action) {
 
     if (!tile) return false;
     if (tile.id !== unit.id) return false;
-    if (action.name == 'walk' && this.isOccupied(location.x, location.y)) return false;
-    if (action.name == 'attack' && (!this.isOccupied(location.x, location.y) || this.array[location.x][location.y].player.number == unit.player.number)) return false;
+    if (action.please == 'walk' && this.isOccupied(location.x, location.y)) return false;
+    if (action.please == 'attack' && (!this.isOccupied(location.x, location.y) || this.array[location.x][location.y].player.number == unit.player.number)) return false;
 
     return true;
 };
@@ -69,7 +69,7 @@ World.prototype.isOccupied = function (x, y) {
 
 
 World.prototype.execAction = function (unit, action) {
-    return this[action.name](unit, action.dx, action.dy);
+    return this[action.please](unit, action.dx, action.dy);
 };
 
 World.prototype.walk = function (unit, dx, dy) {
