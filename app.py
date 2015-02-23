@@ -4,8 +4,10 @@ import subprocess
 from flask import Flask, render_template, send_file
 from flask.ext.pymongo import PyMongo
 
-app = Flask(__name__)
+SECRET_KEY = 'A0Zr98j/3yXsdr R~XHXFG!jmN]ASSR/,?RX'
+SEND_FILE_MAX_AGE_DEFAULT = 0
 
+app = Flask(__name__)
 mongo = PyMongo(app)
 
 
