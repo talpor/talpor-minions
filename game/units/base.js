@@ -71,7 +71,7 @@ AttackUnit.prototype.getStats = function () {
 };
 
 AttackUnit.prototype.doDamage = function () {
-    return self.attack;
+    return this.attack;
 };
 
 
