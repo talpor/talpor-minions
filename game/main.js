@@ -129,6 +129,22 @@ Game.prototype.newUnit = function (player, unitConstructor, x, y) {
 };
 
 /**
+ * Removes a unit from the game using its unitID
+ */
+Game.prototype.killUnit = function (unitID, actions) {
+    var player = this.units[unitID].player,
+        x = this.units[unitID].x,
+        y = this.units[unitID].y;
+
+    delete this.units[unitID];
+    _.remove(player.units, function (unit) { return unit.id === unitID });
+    this.world.removeUnit(x, y);
+
+    if (actions)
+        delete actions[unitID];
+};
+
+/**
  * Adds new units if the time is right.
  */
 Game.prototype.addNewUnits = function () {
@@ -165,8 +181,7 @@ Game.prototype.executeActions = function (actions) {
     var state = {};
     _.each(_.filter(self.units, function (unit) { return unit.kind == 'moving' }), function (unit, unitID) {
         if (unit.isDead()) {
-            delete self.units[unitID];
-            delete actions[unitID];
+            self.killUnit(unit.id, actions);
         }
 
         state[unit.id] = unit.getStats();

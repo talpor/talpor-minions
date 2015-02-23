@@ -7,8 +7,11 @@ function World(size) {
     self.size = size;
     self.array = new Array(size);
 
-    for (var i = 0; i < size; i++)
-        self.array[i] = new Array(size);
+    for (var i = 0; i < size; i++) {
+        this.array[i] = new Array(size);
+        for (var j = 0; j < size; j++)
+            this.array[i][j] = null;
+    }
 }
 
 
@@ -39,6 +42,11 @@ World.prototype.addUnit = function (unitConstructor, x, y, options) {
 };
 
 
+World.prototype.removeUnit = function (x, y) {
+    this.array[x][y] = null;
+};
+
+
 World.prototype.isValidAction = function (unit, action) {
     var location = {
         x: unit.x + action.dx,
@@ -65,7 +73,7 @@ World.prototype.execAction = function (unit, action) {
 };
 
 World.prototype.walk = function (unit, dx, dy) {
-    this.array[unit.x][unit.y] = undefined;
+    this.array[unit.x][unit.y] = null;
 
     unit.x += dx;
     unit.y += dy;
