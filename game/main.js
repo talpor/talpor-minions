@@ -35,6 +35,19 @@ function Game() {
     this.player2 = new Player(2, Agent2);
 
     /*
+     * Sets bases  -- TO-DO: Find a automatic way to select good places to place bases.
+     */
+    this.newUnit(this.player1, unit.Base, 1, 1);
+    this.newUnit(this.player1, unit.Base, 1, 2);
+    this.newUnit(this.player1, unit.Base, 2, 1);
+    this.newUnit(this.player1, unit.Base, 2, 2);
+
+    this.newUnit(this.player2, unit.Base, 17, 17);
+    this.newUnit(this.player2, unit.Base, 17, 18);
+    this.newUnit(this.player2, unit.Base, 18, 17);
+    this.newUnit(this.player2, unit.Base, 18, 18);
+
+    /*
      * Set units in place
      */
     this.newUnit(this.player1, unit.Minion, 0, 4);
@@ -48,19 +61,6 @@ function Game() {
     this.newUnit(this.player2, unit.Minion, 15, 15);
     this.newUnit(this.player2, unit.Minion, 17, 15);
     this.newUnit(this.player2, unit.Minion, 19, 15);
-
-    /*
-     * Sets bases  -- TO-DO: Find a automatic way to select good places to place bases.
-     */
-    this.newUnit(this.player1, unit.Base, 1, 1);
-    this.newUnit(this.player1, unit.Base, 1, 2);
-    this.newUnit(this.player1, unit.Base, 2, 1);
-    this.newUnit(this.player1, unit.Base, 2, 2);
-
-    this.newUnit(this.player2, unit.Base, 17, 17);
-    this.newUnit(this.player2, unit.Base, 17, 18);
-    this.newUnit(this.player2, unit.Base, 18, 17);
-    this.newUnit(this.player2, unit.Base, 18, 18);
 }
 
 
@@ -85,14 +85,16 @@ Game.prototype.start = function () {
         var state = this.executeActions(
             this.currentPlayer.agent._doTurn(this.world.safeClone())
         );
+
         states.push(state);
     }
 
     // Write results to some json file
     var jsonFileName = '/tmp/' + uuid.v4() + '.json';
     var winner = this.getWinner();
+    winner = winner ? winner.number : null;
     var str = JSON.stringify({
-        winner: winner ? winner.player : winner,
+        winner: winner,
         states: states
     }) + '\n';
     fs.writeFile(jsonFileName, str, function () {
