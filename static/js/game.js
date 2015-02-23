@@ -1,8 +1,10 @@
 /* global $, console, moveMinion, attackMinion, minions, Crafty, addMinion */
 /* exported NONE, BOX_SIZE, startGame */
 
-var t, states;
-$.ajax('/play/i7/i7', {
+var t, states,
+    scope = window.scope;
+
+$.ajax('/play/' + scope.armies[0] + '/' + scope.armies[1], {
     aync: true,
     contentType: 'application/json',
     dataType: 'json',
