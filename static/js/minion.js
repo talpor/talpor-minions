@@ -187,7 +187,9 @@
             minion.animate('attack_down_right', 1);
         }
     }
-    global.addMinion = addMinion;
-    global.moveMinion = moveMinion;
-    global.attackMinion = attackMinion;
+    global.minionCraft = {
+        add: addMinion,
+        move: moveMinion,
+        attack: attackMinion
+    };
 })(window);
