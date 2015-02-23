@@ -85,24 +85,23 @@
                     }
                 });
                 currentMinions.forEach(function(minion) {
-                    //console.log(oldMinions);
                     if (oldMinions.indexOf(minion) == -1) {
-                        var newMinion = global.states[stateIndex][minion];
+                        var newMinion = global.states[stateIndex+1][minion];
                         global.addMinion(newMinion.id, newMinion.player, newMinion.x, newMinion.y);
                         //new minion
                     }
                 });
             };
-        if (stateIndex > 0) {
-            var oldMinions = Object.keys(global.states[stateIndex-1]),
-                currentMinions = Object.keys(global.states[stateIndex]);
+        if (stateIndex +1< global.states.length) {
+            var oldMinions = Object.keys(global.states[stateIndex]),
+                currentMinions = Object.keys(global.states[stateIndex+1]);
             checkAliveMinions(oldMinions, currentMinions);
         }
         global.animationsRunning--;
         if (global.animationsRunning === 0){
             stateIndex++;
             if (stateIndex < global.states.length){
-                 setTimeout(function(){ renderAction(global.states[stateIndex]); }, 500); 
+                setTimeout(function(){ renderAction(global.states[stateIndex]); }, 500); 
             }
         }
     }
@@ -152,7 +151,7 @@
         renderAction(global.states[stateIndex]);
     }
 
-    global.renderAction = renderAction;
+    // global.renderAction = renderAction;
     global.startGame = startGame;
     global.initEngine = initEngine;
     global.onAnimationEnds = onAnimationEnds;
