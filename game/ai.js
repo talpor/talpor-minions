@@ -40,8 +40,8 @@ Agent.prototype = {
         _.each(world, function(col) {
             _.each(col, function(tile) {
                 if (!tile) return;
-                if (own && tile.player !== self.playerNumber) return;
-                if (!own && tile.player === self.playerNumber) return;
+                if (own && tile.player !== this.playerNumber) return;
+                if (!own && tile.player === this.playerNumber) return;
                 if (kind && tile.kind !== kind) return;
 
                 units.push(tile);
