@@ -10,4 +10,5 @@
     global.DOWNLEFT = 8;
     global.BOX_SIZE = 30;
     global.animationsRunning = 0;
+    global.minions = {};
 }(window));

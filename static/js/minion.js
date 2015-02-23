@@ -2,7 +2,6 @@
 
 (function(global) {
     'use strict';
-    var minions = {};
 
     function addMinion(minionId, playerNumber, xPosition, yPosition){
 
@@ -126,7 +125,7 @@
 
         player.id = minionId;
 
-        minions[minionId] = player;
+        global.minions[minionId] = player;
     }
 
     function moveMinion(minion, direction){
@@ -191,5 +190,4 @@
     global.addMinion = addMinion;
     global.moveMinion = moveMinion;
     global.attackMinion = attackMinion;
-    global.minions = minions;
 })(window);
