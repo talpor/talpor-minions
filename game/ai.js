@@ -101,8 +101,19 @@ Agent.prototype = {
         return !Boolean(tile || tile == false);
     },
 
-    getDistance: function (world, loc1, loc2) {
-        // pass
+    getDistance: function (from, to) {
+        return {
+            x: to.x - from.x,
+            y: to.y - from.y
+        };
+    },
+
+    getDirection: function (from, to) {
+        var distance = this.getDistance(from, to);
+        var direction = distance;
+        if (distance.x) direction.x /= Math.abs(distance.x)
+        if (distance.y) direction.y /= Math.abs(distance.y)
+        return direction;
     },
 
     /**
