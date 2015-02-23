@@ -14,7 +14,7 @@
     scope.loadState = function() {
         // loadState
         if (scope.armies.length < 2) {
-            alert('Random fight unimplemented :(');
+            alert('Random fight not implemented :(');
             return;
         }
         game.initEngine();
