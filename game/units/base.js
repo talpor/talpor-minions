@@ -2,7 +2,6 @@
 /* exported Unit, Minion */
 
 var config = require('../config'),
-    uuid = require('node-uuid'),
     _ = require('lodash');
 
 var pkAutoIncrement = 0;
@@ -45,7 +44,7 @@ Unit.prototype.getDamage = function (damage) {
 };
 
 Unit.prototype.isDead = function () {
-    return this.hp <= 0
+    return this.hp <= 0;
 };
 
 

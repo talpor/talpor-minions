@@ -4,8 +4,8 @@ var config = require('./config');
 function World(size) {
     var self = this;
 
-    this.size = size
-    this.array = new Array(size);
+    self.size = size;
+    self.array = new Array(size);
 
     for (var i = 0; i < size; i++) {
         this.array[i] = new Array(size);
