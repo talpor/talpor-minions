@@ -31,8 +31,8 @@ function Game() {
     /*
      * Players
      */
-    this.player1 = new Player(1, Agent1);
-    this.player2 = new Player(2, Agent2);
+    this.player1 = new Player(1, this.world, Agent1);
+    this.player2 = new Player(2, this.world, Agent2);
 
     /*
      * Sets bases  -- TO-DO: Find a automatic way to select good places to place bases.

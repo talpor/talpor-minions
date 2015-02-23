@@ -2,9 +2,10 @@
 
 var config = require('./config');
 
-function Player(number, AgentConstructor) {
+function Player(number, world, AgentConstructor) {
     this.number = number;
-    this.agent = new AgentConstructor(number);
+    this.world = world;
+    this.agent = new AgentConstructor(number, world.safeClone());
     this.units = [];
     this.hp = config.player.hp;
 }
