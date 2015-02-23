@@ -1,10 +1,10 @@
 /* global $, Crafty */
 
-(function(global, minion) {
+(function (global, minion) {
     'use strict';
     var stateIndex = 0,
         drawCanvas = function() {
-            Crafty.init(600,600);
+            Crafty.init(600, 600);
             Crafty.background('url("/static/img/bg.png")');
         },
         initEngine = function() {
@@ -15,6 +15,8 @@
                 dataType: 'json',
                 success: function(game) {
                     global.states = game.states;
+                    console.log(global.states.length);
+                    startGame();
                 }
             });
 

@@ -35,9 +35,7 @@
     rivets.binders['play-game'] = function(el, value) {
         if (value) {
             cover.fadeOut(function() {
-                stage.animate({height: '600px'}, 300, function() {
-                    game.start();
-                });
+                stage.animate({height: '600px'}, 300);
                 $('html, body').animate({
                     scrollTop: stage.offset().top
                 }, 700);
