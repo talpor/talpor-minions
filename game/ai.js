@@ -51,6 +51,16 @@ Agent.prototype = {
     },
 
     /**
+     * Returns a list of enemies in range for the given `unit`.
+     */
+    getEnemiesInRange: function (world, unit) {
+        var self = this;
+        return _.filter(this.tilesInRange(world, unit.x, unit.y, unit.range), function (tile) {
+            return tile && tile.player !== self.playerNumber;
+        });
+    },
+
+    /**
      * Returns a world's tile or false if position is invalid
      */
     getTile: function (world, x, y) {
@@ -65,18 +75,18 @@ Agent.prototype = {
         return this._getUnits(world, 'moving');
     },
 
-    getMyBase: function(world) {
+    getMyBase: function (world) {
         return this._getUnits(world, 'stationary');
     },
 
     /**
      * Returns a list with the enemy's current minions.
      */
-    getEnemyMinons: function(world) {
+    getEnemyMinons: function (world) {
         return this._getUnits(world, 'moving', false);
     },
 
-    getEnemyBase: function(world) {
+    getEnemyBase: function (world) {
         return this._getUnits(world, 'stationary', false);
     },
 
@@ -84,19 +94,35 @@ Agent.prototype = {
      * Returns true if a given `direction` for the given `minion` is
      * not occupied in the current `world`. False otherwise.
      */
-    isDirectionUnoccupied: function(world, minion, dir) {
+    isDirectionUnoccupied: function (world, minion, dir) {
         var tile = this.getTile(world, minion.x + dir.x, minion.y + dir.y)
         return !Boolean(tile || tile == false);
     },
 
-    getDistance: function(world, loc1, loc2) {
+    getDistance: function (world, loc1, loc2) {
         // pass
+    },
+
+    /**
+     * Returns a list of tiles in the given `world` that are around
+     * the given [`x`,`y`] location.
+     */
+    tilesInRange: function (world, x, y, range) {
+        range = range || 1;
+        var tiles = [];
+
+        for (var i = x - range; i < x + range; i++) {
+            for (var j = y - range; j < y - range; j++) {
+                tiles.push(this.getTile(world, i, j));
+            }
+        }
+        return _.filter(tiles, function (tile) { return tile !== false });
     },
 
     /**
      * Stores a 'walk' action into the private `_actions` attr.
      */
-    walk: function(world, minion, dir) {
+    walk: function (world, minion, dir) {
         this._actions[minion.id] = {
             name: 'walk',
             dx: dir.x,
@@ -107,7 +133,7 @@ Agent.prototype = {
     /**
      * Stores an 'attack' action into the private `_actions` attr.
      */
-    attack: function(world, minion, dir) {
+    attack: function (world, minion, dir) {
         this._actions[minion.id] = {
             name: 'attack',
             dx: dir.x,
