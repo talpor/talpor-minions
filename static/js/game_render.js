@@ -166,6 +166,10 @@ function init(){
 		}
 		
 	}
+	for (var i in states){ 
+		console.log('stay');
+		renderAction(states[i]);
+	}
     //renderer.render(stage);
 }
 
