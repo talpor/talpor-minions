@@ -1,13 +1,12 @@
 var _ = require('lodash');
-var uuid = require('node-uuid');
 var ai = require('../ai');
 
 
-function MyAgent(playerNumber) {
+function SimpleAgent(playerNumber) {
     ai.Agent.call(this, playerNumber);
 }
 
-MyAgent.prototype = _.extend(ai.Agent.prototype, {
+SimpleAgent.prototype = _.extend(ai.Agent.prototype, {
 
     constructor: ai.Agent,
 
@@ -40,4 +39,4 @@ MyAgent.prototype = _.extend(ai.Agent.prototype, {
 
 });
 
-module.exports = MyAgent;
+module.exports = SimpleAgent;
