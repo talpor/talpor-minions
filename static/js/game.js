@@ -37,14 +37,23 @@ window.onload = function() {
     Crafty.sprite(
         54, '/static/img/escualidos.png', { 2: [0, 0] }, 18, 18
     );
-
-    /*  Crafty.sprite(54, '/static/img/sprite.png', {
-     player1: [0,0],
-     }, 18, 18);*/
+    Crafty.sprite(
+        92, '/static/img/miraflores.png', { redHome: [0, 0] } 
+    );
+	Crafty.sprite(
+        92, '/static/img/ramoverde.png', { blueHome: [0, 0] } 
+    );
 
     // method to randomy generate the map
     function generateWorld() {
         Crafty.background('url("/static/img/bg.png")');
+		
+		Crafty.e("2D, Canvas, redHome")
+				.attr({x: 30, y: 30, w: 60, h:60, z: 2});
+		Crafty.e("2D, Canvas, blueHome")
+				.attr({x: (30 * 17), y: (30 * 17), w: 60, h:60, z: 2});
+	
+
     }
 
 
@@ -56,7 +65,10 @@ window.onload = function() {
         console.log('sprite loading');
 
         Crafty.load(
-            ['/static/img/chavestias.png', '/static/img/escualidos.png'],
+            ['/static/img/chavestias.png', 
+            '/static/img/miraflores.png',
+            '/static/img/escualidos.png',
+            '/static/img/ramoverde.png'],
             function () {
             Crafty.scene('main'); //when everything is loaded, run the main scene
         },
