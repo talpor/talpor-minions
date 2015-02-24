@@ -152,6 +152,13 @@ Agent.prototype = {
     },
 
     /**
+     * Walks towards a given `location`.
+     */
+    walkTowards: function (world, viking, location) {
+        this.walk(world, viking, this.getDirection(viking, location));
+    },
+
+    /**
      * Stores an 'attack' action into the private `_actions` attr.
      */
     attack: function (world, viking, dir) {

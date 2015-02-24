@@ -99,10 +99,6 @@ DefensiveAgent.prototype = _.extend({}, ai.Agent.prototype, {
             self.guard[idleViking.id] = spot;
             self.walkTowards(world, idleViking, spot);
         });
-    },
-
-    walkTowards: function (world, viking, location) {
-        this.walk(world, viking, this.getDirection(viking, location));
     }
 });
 
