@@ -20,6 +20,13 @@ Player.prototype.getDamage = function (damage) {
     this.hp -= damage;
 };
 
+Player.prototype.getStats = function () {
+    return {
+        number: this.number,
+        agent: this.agent.getName()
+    };
+};
+
 Player.prototype.isDead = function () {
     return this.hp <= 0;
 };
