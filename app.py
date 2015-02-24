@@ -53,7 +53,7 @@ def home():
 @app.route('/play/<p1>/<p2>')
 def play(p1, p2):
     """Play the game."""
-    states_file = run_game('{}.js'.format(p1), '{}.js'.format(p2))
+    states_file = run_game(p1, p2)
     return send_file(states_file, mimetype='application/json')
 
 
