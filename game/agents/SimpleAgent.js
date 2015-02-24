@@ -4,6 +4,7 @@ var ai = require('../ai');
 
 function SimpleAgent(playerNumber) {
     ai.Agent.call(this, playerNumber);
+    this.name = 'SimpleAgent';
 }
 
 SimpleAgent.prototype = _.extend(ai.Agent.prototype, {

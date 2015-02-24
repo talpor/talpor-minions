@@ -5,6 +5,8 @@ var ai = require('../ai');
 function DefensiveAgent(playerNumber, world) {
     ai.Agent.call(this, playerNumber);
 
+    this.name = 'DefensiveAgent';
+
     this.guardableSpots = [];
     for (var i = 0; i < world.length; i++)
         this.guardableSpots.push({x: i, y: world.length - i - 1});
