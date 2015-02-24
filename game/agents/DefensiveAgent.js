@@ -21,14 +21,20 @@ DefensiveAgent.prototype = _.extend({}, ai.Agent.prototype, {
 
         var self = this,
             vikings = this.getMyVikings(world),
-            enemiesClose = _.filter(this.getEnemyMinons(world), function (enemy) { return enemy.x + enemy.y < world.length; }),
-            weakestEnemy, enemy;
+            ownBase = this.getMyBase(world)[0],
+            enemiesClose, weakestEnemy, enemy;
 
         var currentVikingKeys = _.pluck(vikings, 'id'),
             currentEnemiesCloseKeys = _.pluck(enemiesClose, 'id'),
             idleVikings = [],
             vikingsGuardingEnemies = [],
             guardedEnemies = [];
+
+
+        if (ownBase.x <= (world.length / 2) && ownBase.y <= (world.length / 2))
+            enemiesClose = _.filter(this.getEnemyMinons(world), function (enemy) { return enemy.x + enemy.y < world.length; })
+        else
+            enemiesClose = _.filter(this.getEnemyMinons(world), function (enemy) { return enemy.x + enemy.y > world.length; })
 
         _.each(this.guard, function (guarded, vikingKey) {
             // First remove from `guard` all dead enemies and dead vikings keys
