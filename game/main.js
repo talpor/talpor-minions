@@ -95,6 +95,7 @@ Game.prototype.start = function () {
     winner = winner ? winner.number : null;
     var str = JSON.stringify({
         winner: winner,
+        players: [this.player1.getStats(), this.player2.getStats()],
         states: states
     }) + '\n';
     fs.writeFile(jsonFileName, str, function () {
@@ -184,20 +185,27 @@ Game.prototype.getWinner = function () {
 Game.prototype.executeActions = function (actions) {
     var self = this;
 
-    var state = {};
+    var state = {
+        bases: {
+            // _.zipObject(_.pluck(this.players, 'id'), _.pluck(this.players, 'hp'))
+            1: this.player1.hp,
+            2: this.player2.hp
+        },
+        units: {}
+    };
     _.each(_.filter(self.units, function (unit) { return unit.kind == 'moving' }), function (unit, index) {
         if (unit.isDead())
             self.killUnit(unit.id, actions);
 
-        state[unit.id] = unit.getStats();
+        state.units[unit.id] = unit.getStats();
     });
 
     _.each(actions, function (action, unitID) {
         var unit = self.units[unitID];
         if (!self.world.isValidAction(unit, action)) return;
 
+        state.units[unitID].action = action;
         self.world.execAction(unit, action);
-        state[unitID].action = action;
     });
 
     return state;

@@ -54,6 +54,7 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function(game) {
+                    console.log(game.winner, game.players[0].agent, game.players[1].agent);
                     global.states = game.states;
                     Crafty.scene('main');
                 }
@@ -78,8 +79,8 @@
     function renderAction(state) {
         if (stateIndex + 1 < global.states.length) checkAliveVikings();
 
-        for (var vikingkey in state) {
-            var viking = state[vikingkey],
+        for (var vikingkey in state.units) {
+            var viking = state.units[vikingkey],
                 direction;
             if (viking.action) {
                 if (viking.action.dx == 1 && viking.action.dy == 1) {
@@ -112,8 +113,8 @@
 
     function initVikings(state0) {
         var vikingStats;
-        for (var vikingId in state0) {
-            vikingStats = state0[vikingId];
+        for (var vikingId in state0.units) {
+            vikingStats = state0.units[vikingId];
             vikingCraft.add(vikingId, vikingStats.player, vikingStats.x, vikingStats.y);
         }
     }
@@ -129,8 +130,8 @@
     };
 
     var checkAliveVikings = function() {
-        var oldVikings = Object.keys(global.states[stateIndex]),
-            currentVikings = Object.keys(global.states[stateIndex+1]);
+        var oldVikings = Object.keys(global.states[stateIndex].units),
+            currentVikings = Object.keys(global.states[stateIndex+1].units);
 
         oldVikings.forEach(function(viking) {
             if (currentVikings.indexOf(viking) == -1) {
@@ -139,7 +140,7 @@
         });
         currentVikings.forEach(function(viking) {
             if (oldVikings.indexOf(viking) == -1) {  // new viking
-                var newViking = global.states[stateIndex+1][viking];
+                var newViking = global.states[stateIndex+1].units[viking];
                 vikingCraft.add(newViking.id, newViking.player, newViking.x, newViking.y);
             }
         });
