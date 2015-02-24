@@ -5,6 +5,7 @@ var _ = require('lodash'),
 
 
 var Agent = function(playerNumber) {
+    this.name = 'unnamed';
     this.playerNumber = playerNumber;
 };
 
@@ -60,6 +61,13 @@ Agent.prototype = {
         return _.filter(this.tilesInRange(world, unit.x, unit.y, unit.range), function (tile) {
             return tile && tile.player !== self.playerNumber;
         });
+    },
+
+    /**
+     * Returns this agent name.
+     */
+    getName: function () {
+        return this.name;
     },
 
     /**
