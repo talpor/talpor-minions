@@ -58,7 +58,7 @@ Agent.prototype = {
      */
     getEnemiesInRange: function (world, unit) {
         var self = this;
-        return _.filter(this.tilesInRange(world, unit.x, unit.y, unit.range), function (tile) {
+        return _.filter(this.tilesInRange(world, unit, unit.range), function (tile) {
             return tile && tile.player !== self.playerNumber;
         });
     },
@@ -124,19 +124,26 @@ Agent.prototype = {
         return direction;
     },
 
+    getDistanceFromDirection: function (from, direction, to) {
+        return this.getDistance(
+            {x: from.x + direction.x, y: from.y - direction.y},
+            to
+        );
+    },
+
     /**
      * Returns a list of tiles in the given `world` that are around
      * the given [`x`,`y`] location.
      */
-    tilesInRange: function (world, x, y, range) {
+    tilesInRange: function (world, location, range) {
         range = range || 1;
         var tiles = [];
 
-        for (var i = x - range; i < (x + range); i++) {
-            for (var j = y - range; j < (y + range); j++) {
-                tiles.push(this.getTile(world, i, j));
-            }
-        }
+        for (var i = location.x - range; i < (location.x + range + 1); i++)
+            for (var j = location.y - range; j < (location.y + range + 1); j++)
+                if (i != location.x && j != location.y)
+                    tiles.push(this.getTile(world, i, j));
+
         return _.filter(tiles, function (tile) { return tile !== false });
     },
 
