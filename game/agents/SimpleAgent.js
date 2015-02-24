@@ -7,7 +7,7 @@ function SimpleAgent(playerNumber) {
     this.name = 'SimpleAgent';
 }
 
-SimpleAgent.prototype = _.extend(ai.Agent.prototype, {
+SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
 
     constructor: ai.Agent,
 

@@ -12,7 +12,7 @@ function DefensiveAgent(playerNumber, world) {
         this.guardableSpots.push({x: i, y: world.length - i - 1});
 }
 
-DefensiveAgent.prototype = _.extend(ai.Agent.prototype, {
+DefensiveAgent.prototype = _.extend({}, ai.Agent.prototype, {
     constructor: ai.Agent,
 
     guard: {},
