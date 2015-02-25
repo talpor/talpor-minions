@@ -5,6 +5,7 @@
     var app = $('#home'),
         stage = app.find('#cr-stage'),
         cover = stage.find('#frontCover'),
+        domArmies = stage.find('#armies li'),
         scope;
 
     function initApp() {
@@ -37,7 +38,7 @@
         title: 'Random Fight',
         today: moment().format('DD-MM-YY'),
         selectedArmies: [],
-        armies: $('#armies li').map(function(i,el) {
+        armies: domArmies.map(function(i,el) {
                                     return el.getAttribute('data-name')}),
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
@@ -70,6 +71,12 @@
             if (armies.length === 2) {
                 scope.title = armies[0] + ' -vs- ' + armies[1];
             }
+            $('#armies li').each(function(i, el) {
+                $(el).find('a').removeClass('active');
+            });
+            armies.forEach(function(army) {
+                $('#armies li[data-name=' + army + '] a').addClass('active');
+            });
         }
     };
     initRivets();
