@@ -6,9 +6,17 @@
         stage = app.find('#cr-stage'),
         cover = stage.find('#frontCover'),
         domArmies = stage.find('#armies li'),
+        armyColors = ['red', 'blue'],
+        myArmy = localStorage.getItem('myArmy'),
         scope;
 
     function initApp() {
+        if (myArmy) {
+            var li = $('#armies li[data-name=' + myArmy + ']');
+            li.find('a')
+                    .addClass('active ' + armyColors[0]);
+            li.prependTo('#armies');
+        }
         setTimeout(function() {
             stage.css({'height': '300px'});
             stage.slideDown('slow');
@@ -37,7 +45,7 @@
     scope = {
         title: 'Random Fight',
         today: moment().format('DD-MM-YY'),
-        selectedArmies: [],
+        selectedArmies: myArmy ? [myArmy] : [],
         armies: domArmies.map(function(i,el) {
                                     return el.getAttribute('data-name')}),
         playGame: function() {
@@ -54,6 +62,8 @@
                 form = target.parentNode.parentNode;
             if (target.files.length) {
                 if (target.files[0].name.search(/\.js$/) > 0) {
+                    localStorage.setItem('myArmy', target.files[0]
+                                                .name.replace(/\.js$/, ''));
                     form.submit();
                     return;
                 } 
@@ -72,10 +82,11 @@
                 scope.title = armies[0] + ' -vs- ' + armies[1];
             }
             $('#armies li').each(function(i, el) {
-                $(el).find('a').removeClass('active');
+                $(el).find('a').removeClass('active red blue');
             });
-            armies.forEach(function(army) {
-                $('#armies li[data-name=' + army + '] a').addClass('active');
+            armies.forEach(function(army, i) {
+                $('#armies li[data-name=' + army + '] a')
+                    .addClass('active ' + armyColors[i]);
             });
         }
     };
