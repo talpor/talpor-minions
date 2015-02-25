@@ -7,20 +7,21 @@ from flask.ext.pymongo import PyMongo
 from werkzeug import secure_filename
 
 
-# Configuration
-# -----------------------------------------------------------------------------
-SECRET_KEY = 'A0Zr98j/3yXsdr R~XHXFG!jmN]ASSR/,?RX'
-SEND_FILE_MAX_AGE_DEFAULT = 0
-UPLOAD_FOLDER = os.path.join('game', 'agents')
-
-
 # Application
 # -----------------------------------------------------------------------------
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config.from_object('config')
 
 mongo = PyMongo(app)
 
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html'), 404
+
+
+# Views
+# -----------------------------------------------------------------------------
 
 def run_game(agent1_name, agent2_name):
     command = 'node {} {} {}'.format(
@@ -58,7 +59,3 @@ def play(p1, p2):
     """Play the game."""
     states_file = run_game(p1, p2)
     return send_file(states_file, mimetype='application/json')
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
