@@ -10,7 +10,17 @@
         app = $('#home'),
         stage = app.find('#cr-stage'),
         cover = stage.find('#frontCover');
-
+    scope.submitFile = function(event) {
+        var target = event.target,
+            form = target.parentNode.parentNode;
+        if (target.files.length) {
+            if (target.files[0].name.search(/\.js$/) > 0) {
+                form.submit();
+                return;
+            } 
+            alert('Not a javascript file');
+        }
+    };
     scope.loadState = function() {
         // loadState
         if (scope.armies.length < 2) {
@@ -25,7 +35,7 @@
     };
     scope.selectArmyToBattle = function(e) {
         e.preventDefault();
-        var target = e.currentTarget; // TODO: backward compatibility
+        var target = e.currentTarget;
         scope.armies.push($(target).attr('data-army'));
         if (scope.armies.length === 3) {
             scope.armies.shift();

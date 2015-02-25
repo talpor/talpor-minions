@@ -10,11 +10,15 @@
 <body id="home">
     <nav class="navbar navbar-default navbar-inverse navbar-static-top">
         <div class="container-fluid">
-            <button type="button" class="btn btn-default navbar-btn">Upload your army <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></button>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <label for="file" rv-hide="selectedFile">
+                    <input rv-on-change="submitFile" type="file" id="file" name="file">
+                    <div class="btn btn-default navbar-btn">Upload your army <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></div>
+                </label>
+            </form>
             <h1 class="navbar-text">Vikings, please!</h1>
         </div>
     </nav>
-
     <div class="container">
         <div class="row">
             <div class="col-md-3">
