@@ -10,13 +10,17 @@
 <body id="home">
     <nav class="navbar navbar-default navbar-inverse navbar-static-top">
         <div class="container-fluid">
-            <form action="/upload" method="post" enctype="multipart/form-data">
-                <label for="file" rv-hide="selectedFile">
-                    <input rv-on-change="submitFile" type="file" id="file" name="file">
-                    <div class="btn btn-default navbar-btn">Upload your army &nbsp;<span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></div>
-                </label>
-            </form>
-            <h1 class="navbar-text">Vikings, please!</h1>
+          <form action="/new-agent" method="post" enctype="multipart/form-data">
+            <label for="file" rv-hide="selectedFile">
+              <input rv-on-change="submitFile" type="file" id="file" name="file" />
+              <div class="btn btn-default navbar-btn">Upload your army &nbsp;<span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></div>
+            </label>
+            Or...
+            <input type="text" name="gist-id" placeholder="Save a gist id" />
+            <input type="submit" value="Save" class="btn btn-default navbar-btn" />
+          </form>
+
+          <h1 class="navbar-text">Vikings, please!</h1>
         </div>
     </nav>
     <div class="container">
@@ -24,9 +28,9 @@
             <div class="col-md-3">
                 <h3>Armies</h3>
                 <ul id="armies">
-                    {% for army in top_armies %}
-                    <li data-name="{{ army.commander }}"><a class="army" href="#" rv-on-click="selectArmyToBattle" ><b>{{ army.commander }}</b></a></li>
-                    {% endfor %}
+                  {% for army_id, army_name in armies.iteritems() %}
+                  <li data-army-id="{{ army_id }}"><a class="army" href="#" rv-on-click="selectArmyToBattle" ><b>{{ army_name }}</b></a></li>
+                  {% endfor %}
                 </ul>
             </div>
             <div class="col-md-7 main-battle">
