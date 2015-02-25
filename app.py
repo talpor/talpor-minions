@@ -7,11 +7,15 @@ from flask.ext.pymongo import PyMongo
 from werkzeug import secure_filename
 
 
+# Configuration
+# -----------------------------------------------------------------------------
 SECRET_KEY = 'A0Zr98j/3yXsdr R~XHXFG!jmN]ASSR/,?RX'
 SEND_FILE_MAX_AGE_DEFAULT = 0
-
 UPLOAD_FOLDER = os.path.join('game', 'agents')
 
+
+# Application
+# -----------------------------------------------------------------------------
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -31,18 +35,13 @@ def run_game(agent1_name, agent2_name):
 @app.route('/')
 def home():
     """Returns main battle page."""
-    fights_today = []
-    top_armies = []
-
-    agents_dir = os.listdir(os.path.join('game', 'agents'))
-    for agent in [f for f in agents_dir]:
-        top_armies.append({
-            'commander': agent.replace('.js', '')
-            })
-
-    return render_template('home.html',
-                           fights_today=fights_today,
-                           top_armies=top_armies)
+    return render_template(
+        'home.html',
+        top_armies=[
+            {'commander': agent.replace('.js', '')}
+            for agent in os.listdir(os.path.join('game', 'agents'))
+        ]
+    )
 
 
 @app.route('/upload', methods=['POST'])
