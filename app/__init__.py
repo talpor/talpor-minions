@@ -1,9 +1,11 @@
-import os
-import subprocess
+import os, shutil, subprocess
 
-from flask import Flask, render_template, send_file, request, redirect, url_for
+from flask import (
+    Flask, flash, render_template, send_file, request, redirect, url_for
+)
 from flask.ext.pymongo import PyMongo
 
+from github3 import gist as gh_gist
 from werkzeug import secure_filename
 
 
@@ -34,6 +36,57 @@ def run_game(agent1_name, agent2_name):
         return False
 
 
+def upsert_gist(gist_id):
+    """Searches for a gist and updates our database, upserting if needed. This
+    function will then call `update_gist_dir` to update our `agents` directory
+    with the current gist file information.
+    """
+    gist = gh_gist(gist_id)
+    if gist is None:
+        return
+    gist_json = gist.to_json()
+    mongo.db.vikings.agents.update(
+        {'id': gist_json['id']},
+        {
+            'id': gist_json['id'],
+            'description': gist_json['description'],
+            'html_url': gist_json['html_url'],
+            'public': gist_json['public'],
+            'created_at': gist_json['created_at'],
+            'updated_at': gist_json['updated_at'],
+            'owner': {
+                'login': gist_json['owner']['login'],
+                'avatar_url': gist_json['owner']['avatar_url'],
+                'html_url': gist_json['owner']['html_url'],
+            },
+        },
+        upsert=True, multi=False
+    )
+    update_gist_dir(gist)
+
+
+def update_gist_dir(gist):
+    if not any([f.filename == 'index.js' for f in gist.iter_files()]):
+        flash('Your gist doesn\'t have an index.js.')
+
+    agent_dir = os.path.join(
+        app.config['GAME_FOLDER'], 'gist::{}'.format(gist.id)
+    )
+
+    shutil.rmtree(agent_dir, ignore_errors=True)
+    os.makedirs(agent_dir)
+
+    for f in gist.iter_files():
+        if not f.filename.endswith('.js'):
+            continue
+        with open(os.path.join(agent_dir, f.filename), 'w') as gf:
+            gf.write(f.content)
+
+
+
+# Views
+# -----------------------------------------------------------------------------
+
 @app.route('/')
 def home():
     """Returns main battle page."""
@@ -48,12 +101,14 @@ def home():
     )
 
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
+@app.route('/new-agent', methods=['POST'])
+def new_agent():
     file = request.files['file']
     if file:
         filename = secure_filename(file.filename)
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    if request.form['gist-id']:
+        upsert_gist(request.form['gist-id'])
     return redirect(url_for('home'))
 
 
