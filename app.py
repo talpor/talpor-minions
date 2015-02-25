@@ -37,8 +37,7 @@ def home():
     agents_dir = os.listdir(os.path.join('game', 'agents'))
     for agent in [f for f in agents_dir]:
         top_armies.append({
-            'commander': agent.replace('.js', ''),
-            'flops': 1245
+            'commander': agent.replace('.js', '')
             })
 
     return render_template('home.html',
