@@ -25,7 +25,8 @@ def not_found(error):
 
 def run_game(agent1_name, agent2_name):
     command = 'node {} {} {}'.format(
-        os.path.join('game', 'main.js'), agent1_name, agent2_name
+        os.path.join(app.config['GAME_FOLDER'], 'main.js'),
+        agent1_name, agent2_name
     )
     try:
         return subprocess.check_output(command, shell=True)
@@ -40,7 +41,9 @@ def home():
         'home.html',
         top_armies=[
             {'commander': agent.replace('.js', '')}
-            for agent in os.listdir(os.path.join('game', 'agents'))
+            for agent in os.listdir(
+                    os.path.join(app.config['GAME_FOLDER'], 'agents')
+            )
         ]
     )
 
