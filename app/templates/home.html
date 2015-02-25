@@ -24,9 +24,9 @@
             <div class="col-md-3">
                 <h3>Armies</h3>
                 <ul id="armies">
-                    {% for army in top_armies %}
-                    <li data-name="{{ army.commander }}"><a class="army" href="#" rv-on-click="selectArmyToBattle" ><b>{{ army.commander }}</b></a></li>
-                    {% endfor %}
+                  {% for army_id, army_name in armies.iteritems() %}
+                  <li data-army-id="{{ army_id }}"><a class="army" href="#" rv-on-click="selectArmyToBattle" ><b>{{ army_name }}</b></a></li>
+                  {% endfor %}
                 </ul>
             </div>
             <div class="col-md-7 main-battle">

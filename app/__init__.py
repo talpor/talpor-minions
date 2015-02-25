@@ -20,7 +20,7 @@ def not_found(error):
     return render_template('404.html'), 404
 
 
-# Views
+# Helpers
 # -----------------------------------------------------------------------------
 
 def run_game(agent1_name, agent2_name):
@@ -39,8 +39,8 @@ def home():
     """Returns main battle page."""
     return render_template(
         'home.html',
-        top_armies=[
-            {'commander': agent.replace('.js', '')}
+        armies=[
+            {agent.replace('.js', ''): agent.replace('.js', '')}
             for agent in os.listdir(
                     os.path.join(app.config['GAME_FOLDER'], 'agents')
             )

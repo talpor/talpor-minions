@@ -12,7 +12,7 @@
 
     function initApp() {
         if (myArmy) {
-            var li = $('#armies li[data-name=' + myArmy + ']');
+            var li = $('#armies li[data-army-id=' + myArmy + ']');
             li.find('a')
                     .addClass('active ' + armyColors[0]);
             li.prependTo('#armies');
@@ -47,7 +47,7 @@
         today: moment().format('DD-MM-YY'),
         selectedArmies: myArmy ? [myArmy] : [],
         armies: domArmies.map(function(i,el) {
-                                    return el.getAttribute('data-name')}),
+            return el.getAttribute('data-army-id')}),
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
@@ -66,7 +66,7 @@
                                                 .name.replace(/\.js$/, ''));
                     form.submit();
                     return;
-                } 
+                }
                 alert('Not a javascript file');
             }
         },
@@ -74,7 +74,7 @@
             var target = e.currentTarget.parentNode,
                 armies = scope.selectedArmies;
             e.preventDefault();
-            armies.push($(target).data('name'));
+            armies.push($(target).data('army-id'));
             if (armies.length === 3) {
                 armies.shift();
             }
@@ -85,7 +85,7 @@
                 $(el).find('a').removeClass('active red blue');
             });
             armies.forEach(function(army, i) {
-                $('#armies li[data-name=' + army + '] a')
+                $('#armies li[data-army-id=' + army + '] a')
                     .addClass('active ' + armyColors[i]);
             });
         }
