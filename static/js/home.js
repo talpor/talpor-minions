@@ -5,7 +5,7 @@
     var app = $('#home'),
         stage = app.find('#cr-stage'),
         cover = stage.find('#frontCover'),
-        domArmies = stage.find('#armies li'),
+        domArmies = $('#armies li'),
         armyColors = ['red', 'blue'],
         myArmy = localStorage.getItem('myArmy'),
         scope;
@@ -81,7 +81,7 @@
             if (armies.length === 2) {
                 scope.title = armies[0] + ' -vs- ' + armies[1];
             }
-            $('#armies li').each(function(i, el) {
+            domArmies.each(function(i, el) {
                 $(el).find('a').removeClass('active red blue');
             });
             armies.forEach(function(army, i) {
