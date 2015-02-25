@@ -39,12 +39,12 @@ def home():
     """Returns main battle page."""
     return render_template(
         'home.html',
-        armies=[
-            {agent.replace('.js', ''): agent.replace('.js', '')}
+        armies={
+            agent.replace('.js', ''): agent.replace('.js', '')
             for agent in os.listdir(
                     os.path.join(app.config['GAME_FOLDER'], 'agents')
-            )
-        ]
+            ) if not agent.startswith('gist::')
+        }
     )
 
 
