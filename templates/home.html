@@ -13,7 +13,7 @@
             <form action="/upload" method="post" enctype="multipart/form-data">
                 <label for="file" rv-hide="selectedFile">
                     <input rv-on-change="submitFile" type="file" id="file" name="file">
-                    <div class="btn btn-default navbar-btn">Upload your army <span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></div>
+                    <div class="btn btn-default navbar-btn">Upload your army &nbsp;<span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></div>
                 </label>
             </form>
             <h1 class="navbar-text">Vikings, please!</h1>
@@ -21,7 +21,7 @@
     </nav>
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
+            {#<div class="col-md-3">
                 <h3>Fight for { today }</h3>
                 <ul>
                     {% for fight in fights_today %}
@@ -38,6 +38,14 @@
                     </li>
                     {% endfor %}
                 </ul>
+            </div>#}
+            <div class="col-md-3">
+                <h3>Armies</h3>
+                <ul id="armies">
+                    {% for army in top_armies %}
+                    <li data-name="{{ army.commander }}"><a class="army" href="#" rv-on-click="selectArmyToBattle" ><b>{{ army.commander }}</b></a></li>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="col-md-7 main-battle">
                 <div rv-play-game="playing">
@@ -48,18 +56,6 @@
                         </div>
                     </div>
                 </div>
-                <div>
-                    <b>max -vs- volrath</b>
-                    <span class="pull-right">22-02-15 13:18:32</span>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <h3>Top armies</h3>
-                <ul>
-                {% for army in top_armies %}
-                <li><a class="army" href="#" rv-on-click="selectArmyToBattle" data-army="{{ army.commander }}"><b>{{ army.commander }}</b> {{ army.flops }} flops</a></li>
-                {% endfor %}
-                </ul>
             </div>
         </div>
     </div>
@@ -69,6 +65,7 @@
     <script src="{{ url_for('static', filename='libs/less/less.min.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/crafty/crafty.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/moment.js') }}"></script>
+    <script src="{{ url_for('static', filename='libs/lodash.js') }}"></script>
     <script src="{{ url_for('static', filename='js/globals.js') }}"></script>
     <script src="{{ url_for('static', filename='js/viking.js') }}"></script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>

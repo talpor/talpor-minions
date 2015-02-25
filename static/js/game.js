@@ -146,9 +146,12 @@
         });
     };
 
+    function stopEngine() {}
+
     global.onAnimationEnds = onAnimationEnds;
-    global.game = {
-        initEngine: initEngine
+    global.engine = {
+        init: initEngine,
+        stop: stopEngine
     };
 
 }(window, window.vikingCraft));
