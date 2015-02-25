@@ -39,10 +39,11 @@
         selectedArmies: [],
         armies: $('#armies li').map(function(i,el) {
                                     return el.getAttribute('data-name')}),
-        loadState: function() {
+        playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
-                scope.title = scope.selectedArmies[0] + ' -vs- ' + scope.selectedArmies[1];
+                scope.title = scope.selectedArmies[0] + ' -vs- ' +
+                              scope.selectedArmies[1];
             }
             engine.init();
             scope.playing = true;
@@ -59,10 +60,10 @@
             }
         },
         selectArmyToBattle: function(e) {
-            var target = e.currentTarget,
+            var target = e.currentTarget.parentNode,
                 armies = scope.selectedArmies;
             e.preventDefault();
-            armies.push($(target).data('army'));
+            armies.push($(target).data('name'));
             if (armies.length === 3) {
                 armies.shift();
             }

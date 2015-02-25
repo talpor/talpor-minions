@@ -6,7 +6,8 @@
 
     var initEngine = function() {
         Crafty.init(600, 600);
-
+        $('#cr-stage').css({'height': '300px'});
+        $('#cr-stage').slideDown();
         Crafty.scene('main', function() {
             Crafty.background('url("/static/img/bg.png")');
             Crafty.e('2D, Canvas, redHome').attr({x: 15, y: 15, w: 90, h:90, z: 2});
@@ -48,7 +49,8 @@
         Crafty.sprite(92, '/static/img/ramoverde.png', { blueHome: [0, 0] });
 
         $.ajax(
-            '/play/' + global.scope.armies[0] + '/' + global.scope.armies[1],
+            '/play/' + global.scope.selectedArmies[0] + '/' +
+                       global.scope.selectedArmies[1],
             {
                 aync: true,
                 contentType: 'application/json',

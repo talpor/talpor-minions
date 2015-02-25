@@ -21,24 +21,6 @@
     </nav>
     <div class="container">
         <div class="row">
-            {#<div class="col-md-3">
-                <h3>Fight for { today }</h3>
-                <ul>
-                    {% for fight in fights_today %}
-                    <li>
-                        <a href="#">
-                            {% if fight.p1 == fight.winner %}<b>{% endif %}
-                            {{ fight.p1 }}
-                            {% if fight.p1 == fight.winner %}</b>{% endif %}
-                            <span> -vs- </span>
-                            {% if fight.p2 == fight.winner %}<b>{% endif %}
-                            {{ fight.p2 }}
-                            {% if fight.p2 == fight.winner %}</b>{% endif %}
-                        </a>
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>#}
             <div class="col-md-3">
                 <h3>Armies</h3>
                 <ul id="armies">
@@ -51,7 +33,7 @@
                 <div rv-play-game="playing">
                     <h2>{ title }</h2>
                     <div id="cr-stage">
-                        <div id="frontCover" rv-on-click="loadState">
+                        <div id="frontCover" rv-on-click="playGame">
                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
                         </div>
                     </div>
