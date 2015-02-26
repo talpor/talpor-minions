@@ -117,7 +117,8 @@ def home():
             )
             if not agent_obj:
                 continue
-            armies[agent] = agent_obj['description']
+            armies[agent] = '{}/{}'.format(agent_obj['owner']['login'],
+                                           agent_obj['description'])
         elif agent.endswith('.js'):
             agent = agent.replace('.js', '')
             armies[agent] = agent

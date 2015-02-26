@@ -60,8 +60,8 @@
 
 
         $.ajax(
-            '/play/' + global.scope.selectedArmies[0] + '/' +
-                       global.scope.selectedArmies[1],
+            '/play/' + global.scope.selectedArmies[0].id + '/' +
+                       global.scope.selectedArmies[1].id,
             {
                 aync: true,
                 contentType: 'application/json',

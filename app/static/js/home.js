@@ -47,12 +47,16 @@
         today: moment().format('DD-MM-YY'),
         selectedArmies: myArmy ? [myArmy] : [],
         armies: domArmies.map(function(i,el) {
-            return el.getAttribute('data-army-id')}),
+            return {
+                    id: el.getAttribute('data-army-id'),
+                    name: el.getAttribute('data-army-name'),
+                };
+            }),
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
-                scope.title = scope.selectedArmies[0] + ' -vs- ' +
-                              scope.selectedArmies[1];
+                scope.title = scope.selectedArmies[0].name + ' -vs- ' +
+                              scope.selectedArmies[1].name;
             }
             engine.init();
             scope.playing = true;
@@ -74,18 +78,21 @@
             var target = e.currentTarget.parentNode,
                 armies = scope.selectedArmies;
             e.preventDefault();
-            armies.push($(target).data('army-id'));
+            armies.push({
+                id: $(target).data('army-id'),
+                name: $(target).data('army-name'),
+            });
             if (armies.length === 3) {
                 armies.shift();
             }
             if (armies.length === 2) {
-                scope.title = armies[0] + ' -vs- ' + armies[1];
+                scope.title = armies[0].name + ' -vs- ' + armies[1].name;
             }
             domArmies.each(function(i, el) {
                 $(el).find('a').removeClass('active red blue');
             });
             armies.forEach(function(army, i) {
-                $('#armies li[data-army-id=' + army + '] a')
+                $('#armies li[data-army-name="' + army.name + '"] a')
                     .addClass('active ' + armyColors[i]);
             });
         }
