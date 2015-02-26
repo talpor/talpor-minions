@@ -5,7 +5,7 @@ module.exports = {
     maxGameTicks: 1440,
     newUnitsNumberOfTicks: 5,
     player: {
-        hp: 96
+        hp: 192
     },
     viking: {
         hp: 12,
