@@ -33,7 +33,6 @@ function newWorldState(world, state) {
 
     // Set up new state
     _.each(state.units, function (unit) {
-        console.log(unit);
         world[unit.x][unit.y] = unit;
     });
 }
