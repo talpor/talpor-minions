@@ -11,4 +11,5 @@
     global.BOX_SIZE = 30;
     global.animationsRunning = 0;
     global.vikings = {};
+    global.bases = {};
 }(window));

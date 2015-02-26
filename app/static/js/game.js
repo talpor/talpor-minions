@@ -10,9 +10,10 @@
         $('#cr-stage').slideDown();
         Crafty.scene('main', function() {
             Crafty.background('url("/static/img/bg.png")');
-            Crafty.e('2D, Canvas, redHome').attr({x: 15, y: 15, w: 90, h:90, z: 2});
-            Crafty.e('2D, Canvas, blueHome').attr({x: (30*17-15), y: (30*17-15), w: 90, h:90, z: 2});
+            baseCraft.add(1, 'blueHome', 15, 15);
+            baseCraft.add(2, 'redHome', (30*17-15), (30*17-15));
 
+            initBases(global.states[0]);
             initVikings(global.states[0]);
             renderAction(global.states[0]);
         });
@@ -24,7 +25,12 @@
                     '/static/img/chavestias.png',
                     '/static/img/miraflores.png',
                     '/static/img/escualidos.png',
-                    '/static/img/ramoverde.png'
+                    '/static/img/ramoverde.png',
+                    '/static/img/fire.png',
+                    '/static/img/explosion.png',
+                    '/static/img/deal.png'
+
+
                 ],
                 initGame,
                 function () {},
@@ -43,10 +49,15 @@
 
 
     function initGame() {
-        Crafty.sprite(54, '/static/img/chavestias.png', { 1: [0, 0] }, 18, 18);
-        Crafty.sprite(54, '/static/img/escualidos.png', { 2: [0, 0] }, 18, 18);
+        Crafty.sprite(54, '/static/img/chavestias.png', { 2: [0, 0] }, 18, 18);
+        Crafty.sprite(54, '/static/img/escualidos.png', { 1: [0, 0] }, 18, 18);
         Crafty.sprite(92, '/static/img/miraflores.png', { redHome: [0, 0] });
         Crafty.sprite(92, '/static/img/ramoverde.png', { blueHome: [0, 0] });
+        Crafty.sprite(32, '/static/img/fire.png', { fire: [0, 0] });
+        Crafty.sprite(315,230, '/static/img/explosion.png', { boom: [0, 0] });
+        Crafty.sprite(100,20, '/static/img/deal.png', { dealWithIt: [0, 0] });
+
+
 
         $.ajax(
             '/play/' + global.scope.selectedArmies[0] + '/' +
@@ -58,6 +69,8 @@
                 success: function(game) {
                     console.log(game.winner, game.players[0].agent, game.players[1].agent);
                     global.states = game.states;
+                    global.winner = game.winner;
+                    global.loser = (game.winner == 2 ? 1 : 2);
                     Crafty.scene('main');
                 }
             }
@@ -67,20 +80,31 @@
 
     function onAnimationEnds() {
         global.animationsRunning--;
-        if (global.animationsRunning === 0) {
+        if (global.animationsRunning == 0) {
             stateIndex++;
             if (stateIndex < global.states.length) {
                 setTimeout(function () {
                     renderAction(global.states[stateIndex])
                 }, 100);
+            } else {
+                global.bases[global.loser].explode();
+                setTimeout(function () {
+                    vikingCraft.setWinner(global.winner);
+                }, 2000);
             }
         }
     }
 
 
     function renderAction(state) {
-        if (stateIndex + 1 < global.states.length) checkAliveVikings();
 
+        if (stateIndex + 1 < global.states.length){
+          checkAliveVikings();
+          global.bases[1].hp = state.bases[1];
+          global.bases[2].hp = state.bases[2];
+        } 
+        var idles = 0;
+        var actions = 0;
         for (var vikingkey in state.units) {
             var viking = state.units[vikingkey],
                 direction;
@@ -108,10 +132,24 @@
                     //fire explosions and michael bay stuff goes here
                     vikingCraft.attack(global.vikings[vikingkey], direction);
                 }
+            } else {
+                idles++;
             }
+            actions++;
         }
+        if (idles == actions){
+          stateIndex++;
+            if (stateIndex < global.states.length) {
+                renderAction(global.states[stateIndex]);
+            }   
+        }
+
     }
 
+    function initBases(state0){
+        global.bases[1]._baseHP = state0.bases[1];
+        global.bases[2]._baseHP = state0.bases[2];
+    }
 
     function initVikings(state0) {
         var vikingStats;

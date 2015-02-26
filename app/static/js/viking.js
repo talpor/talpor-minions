@@ -117,13 +117,17 @@
                 player.alpha -= 0.01;
 
                 if (player.alpha <= 0){
+                    var id = player.id;
                     player.destroy();
+                    delete(global.vikings[id]);
+
                 }
             }
 
         });
 
         player.id = vikingId;
+        player.owner = playerNumber;
 
         global.vikings[vikingId] = player;
     }
@@ -131,14 +135,12 @@
     function moveViking(viking, direction){
         global.animationsRunning++;
         viking.bind('AnimationEnd', global.onAnimationEnds);
-
         viking._moving = direction;
     }
 
     function attackViking(viking, direction){
         global.animationsRunning++;
         viking.bind('AnimationEnd', global.onAnimationEnds);
-
         if(direction == global.LEFT) {
             if (viking._direction == global.RIGHT){
                 viking.flip('X');
@@ -187,9 +189,38 @@
             viking.animate('attack_down_right', 1);
         }
     }
+
+    function winner(playerNumber){
+
+      var winner = Crafty.e('2D, Canvas, ' + playerNumber )
+            .attr({
+                w: 400,
+                h: 400,
+                x: 25,
+                y: 150,
+                z: 10
+            }).sprite(5,0);
+
+        var deal =  Crafty.e('2D, Canvas, dealWithIt') .attr({
+                w: 60,
+                h: 10,
+                x: 270,
+                y: 150,
+                z: 11,
+                alpha: 0
+            }).bind('EnterFrame', function() {
+                if( this.y < 202){
+                    this.y+=1;
+                    this.alpha += 0.025;
+                }
+            });
+
+    }
+
     global.vikingCraft = {
         add: addViking,
         move: moveViking,
-        attack: attackViking
+        attack: attackViking,
+        setWinner: winner
     };
 })(window);
