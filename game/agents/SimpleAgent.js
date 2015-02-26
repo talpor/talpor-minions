@@ -1,5 +1,6 @@
-var _ = require('lodash');
-var ai = require('../ai');
+var _ = require('lodash'),
+    ai = require('../ai'),
+    math = require('../math');
 
 /**
  * SimpleAgent:
@@ -46,7 +47,7 @@ SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
              * the best way to get to the enemy base, trying to avoid
              * collisions with other vikings or obstacles.
              */
-            var closerUnoccupiedToBase = self.getDirection(viking, enemyBase);
+            var closerUnoccupiedToBase = math.getDirection(viking, enemyBase);
             var unoccupiedDirection = self.isDirectionUnoccupied(
                                                         world, viking, closerUnoccupiedToBase);
 
@@ -56,25 +57,16 @@ SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
             }
             else {
                 var direction,
-                    minDistance = self.getDistanceFromDirection(
+                    minDistance = math.getDistanceFromDirection(
                         viking,
                         {x: -1 * closerUnoccupiedToBase.x, y: -1 * closerUnoccupiedToBase.y},
                         enemyBase
                     ),
-                    allDirections = [
-                        {x: 1, y: 1},
-                        {x: 1, y: 0},
-                        {x: 1, y: -1},
-                        {x: 0, y: 1},
-                        {x: 0, y: -1},
-                        {x: -1, y: -1},
-                        {x: -1, y: 0},
-                        {x: -1, y: 1}
-                    ];
+                    allDirections = _.map(self.DIRECTIONS, function(cords) {return cords});
                 while ((direction = allDirections.shift())) {
-                    if (self.getDistanceFromDirection(viking, direction, enemyBase) < minDistance &&
+                    if (math.getDistanceFromDirection(viking, direction, enemyBase) < minDistance &&
                         self.isDirectionUnoccupied(world, viking, direction)) {
-                        minDistance = self.getDistanceFromDirection(viking, direction, enemyBase);
+                        minDistance = math.getDistanceFromDirection(viking, direction, enemyBase);
                         closerUnoccupiedToBase = direction;
                         unoccupiedDirection = true;
                     }

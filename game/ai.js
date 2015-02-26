@@ -1,7 +1,8 @@
 /* global module */
 
 var _ = require('lodash'),
-    config = require('./config');
+    config = require('./config'),
+    math = require('./math');
 
 
 var Agent = function(playerNumber) {
@@ -105,30 +106,8 @@ Agent.prototype = {
      * not occupied in the current `world`. False otherwise.
      */
     isDirectionUnoccupied: function (world, viking, dir) {
-        var tile = this.getTile(world, viking.x + dir.x, viking.y + dir.y)
-        return !Boolean(tile || tile == false);
-    },
-
-    getDistance: function (from, to) {
-        return {
-            x: to.x - from.x,
-            y: to.y - from.y
-        };
-    },
-
-    getDirection: function (from, to) {
-        var distance = this.getDistance(from, to);
-        var direction = distance;
-        if (distance.x) direction.x /= Math.abs(distance.x)
-        if (distance.y) direction.y /= Math.abs(distance.y)
-        return direction;
-    },
-
-    getDistanceFromDirection: function (from, direction, to) {
-        return this.getDistance(
-            {x: from.x + direction.x, y: from.y - direction.y},
-            to
-        );
+        var tile = this.getTile(world, viking.x + dir.x, viking.y + dir.y);
+        return !Boolean(tile || tile === false);
     },
 
     /**
@@ -162,7 +141,7 @@ Agent.prototype = {
      * Walks towards a given `location`.
      */
     walkTowards: function (world, viking, location) {
-        this.walk(world, viking, this.getDirection(viking, location));
+        this.walk(world, viking, math.getDirection(viking, location));
     },
 
     /**
