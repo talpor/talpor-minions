@@ -11,12 +11,13 @@ Easy Peasy... clone this repo and ``cd`` to it. Then you'll need
 ``python`` and ``node``. You have them, right?
 
 .. code:: bash
+
   $> npm install
   $> pip install requirements.py
 
 There you go.
 
-Now have fun creating agents \o/!
+Now have fun creating agents \\o/!
 
 Documentation
 =============
