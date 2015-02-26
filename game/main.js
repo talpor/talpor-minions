@@ -92,14 +92,18 @@ Game.prototype.start = function () {
     }
 
     // Write results to some json file
-    var jsonFileName = path.join(__dirname, 'battles', uuid.v4().split('-')[4] + '.json')
+    var battle_id = uuid.v4().split('-')[4]
+    var jsonFileName = path.join(__dirname, 'battles', battle_id + '.json')
     var winner = this.getWinner();
     winner = winner ? winner.number : null;
+
     var str = JSON.stringify({
+        id: battle_id,
         winner: winner,
         players: [this.player1.getStats(), this.player2.getStats()],
         states: states
     }) + '\n';
+
     fs.writeFile(jsonFileName, str, function () {
         return jsonFileName;
     });

@@ -66,7 +66,7 @@
                 contentType: 'application/json',
                 dataType: 'json',
                 success: function(game) {
-                    console.log(game.winner, game.players[0].agent, game.players[1].agent);
+                    console.log(game.id, game.winner, game.players[0].agent, game.players[1].agent);
                     global.states = game.states;
                     global.winner = game.winner;
                     global.loser = (game.winner == 2 ? 1 : 2);
