@@ -43,8 +43,26 @@ def run_game(agent1_name, agent2_name):
 # -----------------------------------------------------------------------------
 
 @app.route('/')
-def home():
-    """Returns main battle page."""
+@app.route('/battle/<battle_id>')
+def home(battle_id=None):
+    """Returns main battle page.
+
+    When a `battle_id` is given, this function will look up for it in the hard
+    drive and will return 404 if it's not found.
+
+    A `battle_id` called via normal http request will just return this same
+    home page as if nothing else happened. When called via AJAX, this view will
+    return the battle's json states file.
+    """
+    if battle_id:
+        battle_file = os.path.join(
+            app.config['BATTLES_FOLDER'], '{}.json'.format(battle_id)
+        )
+        if not os.path.isfile(battle_file):
+            return 404
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # is ajax
+            return send_file(battle_file, mimetype='application/json')
+
     armies = {}
     for agent in os.listdir(app.config['AGENTS_FOLDER']):
         if agent.startswith('gist::'):
