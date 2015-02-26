@@ -73,7 +73,8 @@ function Game() {
  * Runs the game's loop until it's finished.
  */
 Game.prototype.start = function () {
-    var states = new Array();
+    var actions,
+        states = new Array();
 
     while (!this.finished()) {
         /*
@@ -82,15 +83,25 @@ Game.prototype.start = function () {
         this.addNewUnits();
 
         /*
-         * Current player moves.
+         * Get player's actions
+         *
          */
         this.currentPlayer = this.getCurrentPlayer();
-        var state = this.executeActions(
-            this.currentPlayer.agent._doTurn(this.world.safeClone())
-        );
+        actions = this.currentPlayer.agent._doTurn(this.world.safeClone());
 
-        states.push(state);
+        /*
+         * Save state before executing actions
+         */
+        states.push(this.generateState(actions));
+
+        /*
+         * Current player moves.
+         */
+        this.executeActions(actions);
     }
+
+    // Push last game state
+    states.push(this.generateState());
 
     // Write results to some json file
     var battleID = uuid.v4().split('-')[4]
@@ -142,7 +153,7 @@ Game.prototype.newUnit = function (player, unitConstructor, x, y) {
 /**
  * Removes a unit from the game using its unitID
  */
-Game.prototype.killUnit = function (unitID, actions) {
+Game.prototype.killUnit = function (unitID) {
     var player = this.units[unitID].player,
         x = this.units[unitID].x,
         y = this.units[unitID].y;
@@ -150,9 +161,6 @@ Game.prototype.killUnit = function (unitID, actions) {
     delete this.units[unitID];
     _.remove(player.units, function (unit) { return unit.id === unitID });
     this.world.removeUnit(x, y);
-
-    if (actions)
-        delete actions[unitID];
 };
 
 /**
@@ -185,13 +193,12 @@ Game.prototype.getWinner = function () {
 
 
 /**
- * Executes actions for both players.
+ * Generates a state for a single turn.
  *
- * Returns the current state for all of the game units in play.
+ * If a unit is
  */
-Game.prototype.executeActions = function (actions) {
+Game.prototype.generateState = function (actions) {
     var self = this;
-
     var state = {
         bases: {
             // _.zipObject(_.pluck(this.players, 'id'), _.pluck(this.players, 'hp'))
@@ -200,22 +207,36 @@ Game.prototype.executeActions = function (actions) {
         },
         units: {}
     };
-    _.each(_.filter(self.units, function (unit) { return unit.kind == 'moving' }), function (unit, index) {
-        if (unit.isDead())
-            self.killUnit(unit.id, actions);
 
+    _.each(_.filter(this.units, function (unit) { return unit.kind == 'moving' }), function (unit, index) {
         state.units[unit.id] = unit.getStats();
     });
+    _.each(actions, function (action, unitID) {
+        state.units[unitID].action = action;
+    });
+
+    return state;
+};
+
+
+/**
+ * Executes actions for both players.
+ *
+ * Returns the current state for all of the game units in play.
+ */
+Game.prototype.executeActions = function (actions) {
+    var self = this;
 
     _.each(actions, function (action, unitID) {
         var unit = self.units[unitID];
         if (!self.world.isValidAction(unit, action)) return;
 
-        state.units[unitID].action = action;
         self.world.execAction(unit, action);
     });
-
-    return state;
+    _.each(_.filter(this.units, function (unit) { return unit.kind == 'moving' }), function (unit, index) {
+        if (unit.isDead())
+            self.killUnit(unit.id);
+    });
 };
 
 new Game().start();
