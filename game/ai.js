@@ -93,7 +93,7 @@ Agent.prototype = {
     /**
      * Returns a list with the enemy's current vikings.
      */
-    getEnemyMinons: function (world) {
+    getEnemyVikings: function (world) {
         return this._getUnits(world, 'moving', false);
     },
 
