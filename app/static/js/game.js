@@ -94,7 +94,9 @@
     }
 
 
-    function renderAction(state) {
+    function renderAction(state, force) {
+
+        if (global.scope.debugMode && !force) return;
 
         state = state || global.states[stateIndex];
 
@@ -138,12 +140,12 @@
             vikings++;
         }
 
-        if (idles == vikings && stateIndex < global.states.length){
+        if (idles == vikings && stateIndex < global.states.length) {
             renderAction();
         }
         stateIndex++;
     }
-    window.ra = renderAction;
+    window.nextTurn = renderAction.bind(null, null, true);
 
     function initBases(state0){
         global.bases[1]._baseHP = state0.bases[1];
