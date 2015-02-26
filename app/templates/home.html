@@ -8,32 +8,29 @@
     <link rel="stylesheet/less" type="text/css" href="{{ url_for('static', filename='stylesheet/home.less') }}">
 </head>
 <body id="home">
-    <nav class="navbar navbar-default navbar-inverse navbar-static-top">
-        <div class="container-fluid">
-          <form action="/new-agent" method="post" enctype="multipart/form-data">
-            <label for="file" rv-hide="selectedFile">
-              <input rv-on-change="submitFile" type="file" id="file" name="file" />
-              <div class="btn btn-default navbar-btn">Upload your army &nbsp;<span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></div>
-            </label>
-            Or...
-            <input type="text" name="gist-id" placeholder="Save a gist id" />
-            <input type="submit" value="Save" class="btn btn-default navbar-btn" />
-          </form>
-
-          <h1 class="navbar-text">Vikings, please!</h1>
+    <div class="navbar navbar-default navbar-inverse navbar-static-top">
+        <div class="container">
+            <div class="navbar-header">
+                <h2 class="navbar-text">Vikings, please!</h2>
+            </div>
+            <div class="navbar-collapse collapse" id="navbar-main">
+                <form action="/new-agent" class="navbar-form navbar-right" method="post" enctype="multipart/form-data">
+                    <label for="file" rv-hide="selectedFile">
+                        <input rv-on-change="submitFile" type="file" id="file" name="file" />
+                        <div class="btn btn-default navbar-btn">Upload your army &nbsp;<span class="glyphicon glyphicon-open-file" aria-hidden="true"></span></div>
+                    </label>
+                    <div class="form-group">
+                        <span class="or">Or...</span>
+                        <input type="text" class="form-control" name="gist-id" placeholder="Send a gist id" />
+                    </div>
+                    <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+            </div>
         </div>
-    </nav>
+    </div>
     <div class="container">
         <div class="row">
-            <div class="col-md-3">
-                <h3>Armies</h3>
-                <ul id="armies">
-                  {% for army_id, army_name in armies.iteritems() %}
-                  <li data-army-id="{{ army_id }}"><a class="army" href="#" rv-on-click="selectArmyToBattle" ><b>{{ army_name }}</b></a></li>
-                  {% endfor %}
-                </ul>
-            </div>
-            <div class="col-md-7 main-battle">
+            <div class="col-md-7 col-md-offset-1 main-battle">
                 <div rv-play-game="playing">
                     <h2>{ title }</h2>
                     <div id="cr-stage">
@@ -42,6 +39,14 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="col-md-3" style="text-align: right">
+                <h3>Armies</h3>
+                <ul id="armies">
+                  {% for army_id, army_name in armies.iteritems() %}
+                  <li data-army-id="{{ army_id }}"><a class="army" href="#" rv-on-click="selectArmyToBattle" ><b>{{ army_name }}</b></a></li>
+                  {% endfor %}
+                </ul>
             </div>
         </div>
     </div>
