@@ -8,6 +8,7 @@
         Crafty.init(600, 600);
         $('#cr-stage').css({'height': '300px'});
         $('#cr-stage').slideDown();
+
         Crafty.scene('main', function() {
             Crafty.background('url("/static/img/bg.png")');
             baseCraft.add(1, 'blueHome', 15, 15);
@@ -15,7 +16,7 @@
 
             initBases(global.states[0]);
             initVikings(global.states[0]);
-            renderAction(global.states[0]);
+            renderAction();
         });
 
         //the loading screen that will display while our assets load
@@ -57,11 +58,9 @@
         Crafty.sprite(315,230, '/static/img/explosion.png', { boom: [0, 0] });
         Crafty.sprite(100,20, '/static/img/deal.png', { dealWithIt: [0, 0] });
 
-
-
         $.ajax(
             '/play/' + global.scope.selectedArmies[0].id + '/' +
-                       global.scope.selectedArmies[1].id,
+                global.scope.selectedArmies[1].id,
             {
                 aync: true,
                 contentType: 'application/json',
@@ -81,11 +80,10 @@
     function onAnimationEnds() {
         global.animationsRunning--;
         if (global.animationsRunning == 0) {
-            stateIndex++;
             if (stateIndex < global.states.length) {
                 setTimeout(function () {
-                    renderAction(global.states[stateIndex])
-                }, 100);
+                    renderAction()
+                }, 500);
             } else {
                 global.bases[global.loser].explode();
                 setTimeout(function () {
@@ -98,13 +96,15 @@
 
     function renderAction(state) {
 
+        state = state || global.states[stateIndex];
+
         if (stateIndex + 1 < global.states.length){
-          checkAliveVikings();
-          global.bases[1].hp = state.bases[1];
-          global.bases[2].hp = state.bases[2];
-        } 
+            checkAliveVikings();
+            global.bases[1].hp = state.bases[1];
+            global.bases[2].hp = state.bases[2];
+        }
         var idles = 0;
-        var actions = 0;
+        var vikings = 0;
         for (var vikingkey in state.units) {
             var viking = state.units[vikingkey],
                 direction;
@@ -135,16 +135,15 @@
             } else {
                 idles++;
             }
-            actions++;
-        }
-        if (idles == actions){
-          stateIndex++;
-            if (stateIndex < global.states.length) {
-                renderAction(global.states[stateIndex]);
-            }   
+            vikings++;
         }
 
+        if (idles == vikings && stateIndex < global.states.length){
+            renderAction();
+        }
+        stateIndex++;
     }
+    window.ra = renderAction;
 
     function initBases(state0){
         global.bases[1]._baseHP = state0.bases[1];
