@@ -16,7 +16,8 @@ ADMINS = frozenset(
 SECRET_KEY = 'A0Zr98j/3yXsdr R~XHXFG!jmN]ASSR/,?RX'
 
 GAME_FOLDER = os.path.join(_basedir, 'game')
-UPLOAD_FOLDER = os.path.join(GAME_FOLDER, 'agents')
+AGENTS_FOLDER = os.path.join(GAME_FOLDER, 'agents')
+BATTLES_FOLDER = os.path.join(GAME_FOLDER, 'battles')
 
 MONGO_DBNAME = 'vikings'
 

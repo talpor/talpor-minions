@@ -60,7 +60,7 @@ def update_gist_dir(gist):
         flash('Your gist doesn\'t have an index.js.')
 
     agent_dir = os.path.join(
-        app.config['UPLOAD_FOLDER'], 'gist::{}'.format(gist.id)
+        app.config['AGENTS_FOLDER'], 'gist::{}'.format(gist.id)
     )
 
     shutil.rmtree(agent_dir, ignore_errors=True)

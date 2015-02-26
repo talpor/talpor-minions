@@ -46,7 +46,7 @@ def run_game(agent1_name, agent2_name):
 def home():
     """Returns main battle page."""
     armies = {}
-    for agent in os.listdir(app.config['UPLOAD_FOLDER']):
+    for agent in os.listdir(app.config['AGENTS_FOLDER']):
         if agent.startswith('gist::'):
             agent_obj = mongo.db.agents.find_one(
                 {'id': agent.replace('gist::', '')}
@@ -67,7 +67,7 @@ def new_agent():
     file = request.files['file']
     if file:
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(os.path.join(app.config['AGENTS_FOLDER'], filename))
     if request.form['gist-id']:
         upsert_gist(request.form['gist-id'])
     return redirect(url_for('home'))
