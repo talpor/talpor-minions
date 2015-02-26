@@ -3,7 +3,9 @@
 var _ = require('lodash'),
     fs = require('fs'),
     uuid = require('node-uuid'),
-    config = require('./config'),
+    path = require('path');
+
+var config = require('./config'),
     unit = require('./units/common'),
     Player = require('./player'),
     World = require('./world');
@@ -90,7 +92,7 @@ Game.prototype.start = function () {
     }
 
     // Write results to some json file
-    var jsonFileName = '/tmp/' + uuid.v4() + '.json';
+    var jsonFileName = path.join(__dirname, 'battles', uuid.v4().split('-')[4] + '.json')
     var winner = this.getWinner();
     winner = winner ? winner.number : null;
     var str = JSON.stringify({
