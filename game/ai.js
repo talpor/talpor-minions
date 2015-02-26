@@ -174,6 +174,17 @@ Agent.prototype = {
             dx: dir.x,
             dy: dir.y
         };
+    },
+
+    /**
+     * Stores an 'attack' action into the private `_actions` attr.
+     */
+    attackTarget: function (world, viking, target) {
+        this._actions[viking.id] = {
+            please: 'attack',
+            dx: target.x - viking.x,
+            dy: target.y - viking.y
+        };
     }
 };
 

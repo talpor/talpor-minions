@@ -19,7 +19,7 @@ function SimpleAgent(playerNumber) {
 
 SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
 
-    constructor: ai.Agent,
+    constructor: SimpleAgent,
 
     getAction: function (world) {
         var self = this,
@@ -36,13 +36,8 @@ SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
              */
             weakestEnemy = _.sortBy(self.getEnemiesInRange(world, viking), 'hp')[0];
             if (weakestEnemy) {
-                self.attack(  // and attack!
-                    world, viking,
-                    {
-                        x: weakestEnemy.x - viking.x,
-                        y: weakestEnemy.y - viking.y
-                    }
-                )
+                // and attack!
+                self.attackTarget(world, viking, weakestEnemy);
                 return;
             }
 
@@ -52,9 +47,14 @@ SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
              * collisions with other vikings or obstacles.
              */
             var closerUnoccupiedToBase = self.getDirection(viking, enemyBase);
-            var unoccupiedDirection = self.isDirectionUnoccupied(world, viking, closerUnoccupiedToBase);
+            var unoccupiedDirection = self.isDirectionUnoccupied(
+                                                        world, viking, closerUnoccupiedToBase);
 
-            if (!unoccupiedDirection) {
+            // If we found an unoccupied direction, we walk to it.
+            if (unoccupiedDirection) {
+                self.walk(world, viking, closerUnoccupiedToBase);
+            }
+            else {
                 var direction,
                     minDistance = self.getDistanceFromDirection(
                         viking,
@@ -77,13 +77,10 @@ SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
                         minDistance = self.getDistanceFromDirection(viking, direction, enemyBase);
                         closerUnoccupiedToBase = direction;
                         unoccupiedDirection = true;
-                    };
+                    }
                 }
             }
 
-            // If we found an unoccupied direction, we walk to it.
-            if (unoccupiedDirection)
-                self.walk(world, viking, closerUnoccupiedToBase);
         });
 
     }

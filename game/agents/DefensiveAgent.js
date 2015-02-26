@@ -13,7 +13,7 @@ function DefensiveAgent(playerNumber, world) {
 }
 
 DefensiveAgent.prototype = _.extend({}, ai.Agent.prototype, {
-    constructor: ai.Agent,
+    constructor: DefensiveAgent,
 
     guard: {},
 
