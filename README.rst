@@ -13,7 +13,7 @@ Easy Peasy... clone this repo and ``cd`` to it. Then you'll need
 .. code:: bash
 
   $> npm install
-  $> pip install requirements.py
+  $> pip install -r requirements.pip
 
 There you go.
 

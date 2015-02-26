@@ -1,5 +1,5 @@
 var _ = require('lodash'),
-    ai = require('../ai');
+    ai = require('ai');
 
 
 function DefensiveAgent(playerNumber, world) {
