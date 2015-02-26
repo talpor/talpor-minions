@@ -4,7 +4,8 @@
     'use strict';
     var stateIndex = 0;
 
-    var initEngine = function() {
+    var initEngine = function (gameUrl) {
+        global.scope.playing = true;
         Crafty.init(600, 600);
         $('#cr-stage').css({'height': '300px'});
         $('#cr-stage').slideDown();
@@ -33,7 +34,7 @@
 
 
                 ],
-                initGame,
+                initGame.bind(null, gameUrl),
                 function () {},
                 function (e) { console.log('err', e); }
             );
@@ -49,7 +50,7 @@
     };
 
 
-    function initGame() {
+    function initGame(gameUrl) {
         Crafty.sprite(54, '/static/img/chavestias.png', { 2: [0, 0] }, 18, 18);
         Crafty.sprite(54, '/static/img/escualidos.png', { 1: [0, 0] }, 18, 18);
         Crafty.sprite(92, '/static/img/miraflores.png', { redHome: [0, 0] });
@@ -59,8 +60,7 @@
         Crafty.sprite(100,20, '/static/img/deal.png', { dealWithIt: [0, 0] });
 
         $.ajax(
-            '/play/' + global.scope.selectedArmies[0].id + '/' +
-                global.scope.selectedArmies[1].id,
+            gameUrl,
             {
                 aync: true,
                 contentType: 'application/json',

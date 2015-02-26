@@ -21,10 +21,14 @@
             stage.css({'height': '300px'});
             stage.slideDown('slow');
         }, 300);
+
+        // If current location points to a battle, lets load it!
+        if (window.location.pathname.match(/^\/battle\/[a-z0-9]+\/?$/))
+            engine.init(window.location.pathname);
     }
     function initRivets() {
-        rivets.binders['play-game'] = function(el, value) {
-            if (value) {
+        rivets.binders['play-game'] = function(el, playing) {
+            if (playing) {
                 cover.fadeOut(function() {
                     stage.animate({height: '600px'}, 300);
                     $('html, body').animate({
@@ -48,18 +52,17 @@
         selectedArmies: myArmy ? [myArmy] : [],
         armies: domArmies.map(function(i,el) {
             return {
-                    id: el.getAttribute('data-army-id'),
-                    name: el.getAttribute('data-army-name')
+                id: el.getAttribute('data-army-id'),
+                name: el.getAttribute('data-army-name')
             };
         }),
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
                 scope.title = scope.selectedArmies[0].name + ' -vs- ' +
-                              scope.selectedArmies[1].name;
+                    scope.selectedArmies[1].name;
             }
-            engine.init();
-            scope.playing = true;
+            engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
         },
         submitFile: function(event) {
             var target = event.target,
@@ -67,7 +70,7 @@
             if (target.files.length) {
                 if (target.files[0].name.search(/\.js$/) > 0) {
                     localStorage.setItem('myArmy', target.files[0]
-                                                .name.replace(/\.js$/, ''));
+                                         .name.replace(/\.js$/, ''));
                     form.submit();
                     return;
                 }
@@ -97,7 +100,7 @@
             });
         }
     };
+    global.scope = scope;
     initRivets();
     initApp();
-    global.scope = scope;
 }(window, jQuery, rivets, window.engine));
