@@ -1,8 +1,8 @@
 /* global module */
 
 var _ = require('lodash'),
-    ai = require('../ai'),
-    math = require('../math');
+    ai = require('ai'),
+    math = require('math');
 
 /**
  * SimpleAgent:

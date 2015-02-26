@@ -41,7 +41,9 @@ def run_game(agent1_name, agent2_name):
         agent1_name, agent2_name
     )
     try:
-        return subprocess.check_output(command, shell=True)
+        return subprocess.check_output(
+            command, shell=True, env={'NODE_PATH': app.config['GAME_FOLDER']}
+        )
     except subprocess.CallProcessError:
         return False
 
