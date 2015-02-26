@@ -1,4 +1,5 @@
 import os, shutil, subprocess
+from datetime import datetime
 
 from flask import (
     Flask, flash, render_template, send_file, request, redirect, url_for
@@ -6,6 +7,7 @@ from flask import (
 from flask.ext.pymongo import PyMongo
 
 from github3 import gist as gh_gist
+from pytz import utc
 from werkzeug import secure_filename
 
 
@@ -25,6 +27,14 @@ def not_found(error):
 # Helpers
 # -----------------------------------------------------------------------------
 
+def strptime(time_str):
+    """Convert an ISO 8601 formatted string in UTC into a timezone-aware
+    datetime object.
+    """
+    dt = datetime.strptime(time_str, '%Y-%m-%dT%H:%M:%SZ')
+    return dt.replace(tzinfo=utc)
+
+
 def run_game(agent1_name, agent2_name):
     command = 'node {} {} {}'.format(
         os.path.join(app.config['GAME_FOLDER'], 'main.js'),
@@ -40,12 +50,20 @@ def upsert_gist(gist_id):
     """Searches for a gist and updates our database, upserting if needed. This
     function will then call `update_gist_dir` to update our `agents` directory
     with the current gist file information.
+
+    Returns a boolean value to whether something was updated or not.
     """
     gist = gh_gist(gist_id)
     if gist is None:
         return
+
+    # Do we already have this gist?
+    agent = mongo.db.agents.find_one({'id': gist_id})
+    if agent and gist.updated_at <= strptime(agent['updated_at']):
+        return False
+
     gist_json = gist.to_json()
-    mongo.db.vikings.agents.update(
+    mongo.db.agents.update(
         {'id': gist_json['id']},
         {
             'id': gist_json['id'],
@@ -63,6 +81,7 @@ def upsert_gist(gist_id):
         upsert=True, multi=False
     )
     update_gist_dir(gist)
+    return True
 
 
 def update_gist_dir(gist):
@@ -70,7 +89,7 @@ def update_gist_dir(gist):
         flash('Your gist doesn\'t have an index.js.')
 
     agent_dir = os.path.join(
-        app.config['GAME_FOLDER'], 'gist::{}'.format(gist.id)
+        app.config['UPLOAD_FOLDER'], 'gist::{}'.format(gist.id)
     )
 
     shutil.rmtree(agent_dir, ignore_errors=True)
@@ -90,15 +109,20 @@ def update_gist_dir(gist):
 @app.route('/')
 def home():
     """Returns main battle page."""
-    return render_template(
-        'home.html',
-        armies={
-            agent.replace('.js', ''): agent.replace('.js', '')
-            for agent in os.listdir(
-                    os.path.join(app.config['GAME_FOLDER'], 'agents')
-            ) if not agent.startswith('gist::')
-        }
-    )
+    armies = {}
+    for agent in os.listdir(app.config['UPLOAD_FOLDER']):
+        if agent.startswith('gist::'):
+            agent_obj = mongo.db.agents.find_one(
+                {'id': agent.replace('gist::', '')}
+            )
+            if not agent_obj:
+                continue
+            armies[agent] = agent_obj['description']
+        elif agent.endswith('.js'):
+            agent = agent.replace('.js', '')
+            armies[agent] = agent
+
+    return render_template('home.html', armies=armies)
 
 
 @app.route('/new-agent', methods=['POST'])
@@ -114,6 +138,15 @@ def new_agent():
 
 @app.route('/play/<p1>/<p2>')
 def play(p1, p2):
-    """Play the game."""
+    """Play the game.
+
+    If any player is a gist id, re-fetch it and compare the `updated_at` time
+    between our db and gist. Update our replica if necessary.
+    """
+    if p1.startswith('gist::'):
+        upsert_gist(p1.replace('gist::', ''))
+    if p2.startswith('gist::'):
+        upsert_gist(p2.replace('gist::', ''))
+
     states_file = run_game(p1, p2)
     return send_file(states_file, mimetype='application/json')
