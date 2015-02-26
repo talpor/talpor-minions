@@ -1,4 +1,4 @@
-/* global _, jQuery, rivets, moment */
+/* global _, jQuery, rivets, moment, localStorage */
 
 (function(global, $, rivets, engine) {
     'use strict';
@@ -6,7 +6,7 @@
         stage = app.find('#cr-stage'),
         cover = stage.find('#frontCover'),
         domArmies = $('#armies li'),
-        armyColors = ['red', 'blue'],
+        armyColors = ['blue', 'red'],
         myArmy = localStorage.getItem('myArmy'),
         scope;
 
@@ -49,9 +49,9 @@
         armies: domArmies.map(function(i,el) {
             return {
                     id: el.getAttribute('data-army-id'),
-                    name: el.getAttribute('data-army-name'),
-                };
-            }),
+                    name: el.getAttribute('data-army-name')
+            };
+        }),
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
