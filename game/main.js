@@ -7,6 +7,7 @@ var _ = require('lodash'),
 
 var config = require('./config'),
     unit = require('./units/common'),
+    utils = require('./utils'),
     Player = require('./player'),
     World = require('./world');
 
@@ -92,13 +93,13 @@ Game.prototype.start = function () {
     }
 
     // Write results to some json file
-    var battle_id = uuid.v4().split('-')[4]
-    var jsonFileName = path.join(__dirname, 'battles', battle_id + '.json')
+    var battleID = uuid.v4().split('-')[4]
+    var jsonFileName = utils.getBattleFile(battleID);
     var winner = this.getWinner();
     winner = winner ? winner.number : null;
 
     var str = JSON.stringify({
-        id: battle_id,
+        id: battleID,
         winner: winner,
         players: [this.player1.getStats(), this.player2.getStats()],
         states: states

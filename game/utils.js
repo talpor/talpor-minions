@@ -1,3 +1,11 @@
+var path = require("path");
+
+
+function getBattleFile(battleID) {
+    return path.join(__dirname, 'battles', battleID + '.json');
+}
+
+
 function pad(n, size) {
     size = size || 2
     var sn = n + '';
@@ -30,6 +38,8 @@ function printWorld(world) {
     }
 }
 
+
 module.exports = {
+    getBattleFile: getBattleFile,
     printWorld: printWorld
 };
