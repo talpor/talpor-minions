@@ -1,5 +1,5 @@
-var _ = require('lodash');
-var ai = require('../ai');
+var _ = require('lodash'),
+    ai = require('../ai');
 
 
 function DefensiveAgent(playerNumber, world) {
@@ -13,7 +13,7 @@ function DefensiveAgent(playerNumber, world) {
 }
 
 DefensiveAgent.prototype = _.extend({}, ai.Agent.prototype, {
-    constructor: ai.Agent,
+    constructor: DefensiveAgent,
 
     guard: {},
 

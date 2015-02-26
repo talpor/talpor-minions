@@ -1,2 +1,4 @@
 Flask==0.10.1
 Flask-PyMongo==0.3.0
+github3.py==0.9.3
+pytz==2014.10
