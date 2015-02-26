@@ -18,7 +18,7 @@ SECRET_KEY = 'A0Zr98j/3yXsdr R~XHXFG!jmN]ASSR/,?RX'
 GAME_FOLDER = os.path.join(_basedir, 'game')
 UPLOAD_FOLDER = os.path.join(GAME_FOLDER, 'agents')
 
-MONGO_DB_NAME = 'vikings'
+MONGO_DBNAME = 'vikings'
 
 THREADS_PER_PAGE = num_cpus() * 2
 SEND_FILE_MAX_AGE_DEFAULT = 0
