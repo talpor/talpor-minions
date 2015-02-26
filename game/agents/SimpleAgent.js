@@ -1,3 +1,5 @@
+/* global module */
+
 var _ = require('lodash'),
     ai = require('../ai'),
     math = require('../math');
@@ -9,8 +11,6 @@ var _ = require('lodash'),
  * enemy base, and if they find an enemy in their way, they'll fight
  * it to death!
  *
- * If vikings find an obstacle in their way, they will try to find the
- * best possible move to avoid it.
  */
 
 function SimpleAgent(playerNumber) {
@@ -44,35 +44,16 @@ SimpleAgent.prototype = _.extend({}, ai.Agent.prototype, {
 
             /*
              * No enemies vikings close, so we will try to figure out
-             * the best way to get to the enemy base, trying to avoid
-             * collisions with other vikings or obstacles.
+             * the best way to get to the enemy base.
              */
-            var closerUnoccupiedToBase = math.getDirection(viking, enemyBase);
+            var directionToBase = math.getDirection(viking, enemyBase);
             var unoccupiedDirection = self.isDirectionUnoccupied(
-                                                        world, viking, closerUnoccupiedToBase);
+                                                        world, viking, directionToBase);
 
             // If we found an unoccupied direction, we walk to it.
             if (unoccupiedDirection) {
-                self.walk(world, viking, closerUnoccupiedToBase);
+                self.walk(world, viking, directionToBase);
             }
-            else {
-                var direction,
-                    minDistance = math.getDistanceFromDirection(
-                        viking,
-                        {x: -1 * closerUnoccupiedToBase.x, y: -1 * closerUnoccupiedToBase.y},
-                        enemyBase
-                    ),
-                    allDirections = _.map(self.DIRECTIONS, function(cords) {return cords});
-                while ((direction = allDirections.shift())) {
-                    if (math.getDistanceFromDirection(viking, direction, enemyBase) < minDistance &&
-                        self.isDirectionUnoccupied(world, viking, direction)) {
-                        minDistance = math.getDistanceFromDirection(viking, direction, enemyBase);
-                        closerUnoccupiedToBase = direction;
-                        unoccupiedDirection = true;
-                    }
-                }
-            }
-
         });
 
     }
