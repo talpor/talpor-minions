@@ -2,7 +2,7 @@ var path = require("path");
 
 
 function getBattleFile(battleID) {
-    return path.join(__dirname, 'battles', battleID + '.json');
+    return path.join(__dirname, 'battles', battleID + '.json.gz');
 }
 
 
