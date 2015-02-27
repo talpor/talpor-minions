@@ -3,7 +3,8 @@
 var _ = require('lodash'),
     fs = require('fs'),
     uuid = require('node-uuid'),
-    path = require('path');
+    path = require('path'),
+    LZString = require('lz-string');
 
 var config = require('./config'),
     unit = require('./units/common'),
@@ -116,9 +117,7 @@ Game.prototype.start = function () {
         states: states
     }) + '\n';
 
-    fs.writeFile(jsonFileName, str, function () {
-        return jsonFileName;
-    });
+    fs.writeFileSync(jsonFileName, LZString.compress(str));
     process.stdout.write(jsonFileName);
 };
 
