@@ -168,52 +168,65 @@ Game.prototype.killUnit = function (unitID) {
  * Return the an unoccupied tile around a base
  */
 Game.prototype.getUnoccupiedTileAroundBase = function (player) {
-    oThis = this;
+    "use strict";
+    var oThis = this;
     var result;
-    if (player.number == 1){
+    if (player.number === 1){
         _.each(_.range(3, -1, -1),function(elem){
-            if (!oThis.world.isOccupied(elem, 3) && result == undefined){
+            if (!oThis.world.isOccupied(elem, 3) && !result) {
                 result = [elem, 3];
             }
-            if (!oThis.world.isOccupied(3, elem) && result == undefined)
+            if (!oThis.world.isOccupied(3, elem) && !result){
                 result = [3, elem];
+            }
         });
         _.each(_.range(3, -1, -1),function(elem){
-            if (!oThis.world.isOccupied(elem, 0) && result == undefined)
+            if (!oThis.world.isOccupied(elem, 0) && !result){
                 result = [elem, 0];
-            if (!oThis.world.isOccupied(0, elem) && result == undefined)
+            }
+            if (!oThis.world.isOccupied(0, elem) && !result){
                 result = [0, elem];
-        })
-    }else if(player.number == 2){
+            }
+        });
+    }else if(player.number === 2){
         _.each(_.range(16,20),function(elem){
-            if (!oThis.world.isOccupied(elem, 16) && result == undefined)
+            if (!oThis.world.isOccupied(elem, 16) && !result){
                 result = [elem, 16];
-            if (!oThis.world.isOccupied(16, elem) && result == undefined)
+            }
+            if (!oThis.world.isOccupied(16, elem) && !result){
                 result = [16, elem];
+            }
         });
         _.each(_.range(16,20),function(elem){
-            if (!oThis.world.isOccupied(elem, 19) && result == undefined)
+            if (!oThis.world.isOccupied(elem, 19) && !result){
                 result = [elem, 19];
-            if (!oThis.world.isOccupied(0, elem) && result == undefined)
+            }
+            if (!oThis.world.isOccupied(0, elem) && !result){
                 result = [19, elem];
-        })
+            }
+        });
     }
-    return result
+    return result;
 };
 
 /**
  * Adds new units if the time is right.
  */
 Game.prototype.addNewUnits = function () {
+    "use strict";
+
     if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0) return;
+    var unoccupied;
 
     unoccupied =this.getUnoccupiedTileAroundBase(this.player1);
-    if (unoccupied)
+    if (unoccupied){
         this.newUnit(this.player1, unit.Viking, unoccupied[0], unoccupied[1]);
+    }
 
     unoccupied =this.getUnoccupiedTileAroundBase(this.player2);
-    if (unoccupied)
+    if (unoccupied){
         this.newUnit(this.player2, unit.Viking, unoccupied[0], unoccupied[1]);
+    }
 };
 
 
