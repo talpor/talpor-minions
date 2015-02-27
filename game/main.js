@@ -163,15 +163,57 @@ Game.prototype.killUnit = function (unitID) {
     this.world.removeUnit(x, y);
 };
 
+
+/**
+ * Return the an unoccupied tile around a base
+ */
+Game.prototype.getUnoccupiedTileAroundBase = function (player) {
+    oThis = this;
+    var result;
+    if (player.number == 1){
+        _.each(_.range(3, -1, -1),function(elem){
+            if (!oThis.world.isOccupied(elem, 3) && result == undefined){
+                result = [elem, 3];
+            }
+            if (!oThis.world.isOccupied(3, elem) && result == undefined)
+                result = [3, elem];
+        });
+        _.each(_.range(3, -1, -1),function(elem){
+            if (!oThis.world.isOccupied(elem, 0) && result == undefined)
+                result = [elem, 0];
+            if (!oThis.world.isOccupied(0, elem) && result == undefined)
+                result = [0, elem];
+        })
+    }else if(player.number == 2){
+        _.each(_.range(16,20),function(elem){
+            if (!oThis.world.isOccupied(elem, 16) && result == undefined)
+                result = [elem, 16];
+            if (!oThis.world.isOccupied(16, elem) && result == undefined)
+                result = [16, elem];
+        });
+        _.each(_.range(16,20),function(elem){
+            if (!oThis.world.isOccupied(elem, 19) && result == undefined)
+                result = [elem, 19];
+            if (!oThis.world.isOccupied(0, elem) && result == undefined)
+                result = [19, elem];
+        })
+    }
+    return result
+};
+
 /**
  * Adds new units if the time is right.
  */
 Game.prototype.addNewUnits = function () {
     if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0) return;
-    if (!this.world.isOccupied(3, 3))
-        this.newUnit(this.player1, unit.Viking, 3, 3);
-    if (!this.world.isOccupied(16, 16))
-        this.newUnit(this.player2, unit.Viking, 16, 16);
+
+    unoccupied =this.getUnoccupiedTileAroundBase(this.player1);
+    if (unoccupied)
+        this.newUnit(this.player1, unit.Viking, unoccupied[0], unoccupied[1]);
+
+    unoccupied =this.getUnoccupiedTileAroundBase(this.player2);
+    if (unoccupied)
+        this.newUnit(this.player2, unit.Viking, unoccupied[0], unoccupied[1]);
 };
 
 
