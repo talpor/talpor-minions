@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet/bootstrap-superhero.css') }}">
     <link rel="stylesheet/less" type="text/css" href="{{ url_for('static', filename='stylesheet/home.less') }}">
 </head>
-<body id="home">
+<body id="home"{% if config['DEBUG'] %} rv-on-keydown="debugStep"{% endif %}>
     <div class="navbar navbar-default navbar-inverse navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -39,15 +39,18 @@
                         </div>
                     </div>
                     {% if config['DEBUG'] %}
+                    
                     <div id="debugging">
-                      Debug:
                       <button
                          id="debug-mode-button"
                          rv-on-click="toggleDebug"
-                         class="btn btn-{% if request.args.has_key('debug') %}success{% else %}danger{% endif %}"
+                         rv-text="debugMode | onoff"
+                         rv-class-btn-danger="debugMode | not"
+                         rv-class-btn-success="debugMode"
+                         class="btn"
                          >
-                        {% if request.args.has_key('debug') %}On{% else %}Off{% endif %}
                       </button>
+                      <h4>Debug mode</h4>
                     </div>
                     {% endif %}
                 </div>
@@ -69,10 +72,14 @@
     <script src="{{ url_for('static', filename='libs/crafty/crafty.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/moment.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/lodash.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/rivets.formatters.js') }}"></script>
     <script src="{{ url_for('static', filename='js/globals.js') }}"></script>
     <script src="{{ url_for('static', filename='js/viking.js') }}"></script>
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+    {% if config['DEBUG'] %}
+    <script>{% if request.args.has_key('debug') %}scope.debugMode=true;{% endif %}</script>
+    {% endif %}
 </body>
 </html>

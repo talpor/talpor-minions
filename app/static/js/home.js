@@ -1,4 +1,4 @@
-/* global _, jQuery, rivets, moment, localStorage */
+/* global _, alert, jQuery, rivets, moment, localStorage */
 
 (function(global, $, rivets, engine) {
     'use strict';
@@ -48,7 +48,6 @@
     }
     scope = {
         title: 'Random Fight',
-        debugMode: $('#debug-mode-button').hasClass('btn-success'),
         today: moment().format('DD-MM-YY'),
         selectedArmies: myArmy ? [myArmy] : [],
 
@@ -58,7 +57,6 @@
                 name: el.getAttribute('data-army-name')
             };
         }),
-
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
@@ -66,6 +64,12 @@
                     scope.selectedArmies[1].name;
             }
             engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
+        },
+        debugStep: function(e) {
+            if (e.which == 32 && scope.debugMode) {
+                e.preventDefault();
+                global.nextTurn();
+            }
         },
         submitFile: function(event) {
             var target = event.target,
@@ -102,12 +106,8 @@
                     .addClass('active ' + armyColors[i]);
             });
         },
-        toggleDebug: function (e) {
+        toggleDebug: function () {
             scope.debugMode = !scope.debugMode;
-            if (scope.debugMode)
-                $('#debug-mode-button').removeClass('btn-danger').addClass('btn-success').text('On');
-            else
-                $('#debug-mode-button').removeClass('btn-success').addClass('btn-danger').text('Off');
         }
     };
     global.scope = scope;

@@ -145,7 +145,7 @@
         }
         stateIndex++;
     }
-    window.nextTurn = renderAction.bind(null, null, true);
+    global.nextTurn = renderAction.bind(null, null, true);
 
     function initBases(state0){
         global.bases[1]._baseHP = state0.bases[1];
