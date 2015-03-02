@@ -74,7 +74,7 @@ function Game() {
  * Runs the game's loop until it's finished.
  */
 Game.prototype.start = function () {
-    var actions,
+    var actions, state,
         states = new Array();
 
     while (!this.finished()) {
@@ -91,14 +91,21 @@ Game.prototype.start = function () {
         actions = this.currentPlayer.agent._doTurn(this.world.safeClone());
 
         /*
-         * Save state before executing actions
+         * Generates a state with current unit stats before executing
+         * actions.
          */
-        states.push(this.generateState(actions));
+        state = this.generateState();
 
         /*
          * Current player moves.
+         *
+         * `executeActions` cleans unsafe actions for us, and assigns
+         * them to the current given `state`. Then returns the new and
+         * complete state so we can push it to the `states` array.
          */
-        this.executeActions(actions);
+        states.push(
+            this.executeActions(actions, state)
+        );
     }
 
     // Push last game state
@@ -248,10 +255,8 @@ Game.prototype.getWinner = function () {
 
 /**
  * Generates a state for a single turn.
- *
- * If a unit is
  */
-Game.prototype.generateState = function (actions) {
+Game.prototype.generateState = function () {
     var self = this;
     var state = {
         bases: {
@@ -265,10 +270,6 @@ Game.prototype.generateState = function (actions) {
     _.each(_.filter(this.units, function (unit) { return unit.kind == 'moving' }), function (unit, index) {
         state.units[unit.id] = unit.getStats();
     });
-    _.each(actions, function (action, unitID) {
-        state.units[unitID].action = action;
-    });
-
     return state;
 };
 
@@ -276,21 +277,25 @@ Game.prototype.generateState = function (actions) {
 /**
  * Executes actions for both players.
  *
- * Returns the current state for all of the game units in play.
+ * Returns the current state for all of the game units in play after
+ * assigning only safe actions.
  */
-Game.prototype.executeActions = function (actions) {
+Game.prototype.executeActions = function (actions, state) {
     var self = this;
 
     _.each(actions, function (action, unitID) {
         var unit = self.units[unitID];
         if (!self.world.isValidAction(unit, action)) return;
 
+        state.units[unitID].action = action;
         self.world.execAction(unit, action);
     });
     _.each(_.filter(this.units, function (unit) { return unit.kind == 'moving' }), function (unit, index) {
         if (unit.isDead())
             self.killUnit(unit.id);
     });
+
+    return state;
 };
 
 new Game().start();
