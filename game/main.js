@@ -42,14 +42,7 @@ function Game() {
      * Sets bases  -- TO-DO: Find a automatic way to select good places to place bases.
      */
     this.newUnit(this.player1, unit.Base, 1, 1);
-    this.newUnit(this.player1, unit.Base, 1, 2);
-    this.newUnit(this.player1, unit.Base, 2, 1);
-    this.newUnit(this.player1, unit.Base, 2, 2);
-
     this.newUnit(this.player2, unit.Base, 17, 17);
-    this.newUnit(this.player2, unit.Base, 17, 18);
-    this.newUnit(this.player2, unit.Base, 18, 17);
-    this.newUnit(this.player2, unit.Base, 18, 18);
 
     /*
      * Set units in place
@@ -170,50 +163,6 @@ Game.prototype.killUnit = function (unitID) {
 };
 
 
-/**
- * Return the an unoccupied tile around a base
- */
-Game.prototype.getUnoccupiedTileAroundBase = function (player) {
-    "use strict";
-    var oThis = this;
-    var result;
-    if (player.number === 1){
-        _.each(_.range(3, -1, -1),function(elem){
-            if (!oThis.world.isOccupied(elem, 3) && !result) {
-                result = [elem, 3];
-            }
-            if (!oThis.world.isOccupied(3, elem) && !result){
-                result = [3, elem];
-            }
-        });
-        _.each(_.range(3, -1, -1),function(elem){
-            if (!oThis.world.isOccupied(elem, 0) && !result){
-                result = [elem, 0];
-            }
-            if (!oThis.world.isOccupied(0, elem) && !result){
-                result = [0, elem];
-            }
-        });
-    }else if(player.number === 2){
-        _.each(_.range(16,20),function(elem){
-            if (!oThis.world.isOccupied(elem, 16) && !result){
-                result = [elem, 16];
-            }
-            if (!oThis.world.isOccupied(16, elem) && !result){
-                result = [16, elem];
-            }
-        });
-        _.each(_.range(16,20),function(elem){
-            if (!oThis.world.isOccupied(elem, 19) && !result){
-                result = [elem, 19];
-            }
-            if (!oThis.world.isOccupied(0, elem) && !result){
-                result = [19, elem];
-            }
-        });
-    }
-    return result;
-};
 
 /**
  * Adds new units if the time is right.
@@ -222,15 +171,16 @@ Game.prototype.addNewUnits = function () {
     "use strict";
 
     if ((this.tickNumber % config.newUnitsNumberOfTicks) !== 0) return;
+
     var unoccupied;
 
-    unoccupied =this.getUnoccupiedTileAroundBase(this.player1);
-    if (unoccupied){
+    unoccupied = this.world.getUnoccupiedTileAroundBase(this.player1.base);
+    if (unoccupied) {
         this.newUnit(this.player1, unit.Viking, unoccupied[0], unoccupied[1]);
     }
 
-    unoccupied =this.getUnoccupiedTileAroundBase(this.player2);
-    if (unoccupied){
+    unoccupied = this.world.getUnoccupiedTileAroundBase(this.player2.base);
+    if (unoccupied) {
         this.newUnit(this.player2, unit.Viking, unoccupied[0], unoccupied[1]);
     }
 };

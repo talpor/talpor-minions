@@ -1,3 +1,5 @@
+var _ = require("lodash");
+
 var config = require('./config');
 
 
@@ -62,9 +64,39 @@ World.prototype.isValidAction = function (unit, action) {
     return true;
 };
 
+
 World.prototype.isOccupied = function (x, y) {
     if (x < 0 || x >= this.size || y < 0 || y >= this.size) return true;
     return Boolean(this.array[x][y]);
+};
+
+
+/**
+ * Returns an unoccupied tile around a base
+ */
+World.prototype.getUnoccupiedTileAroundBase = function (base) {
+    "use strict";
+    var self = this,
+        range,
+        baseBorders;
+
+    if (base.player.number == 1) {
+        baseBorders = [base.x + base.size, base.x - 1];
+        range = _.range(baseBorders[0], baseBorders[1] - 1, -1);
+    }
+    else {
+        baseBorders = [base.x - 1, base.x + base.size];
+        range = _.range(baseBorders[0], baseBorders[1] + 1, 1);
+    }
+
+    for (var i = 0; i < range.length; i++) {
+        if (!self.isOccupied(range[i], baseBorders[0])) return [range[i], baseBorders[0]];
+        if (!self.isOccupied(baseBorders[0], range[i])) return [baseBorders[0], range[i]];
+    }
+    for (i = 0; i < range.length; i++) {
+        if (!self.isOccupied(range[i], baseBorders[1])) return [range[i], baseBorders[1]];
+        if (!self.isOccupied(baseBorders[1], range[i])) return [baseBorders[1], range[i]];
+    }
 };
 
 
