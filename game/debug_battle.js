@@ -11,7 +11,7 @@ var config = require('./config'),
 var state,
     world = new Array(config.worldSize),
     battle = JSON.parse(
-        LZString.decompress(
+        LZString.decompressFromUTF16(
             fs.readFileSync(utils.getBattleFile(process.argv[2]), {encoding: 'utf8'})
         )
     );
