@@ -1,4 +1,4 @@
-/* global $, Crafty, LZString */
+/* global $, _, Crafty, LZString */
 
 (function (global, vikingCraft) {
     'use strict';
@@ -98,11 +98,11 @@
 
     function renderAction(state, force) {
 
-        if (global.scope.debugMode && !force) return;
+        if (global.scope.debugMode && !force || stateIndex >= global.states.length) return;
 
         state = state || global.states[stateIndex];
 
-        if (stateIndex + 1 < global.states.length){
+        if (stateIndex + 1 < global.states.length) {
             checkAliveVikings();
             global.bases[1].hp = state.bases[1];
             global.bases[2].hp = state.bases[2];
@@ -123,17 +123,17 @@
                     direction = global.UPRIGHT;
                 } else if (viking.action.dx == 1) {
                     direction = global.RIGHT;
-                } else if(viking.action.dx == -1) {
+                } else if (viking.action.dx == -1) {
                     direction = global.LEFT;
-                } else if(viking.action.dy == 1) {
+                } else if (viking.action.dy == 1) {
                     direction = global.DOWN;
-                } else if(viking.action.dy == -1) {
+                } else if (viking.action.dy == -1) {
                     direction = global.UP;
                 }
                 if (viking.action.please == 'walk') {
                     vikingCraft.move(global.vikings[vikingkey], direction);
-                } else if (viking.action.please == 'attack'){
-                    //fire explosions and michael bay stuff goes here
+                } else if (viking.action.please == 'attack') {
+                    // fire explosions and michael bay stuff goes here
                     vikingCraft.attack(global.vikings[vikingkey], direction);
                 }
             } else {
@@ -143,6 +143,9 @@
         }
 
         if (idles == vikings && stateIndex < global.states.length) {
+            while (++stateIndex < global.states.length) {
+                if (_.any(global.states[stateIndex].units, function (unit) { return unit.action !== undefined })) break;
+            }
             renderAction();
         }
         stateIndex++;
