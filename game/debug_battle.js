@@ -8,8 +8,7 @@ var config = require('./config'),
     utils = require('./utils'),
     World = require('./world');
 
-var state,
-    world = new Array(config.worldSize),
+var world = new Array(config.worldSize),
     battle = JSON.parse(
         LZString.decompressFromUTF16(
             fs.readFileSync(utils.getBattleFile(process.argv[2]), {encoding: 'utf8'})
@@ -54,7 +53,9 @@ process.stdin.resume();
 process.stdin.setEncoding('utf8');
 process.stdin.on('data', function (txt) {
 
-    newWorldState(world, battle.states.shift());
-    utils.printWorld(world);
+    var state = battle.states.shift();
+
+    newWorldState(world, state);
+    utils.printWorld(world, state);
 
 });
