@@ -1,4 +1,4 @@
-/* global $, Crafty */
+/* global $, Crafty, LZString */
 
 (function (global, vikingCraft) {
     'use strict';
@@ -62,10 +62,12 @@
         $.ajax(
             gameUrl,
             {
-                aync: true,
-                contentType: 'application/json',
-                dataType: 'json',
-                success: function(game) {
+                dataType: 'text',
+                success: function(gzippedGame, status, xhr) {
+                    var game = JSON.parse(
+                        LZString.decompressFromUTF16(gzippedGame)
+                    );
+
                     console.log(game.id, game.winner, game.players[0].agent, game.players[1].agent);
                     global.states = game.states;
                     global.winner = game.winner;

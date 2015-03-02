@@ -117,7 +117,7 @@ Game.prototype.start = function () {
         states: states
     }) + '\n';
 
-    fs.writeFileSync(jsonFileName, LZString.compress(str));
+    fs.writeFileSync(jsonFileName, LZString.compressToUTF16(str));
     process.stdout.write(jsonFileName);
 };
 
