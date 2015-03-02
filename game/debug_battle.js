@@ -1,7 +1,8 @@
 /* global process */
 
 var fs = require('fs'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    LZString = require('lz-string');
 
 var config = require('./config'),
     utils = require('./utils'),
@@ -10,7 +11,9 @@ var config = require('./config'),
 var state,
     world = new Array(config.worldSize),
     battle = JSON.parse(
-        fs.readFileSync(utils.getBattleFile(process.argv[2]))
+        LZString.decompress(
+            fs.readFileSync(utils.getBattleFile(process.argv[2]), {encoding: 'utf8'})
+        )
     );
 
 for (var i = 0; i < config.worldSize; i++) {

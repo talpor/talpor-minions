@@ -104,4 +104,4 @@ def play(p1, p2):
         upsert_gist(p2.replace('gist::', ''))
 
     states_file = run_game(p1, p2)
-    return send_file(states_file, mimetype='application/json')
+    return send_file(states_file, mimetype='html/text; charset=utf-8')
