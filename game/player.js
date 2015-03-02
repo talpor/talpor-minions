@@ -1,6 +1,7 @@
 /* global module */
 
-var config = require('./config');
+var config = require('./config'),
+    units = require('./units/common');
 
 function Player(number, world, AgentConstructor) {
     this.number = number;
@@ -13,6 +14,10 @@ function Player(number, world, AgentConstructor) {
 Player.prototype.addUnit = function (unit) {
     unit.player = this;
     this.units.push(unit);
+
+    if (unit instanceof units.Base)
+        this.base = unit;
+
     return unit;
 };
 
