@@ -1,7 +1,7 @@
 import os, subprocess
 
 from flask import (
-    Flask, render_template, send_file, request, redirect, url_for
+    Flask, abort, render_template, send_file, request, redirect, url_for
 )
 from flask.ext.pymongo import PyMongo
 
@@ -59,7 +59,7 @@ def home(battle_id=None):
             app.config['BATTLES_FOLDER'], '{}.json'.format(battle_id)
         )
         if not os.path.isfile(battle_file):
-            return 404
+            return abort(404)
         if request.headers.get('X-Requested-With') == 'XMLHttpRequest':  # is ajax
             return send_file(battle_file, mimetype='application/json')
 
