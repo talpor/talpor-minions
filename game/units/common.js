@@ -1,3 +1,5 @@
+var _ = require("lodash");
+
 var baseUnits = require('./base'),
     config = require('../config');
 
@@ -7,7 +9,7 @@ var baseUnits = require('./base'),
  * ----------------------------------------------------------------------------
  */
 function Base(x, y, options) {
-    baseUnits.Unit.call(this, x, y, 1);
+    baseUnits.Unit.call(this, x, y, { hp: 1, size: 2 });
 }
 Base.prototype = Object.create(baseUnits.Unit.prototype);
 Base.prototype.constructor = Base;
@@ -22,13 +24,13 @@ Base.prototype.getDamage = function (damage) {
  * ----------------------------------------------------------------------------
  */
 function Viking(x, y, options) {
-    baseUnits.AttackUnit.call(
-        this,
-        x, y,
-        config.viking.hp,
-        config.viking.range,
-        config.viking.attack
-    );
+    options = _.extend({}, options, {
+        hp: config.viking.hp,
+        size: config.viking.size,
+        range: config.viking.range,
+        attack: config.viking.attack
+    });
+    baseUnits.AttackUnit.call(this, x, y, options);
 }
 Viking.prototype = Object.create(baseUnits.AttackUnit.prototype);
 Viking.prototype.constructor = Viking;
@@ -39,13 +41,13 @@ Viking.prototype.constructor = Viking;
  * ----------------------------------------------------------------------------
  */
 function Tower(x, y, options) {
-    baseUnits.AttackUnit.call(
-        this,
-        x, y,
-        config.tower.hp,
-        config.tower.range,
-        config.tower.attack
-    );
+    options = _.extend({}, options, {
+        hp: config.tower.hp,
+        size: config.tower.size,
+        range: config.tower.range,
+        attack: config.tower.attack
+    });
+    baseUnits.AttackUnit.call(this, x, y, options);
 }
 Tower.prototype = Object.create(baseUnits.AttackUnit.prototype);
 Tower.prototype.constructor = Tower;

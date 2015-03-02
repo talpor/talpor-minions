@@ -10,7 +10,7 @@ var pkAutoIncrement = 0;
  * Base Unit
  * ----------------------------------------------------------------------------
  */
-function Unit(x, y, hp, options) {
+function Unit(x, y, options) {
     if (!(typeof x === 'number' && typeof y === 'number' &&
           x < config.worldSize && y < config.worldSize &&
           x >= 0 && y >= 0)) {
@@ -19,13 +19,10 @@ function Unit(x, y, hp, options) {
     this.id = pkAutoIncrement++;
     this.x = x;
     this.y = y;
-    this.hp = hp;
-    this.kind = 'stationary';
-
-    if (options && options.player)
-        this.player = options.player;
-    else
-        this.player = null;
+    this.hp = options.hp;
+    this.size = options.size || 1;
+    this.kind = options.kind || 'stationary';
+    this.player = options.player || null;
 }
 
 Unit.prototype.getStats = function() {
@@ -52,10 +49,10 @@ Unit.prototype.isDead = function () {
  * Attacking Unit
  * ----------------------------------------------------------------------------
  */
-function AttackUnit(x, y, hp, range, attack) {
-    Unit.call(this, x, y, hp);
-    this.range = range;
-    this.attack = attack;
+function AttackUnit(x, y, options) {
+    Unit.call(this, x, y, options || {});
+    this.range = options.range;
+    this.attack = options.attack;
 
     this.kind = 'moving';
 }
