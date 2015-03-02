@@ -56,7 +56,7 @@ def home(battle_id=None):
     """
     if battle_id:
         battle_file = os.path.join(
-            app.config['BATTLES_FOLDER'], '{}.json'.format(battle_id)
+            app.config['BATTLES_FOLDER'], '{}.json.gz'.format(battle_id)
         )
         if not os.path.isfile(battle_file):
             return abort(404)
