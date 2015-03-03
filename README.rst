@@ -16,7 +16,7 @@ repo and ``cd`` to it. Then:
 .. code:: bash
 
   $> npm install
-  $> pip install -r requirements.pip
+  $> pip install -r requirements/base.pip
   $> python run.py
 
 There you go http://localhost:5000.
