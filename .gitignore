@@ -1,6 +1,7 @@
 *.pyc
 *~
 *\#*
-/node_modules/*
+node_modules/*
 game/agents/
 game/battles/
+server/logs/*
