@@ -1,6 +1,7 @@
 import os
+from os import path
 
-_basedir = os.path.abspath(os.path.dirname(__file__))
+_basedir = path.abspath(path.dirname(os.path.dirname(__file__)))
 
 def num_cpus():
     if not hasattr(os, "sysconf"):
@@ -15,11 +16,11 @@ ADMINS = frozenset(
 )
 SECRET_KEY = 'A0Zr98j/3yXsdr R~XHXFG!jmN]ASSR/,?RX'
 
-GAME_FOLDER = os.path.join(_basedir, 'game')
-AGENTS_FOLDER = os.path.join(GAME_FOLDER, 'agents')
-BATTLES_FOLDER = os.path.join(GAME_FOLDER, 'battles')
+GAME_FOLDER = path.join(_basedir, 'game')
+AGENTS_FOLDER = path.join(GAME_FOLDER, 'agents')
+BATTLES_FOLDER = path.join(GAME_FOLDER, 'battles')
 
 MONGO_DBNAME = 'vikings'
 
-THREADS_PER_PAGE = num_cpus() * 2
 SEND_FILE_MAX_AGE_DEFAULT = 0
+THREADS_PER_PAGE = num_cpus() * 2

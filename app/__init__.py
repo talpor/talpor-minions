@@ -13,7 +13,10 @@ from .gists import upsert_gist
 # Application
 # -----------------------------------------------------------------------------
 app = Flask(__name__)
-app.config.from_object('config')
+app.config.from_object('config.base')
+
+if os.environ.has_key('VIKINGS_CONFIG'):
+    app.config.from_envvar('VIKINGS_CONFIG')
 
 mongo = PyMongo(app)
 
