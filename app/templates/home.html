@@ -65,6 +65,14 @@
             </div>
         </div>
     </div>
+    {% if not config['DEBUG'] %}
+    <script src="//cdn.ravenjs.com/1.1.11/jquery,native/raven.min.js"></script>
+    <script>
+      Raven.config('https://198259cf4480430790c2c3425a1d8f4f@sentry.talpor.com/31', {
+      whitelistUrls: ['vikings.talpor.com/static/js/']
+      }).install();
+    </script>
+    {% endif %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='libs/rivets.bundled.min.js') }}"></script>
     <script src="{{ url_for('static', filename='libs/bootstrap/js/bootstrap.js') }}"></script>
@@ -79,8 +87,8 @@
     <script src="{{ url_for('static', filename='js/base.js') }}"></script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>
     <script src="{{ url_for('static', filename='js/home.js') }}"></script>
-    {% if config['DEBUG'] %}
-    <script>{% if request.args.has_key('debug') %}scope.debugMode=true;{% endif %}</script>
+    {% if config['DEBUG'] and request.args.has_key('debug') %}
+    <script>scope.debugMode=true;</script>
     {% endif %}
 </body>
 </html>
