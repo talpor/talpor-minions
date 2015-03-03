@@ -5,6 +5,7 @@ from flask import (
 )
 from flask.ext.pymongo import PyMongo
 
+from raven.contrib.flask import Sentry
 from werkzeug import secure_filename
 
 from .gists import upsert_gist
@@ -18,6 +19,7 @@ app.config.from_object('config.base')
 if os.environ.has_key('VIKINGS_CONFIG'):
     app.config.from_envvar('VIKINGS_CONFIG')
 
+sentry = Sentry(app)
 mongo = PyMongo(app)
 
 
