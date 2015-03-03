@@ -1,6 +1,6 @@
 /* global $, _, Crafty, LZString */
 
-(function (global, vikingCraft) {
+(function (global, vikingCraft, baseCraft) {
     'use strict';
     var stateIndex = 0;
 
@@ -84,7 +84,7 @@
         if (global.animationsRunning == 0) {
             if (stateIndex < global.states.length) {
                 setTimeout(function () {
-                    renderAction()
+                    renderAction();
                 }, 500);
             } else {
                 global.bases[global.loser].explode();
@@ -200,4 +200,4 @@
         stop: stopEngine
     };
 
-}(window, window.vikingCraft));
+}(window, window.vikingCraft, window.baseCraft));

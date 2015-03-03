@@ -20,14 +20,14 @@
                 .attr({
                     w: 0,
                     h: 0,
-                    x: xPosition+BOX_SIZE/2,
-                    y: yPosition+BOX_SIZE/5,
+                    x: xPosition+global.BOX_SIZE/2,
+                    y: yPosition+global.BOX_SIZE/5,
                     z: 3,
                     alpha: 0
                 }).animate('burning', [[0,0], [1,0], [2,0], [0,0]])
                .bind('EnterFrame', function() {
                     fire.animate('burning', 1);
-               })
+               });
             fire.animationSpeed = 0.005;
 
             fire.hp = 96;
@@ -44,10 +44,10 @@
                         this.w++;
                         this.h++;
                     }
-                    if (this.xPosition < this._defaultX+BOX_SIZE/2){
+                    if (this.xPosition < this._defaultX+global.BOX_SIZE/2){
                         this.xPosition+=1;
                     }
-                    if (this.yPosition < this._defaultY+BOX_SIZE/5){
+                    if (this.yPosition < this._defaultY+global.BOX_SIZE/5){
                         this.yPosition+=1;
                     } 
                     if (this.alpha < 1){
@@ -65,10 +65,10 @@
                         this.w--;
                         this.h--;
                     }
-                    if (this.xPosition < this._defaultX+BOX_SIZE/2){
+                    if (this.xPosition < this._defaultX+global.BOX_SIZE/2){
                         this.xPosition+=1;
                     }
-                    if (this.yPosition < this._defaultY+BOX_SIZE/5){
+                    if (this.yPosition < this._defaultY+global.BOX_SIZE/5){
                         this.yPosition+=1;
                     } 
                     if (this.alpha < 1){
@@ -79,15 +79,15 @@
                         this.alpha -= 0.01;
                     }
                 }
-            })
+            });
 
             base.explode = function(){
                 var boom = Crafty.e('2D, Canvas, boom, SpriteAnimation')
                 .attr({
-                    w: BOX_SIZE*6,
-                    h: BOX_SIZE*5,
-                    x: base.x-2*BOX_SIZE,
-                    y: base.y-2*BOX_SIZE,
+                    w: global.BOX_SIZE*6,
+                    h: global.BOX_SIZE*5,
+                    x: base.x-2*global.BOX_SIZE,
+                    y: base.y-2*global.BOX_SIZE,
                     z: 5,
                 }).bind('EnterFrame', function() {
                     if (base.alpha > 0.01 ){
@@ -103,20 +103,15 @@
                                     [0,1], [1,1], [2,1], [3,1], [4,1],
                                     [0,2], [1,2], [2,2], [3,2], [4,2],
                                     [0,3], [1,3], [2,3], [3,3], [4,3],
-                                    [0,4], [1,4], [2,4]])
+                                    [0,4], [1,4], [2,4]]);
             
                 boom.animate('kaboom',1);
-            }
+            };
 
         base.id = baseId;
 
         global.bases[baseId] = base;
     }
-
-
-
-    window.bases = global.bases;
-
     global.baseCraft = {
         add: addBase,
     };
