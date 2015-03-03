@@ -7,15 +7,19 @@ Yeah!
 Installation
 ============
 
-Easy Peasy... clone this repo and ``cd`` to it. Then you'll need
-``python`` and ``node``. You have them, right?
+You need just a few requirements: ``python``, ``node`` and
+``mongodb``. Installation for all of these are left to the reader.
+
+After meeting these requirements, the rest is easy peasy... clone this
+repo and ``cd`` to it. Then:
 
 .. code:: bash
 
   $> npm install
   $> pip install -r requirements.pip
+  $> python run.py
 
-There you go.
+There you go http://localhost:5000.
 
 Now have fun creating agents \\o/!
 
