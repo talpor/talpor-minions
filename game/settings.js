@@ -24,7 +24,7 @@ Settings.development = {
 var vikingsConfig, extraConfiguration;
 try {
     vikingsConfig = ini.parseSync(path.join(__dirname, process.env.VIKINGS_CONFIG));
-    extraConfiguration = Settings[vikingsConfig.NODE_ENV];
+    extraConfiguration = Settings[vikingsConfig.NODE_ENV.replace(/'/g, '')];
 } catch (err) {
     extraConfiguration = {};
 };
