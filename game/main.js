@@ -1,9 +1,8 @@
-/* global process */
+/* global global, process */
 
 var _ = require('lodash'),
     fs = require('fs'),
     uuid = require('node-uuid'),
-    path = require('path'),
     LZString = require('lz-string');
 
 var config = require('./config'),
@@ -11,6 +10,24 @@ var config = require('./config'),
     utils = require('./utils'),
     Player = require('./player'),
     World = require('./world');
+
+global.settings = require('./settings');
+
+// Sets logging
+if (!global.settings.debug) {
+    var bunyan = require('bunyan').createLogger({name: 'vikings.engine'});
+    var r = require('raven');
+    var raven = new r.Client(global.settings.sentryDSN);
+
+    raven.patchGlobal(function () {
+        bunyan.error('System Crashed, check sentry for details.');
+        process.exit(1);
+    });
+
+    raven.on('error', function (e) {
+        bunyan.error({error: e}, 'Sentry is down =(!');
+    });
+}
 
 
 function Game() {
