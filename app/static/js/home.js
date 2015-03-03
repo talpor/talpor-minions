@@ -49,7 +49,7 @@
     scope = {
         title: 'Random Fight',
         today: moment().format('DD-MM-YY'),
-        selectedArmies: myArmy ? [myArmy] : [],
+        selectedArmies: myArmy ? [{id: myArmy, name: myArmy}] : [],
 
         armies: domArmies.map(function(i,el) {
             return {
