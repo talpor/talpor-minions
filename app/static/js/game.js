@@ -6,7 +6,7 @@
 
     var initEngine = function (gameUrl) {
         global.scope.playing = true;
-        Crafty.init(600, 600);
+        Crafty.init(global.BOX_SIZE*20, global.BOX_SIZE*20);
         $('#cr-stage').css({'height': '300px'});
         $('#cr-stage').slideDown();
 
@@ -106,6 +106,7 @@
         var idles = 0;
         var vikings = 0;
         for (var vikingkey in state.units) {
+            global.vikings[vikingkey].hp = state.units[vikingkey].hp;
             var viking = state.units[vikingkey],
                 direction;
             if (viking.action) {

@@ -12,7 +12,7 @@
                 .attr({
                     w: global.BOX_SIZE,
                     h: global.BOX_SIZE,
-                    x: xPosition*global.BOX_SIZE,
+                    x: xPosition*global.BOX_SIZE - (global.BOX_SIZE/2),
                     y: yPosition*global.BOX_SIZE,
                     z: 1
                 });
@@ -22,6 +22,16 @@
         player._moved = 0;
         player._direction = global.RIGHT;
         player._dying = false;
+        player.hp = 12;
+
+        var barBaseWidth =  global.BOX_SIZE*(4/5);
+        player.hpBarBkgd = Crafty.e("2D, Canvas, Color")
+             .color("white")
+             .attr({x: player.x-1+global.BOX_SIZE/4, y: player.y-1, w: barBaseWidth+2, h: global.BOX_SIZE/10+2});
+
+        player.hpBar = Crafty.e("2D, Canvas, Color")
+             .color("green")
+             .attr({x: player.x+global.BOX_SIZE/4, y: player.y, w: barBaseWidth, h: global.BOX_SIZE/10});
 
         player
             .animate('walk_left', [[2,0], [2,1], [2,2],[2,3], [2,4]])
@@ -46,13 +56,25 @@
             .animate('die', [[4,9], [4,10], [4,11],[3,11]])
 
         .bind('EnterFrame', function() {
+            player.hpBar.w = barBaseWidth*(player.hp/12);
+            if (player.hp <= 8){
+                player.hpBar.color('#df691a');
+            } 
+            if (player.hp <= 4){
+                player.hpBar.color('red');
+            } 
+
             if (player._moving != global.NONE) {
                 if (player._moving == global.UP) {
                     player.animate('walk_up', 1);
                     player.y -= 1;
+                    player.hpBarBkgd.y -= 1;
+                    player.hpBar.y -= 1;
                 } else if (player._moving == global.DOWN) {
                     player.animate('walk_down', 1);
                     player.y += 1;
+                    player.hpBarBkgd.y += 1;
+                    player.hpBar.y += 1;
                 } else if (player._moving == global.LEFT) {
                     if (player._direction == global.RIGHT) {
                         this.flip('X');
@@ -60,6 +82,8 @@
                     }
                     this.animate('walk_left', 1);
                     player.x -= 1;
+                    player.hpBarBkgd.x -= 1;
+                    player.hpBar.x -= 1;
                 } else if (player._moving == global.RIGHT) {
                     if (player._direction == global.LEFT) {
                         this.unflip('X');
@@ -67,6 +91,8 @@
                     }
                     this.animate('walk_right', 1);
                     player.x += 1;
+                    player.hpBarBkgd.x += 1;
+                    player.hpBar.x += 1;
 
                 } else if (player._moving == global.UPRIGHT) {
                     if (player._direction == global.LEFT) {
@@ -76,6 +102,11 @@
                     this.animate('walk_up_right', 1);
                     player.x += 1;
                     player.y -= 1;
+                    player.hpBarBkgd.x += 1;
+                    player.hpBar.x += 1;
+                    player.hpBarBkgd.y -= 1;
+                    player.hpBar.y -= 1;
+
                 } else if (player._moving == global.UPLEFT) {
                     if (player._direction == global.RIGHT) {
                         this.flip('X');
@@ -84,6 +115,11 @@
                     this.animate('walk_up_left', 1);
                     player.x -= 1;
                     player.y -= 1;
+                    player.hpBarBkgd.x -= 1;
+                    player.hpBar.x -= 1;
+                    player.hpBarBkgd.y -= 1;
+                    player.hpBar.y -= 1;
+
                 } else if (player._moving == global.DOWNRIGHT) {
                     if (player._direction == global.LEFT) {
                         this.unflip('X');
@@ -92,6 +128,11 @@
                     this.animate('walk_down_right', 1);
                     player.x += 1;
                     player.y += 1;
+                    player.hpBarBkgd.x += 1;
+                    player.hpBar.x += 1;
+                    player.hpBarBkgd.y += 1;
+                    player.hpBar.y += 1;
+
                 } else if (player._moving == global.DOWNLEFT) {
                     if (player._direction == global.RIGHT) {
                         this.flip('X');
@@ -100,6 +141,10 @@
                     this.animate('walk_down_left', 1);
                     player.x -= 1;
                     player.y += 1;
+                    player.hpBarBkgd.x -= 1;
+                    player.hpBar.x -= 1;
+                    player.hpBarBkgd.y += 1;
+                    player.hpBar.y += 1;
                 }
 
                 player._moved++;
@@ -115,8 +160,16 @@
 
             if (player.dying) {
                 player.alpha -= 0.01;
+                player.hpBarBkgd.alpha -= 0.01;
+                player.hpBar.w = 0;
 
                 if (player.alpha <= 0){
+                    player.hpBarBkgd.alpha = 0;
+                    player.hpBar.alpha = 0;
+
+                    player.hpBarBkgd.destroy();
+                    player.hpBar.destroy();
+
                     var id = player.id;
                     player.destroy();
                     delete(global.vikings[id]);
@@ -125,6 +178,7 @@
             }
 
         });
+
 
         player.id = vikingId;
         player.owner = playerNumber;

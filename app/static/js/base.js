@@ -15,6 +15,15 @@
                     z: 2
                 });
 
+        var barBaseWidth =  global.BOX_SIZE*3*(4/5);
+        base.hpBarBkgd = Crafty.e("2D, Canvas, Color")
+             .color("white")
+             .attr({z:10, x: base.x-1+global.BOX_SIZE/4, y: base.y-1, w: barBaseWidth+2, h: global.BOX_SIZE/10+2});
+
+        base.hpBar = Crafty.e("2D, Canvas, Color")
+             .color("green")
+             .attr({z:11, x: base.x+global.BOX_SIZE/4, y: base.y, w: barBaseWidth, h: global.BOX_SIZE/10});
+
 
         var fire =  Crafty.e('2D, Canvas, fire, SpriteAnimation, Collision')
                 .attr({
@@ -36,9 +45,12 @@
             fire._defaultY = yPosition;
 
             fire.bind('EnterFrame', function() {
-               // console.log(base.hp, base._baseHP);
+                base.hpBar.w = barBaseWidth*(base.hp/base._baseHP);
+                           // console.log(base.hp, base._baseHP);
                 if(base.hp / base._baseHP < 0.3){
                     //burning as hell
+                    base.hpBar.color('red');
+
                     if (this.w < global.BOX_SIZE / 0.75){
                         //if flame is too small
                         this.w++;
@@ -55,6 +67,8 @@
                     }
 
                 } else if(base.hp / base._baseHP < 0.8){
+                    base.hpBar.color('#df691a');
+
                     //burning, but not as hell
                     if (this.w < global.BOX_SIZE / 1.5){
                         //if flame is too small
@@ -82,6 +96,8 @@
             });
 
             base.explode = function(){
+                base.hpBar.w = 0;
+
                 var boom = Crafty.e('2D, Canvas, boom, SpriteAnimation')
                 .attr({
                     w: global.BOX_SIZE*6,
@@ -93,6 +109,8 @@
                     if (base.alpha > 0.01 ){
                         base.alpha -= 0.02;
                         fire.alpha -= 0.02;
+                        player.hpBarBkgd.alpha -= 0.02;
+
                     } else {
                         base.alpha = 0;
                         fire.alpha = 0;
