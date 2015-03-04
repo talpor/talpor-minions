@@ -48,6 +48,7 @@
     }
     scope = {
         title: 'Random Fight',
+        gameSpeed: 500,
         today: moment().format('DD-MM-YY'),
         selectedArmies: myArmy ? [{id: myArmy, name: myArmy}] : [],
 
@@ -57,6 +58,9 @@
                 name: el.getAttribute('data-army-name')
             };
         }),
+        speedToggle: function() {
+            scope.gameSpeed = scope.gameSpeed === 500 ? 100 : 500;
+        },
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);

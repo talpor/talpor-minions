@@ -41,21 +41,14 @@
                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
                         </div>
                     </div>
-                    {% if config['DEBUG'] %}
-
-                    <div id="debugging">
-                      <button
-                         id="debug-mode-button"
-                         rv-on-click="toggleDebug"
-                         rv-text="debugMode | onoff"
-                         rv-class-btn-danger="debugMode | not"
-                         rv-class-btn-success="debugMode"
-                         class="btn"
-                         >
-                      </button>
-                      <h4>Debug mode</h4>
+                    <div class="row" rv-show="playing" id="player-controls">
+                        <div class="col-md-10 col-md-offset-1">
+                            <span class="glyphicon" rv-class-glyphicon-forward="gameSpeed | fast" rv-class-glyphicon-play="gameSpeed | slow" rv-on-click="speedToggle" aria-hidden="true"></span>
+                            {% if config['DEBUG'] %}
+                            <span class="glyphicon glyphicon-step-forward" rv-class-highlight="debugMode" rv-on-click="toggleDebug" aria-hidden="true"></span>
+                            {% endif %}
+                        </div>
                     </div>
-                    {% endif %}
                 </div>
             </div>
             <div class="col-md-3" style="text-align: right">

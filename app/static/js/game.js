@@ -31,8 +31,6 @@
                     '/static/img/fire.png',
                     '/static/img/explosion.png',
                     '/static/img/deal.png'
-
-
                 ],
                 initGame.bind(null, gameUrl),
                 function () {},
@@ -78,14 +76,13 @@
         );
     }
 
-
     function onAnimationEnds() {
         global.animationsRunning--;
-        if (global.animationsRunning == 0) {
+        if (global.animationsRunning === 0) {
             if (stateIndex < global.states.length) {
                 setTimeout(function () {
                     renderAction();
-                }, 500);
+                }, global.scope.gameSpeed);
             } else {
                 global.bases[global.loser].explode();
                 setTimeout(function () {
@@ -94,7 +91,6 @@
             }
         }
     }
-
 
     function renderAction(state, force) {
 
