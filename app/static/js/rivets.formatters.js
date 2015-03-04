@@ -15,3 +15,16 @@ rivets.formatters.fast = function(value) {
 rivets.formatters.slow = function(value) {
   return value < 101;
 };
+
+rivets.formatters.inHome = function(value) {
+  return value === 'home';
+};
+
+rivets.formatters.progress = function(value) {
+    if (!value) return '';
+    var values = value.match(/\d+/g);
+    if (values.length === 2) {
+        return 'width: ' + (values[0]/values[1]*100) + '%';
+    }
+    return '';
+};

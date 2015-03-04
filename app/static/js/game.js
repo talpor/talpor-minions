@@ -77,6 +77,7 @@
     }
 
     function onAnimationEnds() {
+        global.scope.gameProgress = stateIndex + '/' + global.states.length;
         global.animationsRunning--;
         if (global.animationsRunning === 0) {
             if (stateIndex < global.states.length) {

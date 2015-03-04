@@ -48,6 +48,14 @@
     }
     scope = {
         title: 'Random Fight',
+        view: (function() {
+            if (location.pathname === '/') {
+                return 'home';
+            }
+            else if (location.pathname.search('battle') === 1) {
+                return 'battle';
+            }
+        }()),
         gameSpeed: 500,
         today: moment().format('DD-MM-YY'),
         selectedArmies: myArmy ? [{id: myArmy, name: myArmy}] : [],
