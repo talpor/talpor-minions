@@ -47,7 +47,6 @@
         rivets.bind(app, scope);
     }
     scope = {
-        title: 'Random Fight',
         view: (function() {
             if (location.pathname === '/') {
                 return 'home';
@@ -56,6 +55,7 @@
                 return 'battle';
             }
         }()),
+        locationOrigin: location.origin,
         gameSpeed: 500,
         today: moment().format('DD-MM-YY'),
         selectedArmies: myArmy ? [{id: myArmy, name: myArmy}] : [],
@@ -99,8 +99,6 @@
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
-                scope.title = scope.selectedArmies[0].name + ' -vs- ' +
-                    scope.selectedArmies[1].name;
             }
             engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
         },
@@ -133,9 +131,6 @@
             });
             if (armies.length === 3) {
                 armies.shift();
-            }
-            if (armies.length === 2) {
-                scope.title = armies[0].name + ' -vs- ' + armies[1].name;
             }
             domArmies.each(function(i, el) {
                 $(el).find('a').removeClass('active red blue');

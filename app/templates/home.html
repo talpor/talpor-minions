@@ -35,7 +35,8 @@
         <div class="row">
             <div class="col-md-7 col-md-offset-1 main-battle">
                 <div rv-play-game="playing">
-                    <h2>{ title }</h2>
+                    <h2 rv-unless="result">Random Fight</h2>
+                    <h2 rv-if="result"><span class="blue"></span>{ result.player0.agent } -vs- <span class="red"></span>{ result.player1.agent }</h2>
                     <div id="cr-stage">
                         <div id="frontCover" rv-if="view | inHome" rv-on-click="playGame">
                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
@@ -45,7 +46,7 @@
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="share">
-                                    <span>http://127.0.0.1:5000/battle/2808e4d0555f</span>
+                                    <span>{ locationOrigin }/battle/{ result.id }/</span>
                                     <button class="btn btn-sm btn-warning">Share</button>
                                 </div>
                                 <div class="progress">

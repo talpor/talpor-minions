@@ -66,7 +66,14 @@
                         LZString.decompressFromUTF16(gzippedGame)
                     );
 
-                    console.log(game.id, game.winner, game.players[0].agent, game.players[1].agent);
+                    //console.log(game.id, game.winner, game.players[0].agent, game.players[1].agent);
+                    global.scope.result = {
+                        id: game.id,
+                        winner: game.winner,
+                        player0: game.players[0],
+                        player1: game.players[1]
+                    };
+
                     global.states = game.states;
                     global.winner = game.winner;
                     global.loser = (game.winner == 2 ? 1 : 2);
