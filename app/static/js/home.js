@@ -8,7 +8,7 @@
         domArmies = $('#armies li'),
         armyColors = ['blue', 'red'],
         myArmy = localStorage.getItem('myArmy'),
-        scope;
+        scope, inPause = false;
 
     function initApp() {
         if (myArmy) {
@@ -66,8 +66,35 @@
                 name: el.getAttribute('data-army-name')
             };
         }),
-        speedToggle: function() {
-            scope.gameSpeed = scope.gameSpeed === 500 ? 100 : 500;
+        player: {
+            play: function() {
+                scope.gameSpeed = 500;
+                if (inPause) {
+                    global.nextTurn();
+                    inPause = false;
+                }
+            },
+            forward: function() {
+                scope.gameSpeed = 100;
+                if (inPause) {
+                    global.nextTurn();
+                    inPause = false;
+                }
+            },
+            pause: function() {
+                scope.gameSpeed = 0;
+                inPause = true;
+            },
+            stepForward: function(e) {
+                if (!inPause) return;
+                global.nextTurn();
+                // blink animation
+                var t = $(e.target);
+                t.addClass('active');
+                setTimeout(function() {
+                    t.removeClass('active');
+                }, 100);
+            }
         },
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
@@ -117,9 +144,6 @@
                 $('#armies li[data-army-name="' + army.name + '"] a')
                     .addClass('active ' + armyColors[i]);
             });
-        },
-        toggleDebug: function () {
-            scope.debugMode = !scope.debugMode;
         }
     };
     global.scope = scope;

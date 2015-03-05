@@ -41,15 +41,23 @@
                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
                         </div>
                     </div>
-                    <div class="row" rv-show="playing" id="player-controls">
-                        <div class="col-md-10 col-md-offset-1">
-                            <div class="progress">
-                                <div class="progress-bar" rv-text="gameProgress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" rv-style="gameProgress | progress"></div>
+                    <div rv-show="playing" id="player-controls">
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="share">
+                                    <span>http://127.0.0.1:5000/battle/2808e4d0555f</span>
+                                    <button class="btn btn-sm btn-warning">Share</button>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar" rv-text="gameProgress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" rv-style="gameProgress | progress"></div>
+                                </div>
                             </div>
-                            <span class="glyphicon" rv-class-glyphicon-forward="gameSpeed | fast" rv-class-glyphicon-play="gameSpeed | slow" rv-on-click="speedToggle" aria-hidden="true"></span>
-                            {% if config['DEBUG'] %}
-                            <span class="glyphicon glyphicon-step-forward" rv-class-highlight="debugMode" rv-on-click="toggleDebug" aria-hidden="true"></span>
-                            {% endif %}
+                            <div class="col-md-3">
+                                <span class="glyphicon glyphicon-play" rv-class-active="gameSpeed | isFiveHundred" rv-on-click="player.play" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-forward" rv-class-active="gameSpeed | isHundred" rv-on-click="player.forward" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon glyphicon-pause" rv-on-click="player.pause" rv-class-active="gameSpeed | isZero" aria-hidden="true"></span>
+                                <span class="glyphicon glyphicon-step-forward" rv-on-click="player.stepForward" rv-class-disabled="gameSpeed | isZero | not" aria-hidden="true" title="or press space"></span>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -95,7 +95,8 @@
 
     function renderAction(state, force) {
 
-        if (global.scope.debugMode && !force || stateIndex >= global.states.length) return;
+        if (global.scope.gameSpeed === 0 && !force ||
+            stateIndex >= global.states.length) return;
 
         state = state || global.states[stateIndex];
 

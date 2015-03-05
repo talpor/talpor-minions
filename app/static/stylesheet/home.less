@@ -79,16 +79,30 @@
         }
     }
     #player-controls {
-        span {
+        width: 600px;
+        margin: 0 auto;
+        .glyphicon {
             padding: 9px 0 0 13px;
-            float: right;
-            font-size: 39px;
-            &.highlight {
-                color: #10171e;
+            font-size: 32px;
+            cursor: pointer;
+            &.active {
+                color: #5bc0de;
+            }
+            &.disabled {
+                color: #4e5d6c;
+                cursor: default;
+            }
+        }
+        .share {
+            margin-top: 15px;
+            span {
+                margin-top: 2px;
+                display: inline-block;
+                font-size: 18px;
             }
         }
         .progress {
-            width: 431px;
+            width: 100%;
             margin-top: 20px;
             float: left;
         }
