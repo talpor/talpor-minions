@@ -1,0 +1,38 @@
+- name: Set up application user
+  hosts: all
+  tasks:
+
+    - name: Create application user and home
+      sudo: yes
+      user: >
+        name=vikings
+        groups=www-data
+        shell=/bin/zsh
+        state=present
+      tags: [user, provision]
+
+    - name: Add developers keys to vikings
+      sudo: yes
+      authorized_key: user=vikings key="{{ item }}" state=present
+      with_file:
+        - public_keys/volrath.pub
+        - public_keys/mreyes.pub
+        - public_keys/mrondon.pub
+      tags: [user, provision]
+
+    - name: Clone .dotfiles env
+      remote_user: vikings
+      git: repo=https://github.com/volrath/dotfiles.git dest=~/.dotfiles
+      tags: [user, provision]
+
+    - name: Install and Bootrap .dotfiles
+      remote_user: vikings
+      shell: ./.dotfiles/script/install && ./.dotfiles/script/bootstrap
+      tags: [user, provision]
+      ignore_errors: yes
+
+    - name: Create virtualenv with virtualenvwrapper
+      remote_user: vikings
+      shell: >
+        executable=/bin/zsh
+        source `which virtualenvwrapper.sh` && mkvirtualenv vikings

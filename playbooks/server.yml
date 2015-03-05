@@ -1,0 +1,24 @@
+- name: Configure web server
+  hosts: all
+  sudo: yes
+  tasks:
+
+    - name: Prepare nodejs installation
+      shell: curl -sL https://deb.nodesource.com/setup | sudo bash -
+      tags: packages
+
+    - name: Install basic packages
+      apt: name={{ item }} state=present
+      with_items:
+        - build-essential
+        - htop
+        - emacs
+        - mongodb
+        - nginx
+        - git
+        - nodejs
+        - python-dev
+        - python-pip
+        - supervisor
+        - zsh
+      tags: [packages, provision]

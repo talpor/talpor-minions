@@ -1,0 +1,68 @@
+- name: Deploy application
+  hosts: all
+  remote_user: vikings
+  gather_facts: no
+  tags: deploy
+  tasks:
+
+    - name: "Put project's source code up-to-date"
+      git:
+        repo=https://github.com/talpor/talpor-vikings
+        dest=vikings
+        force=yes
+        version=HEAD
+
+    - name: Delete all .pyc files
+      command: find . -name '*.pyc' -delete chdir=vikings
+
+    - name: Ensure tmp directory is present
+      file: path=vikings/tmp state=directory
+
+    - name: Create checksum for current requirements
+      shell: >
+        /usr/bin/md5sum vikings/requirements/*.pip 2>/dev/null > vikings/tmp/pip.req.new
+        /usr/bin/md5sum vikings/package.json 2>/dev/null > vikings/tmp/npm.req.new
+      ignore_errors: true
+
+    - stat: path=vikings/tmp/pip.req.new
+      register: pip_new
+
+    - stat: path=vikings/tmp/pip.req.installed
+      register: pip_inst
+
+    - stat: path=vikings/server/supervisord.sock
+      register: supervisor_socket
+
+    - stat: path=vikings/tmp/npm.req.new
+      register: npm_new
+
+    - stat: path=vikings/tmp/npm.req.installed
+      register: npm_inst
+
+    - name: Install pip requirements
+      pip: requirements=/home/vikings/vikings/requirements/development.pip virtualenv=/home/vikings/.virtualenvs/vikings state=present
+      when: not pip_inst.stat.exists or pip_new.stat.md5 != pip_inst.stat.md5
+
+    - name: Install npm requirements
+      npm: path=/home/vikings/vikings state=present
+      when: not npm_inst.stat.exists or npm_new.stat.md5 != npm_inst.stat.md5
+
+    - name: Create checksum for installed pip requirements
+      shell: 'cp vikings/tmp/pip.req.new vikings/tmp/pip.req.installed'
+
+    - name: Create checksum for installed npm requirements
+      shell: 'cp vikings/tmp/npm.req.new vikings/tmp/npm.req.installed'
+
+    - name: Start Supervisor
+      shell: >
+        executable=/bin/zsh
+        ~/.virtualenvs/vikings/bin/supervisord -c vikings/server/supervisord.conf
+      when: not supervisor_socket.stat.exists
+      register: supervisord_started
+
+    - name: Restart Supervisor
+      supervisorctl:
+        name=web
+        state=restarted
+        config=vikings/server/supervisord.conf
+        supervisorctl_path=.virtualenvs/vikings/bin/supervisorctl
