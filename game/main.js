@@ -122,7 +122,7 @@ Game.prototype.start = function () {
     states.push(this.generateState());
 
     // Write results to some json file
-    var battleID = uuid.v4().split('-')[4]
+    var battleID = uuid.v4().split('-')[4];
     var jsonFileName = utils.getBattleFile(battleID);
     var winner = this.getWinner();
     winner = winner ? winner.number : null;

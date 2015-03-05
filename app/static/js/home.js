@@ -8,7 +8,7 @@
         domArmies = $('#armies li'),
         armyColors = ['blue', 'red'],
         myArmy = localStorage.getItem('myArmy'),
-        scope;
+        scope, inPause = false;
 
     function initApp() {
         if (myArmy) {
@@ -47,7 +47,15 @@
         rivets.bind(app, scope);
     }
     scope = {
-        title: 'Random Fight',
+        view: (function() {
+            if (location.pathname === '/') {
+                return 'home';
+            }
+            else if (location.pathname.search('battle') === 1) {
+                return 'battle';
+            }
+        }()),
+        locationOrigin: location.origin,
         gameSpeed: 500,
         today: moment().format('DD-MM-YY'),
         selectedArmies: myArmy ? [{id: myArmy, name: myArmy}] : [],
@@ -58,14 +66,39 @@
                 name: el.getAttribute('data-army-name')
             };
         }),
-        speedToggle: function() {
-            scope.gameSpeed = scope.gameSpeed === 500 ? 100 : 500;
+        player: {
+            play: function() {
+                scope.gameSpeed = 500;
+                if (inPause) {
+                    global.nextTurn();
+                    inPause = false;
+                }
+            },
+            forward: function() {
+                scope.gameSpeed = 100;
+                if (inPause) {
+                    global.nextTurn();
+                    inPause = false;
+                }
+            },
+            pause: function() {
+                scope.gameSpeed = 0;
+                inPause = true;
+            },
+            stepForward: function(e) {
+                if (!inPause) return;
+                global.nextTurn();
+                // blink animation
+                var t = $(e.target);
+                t.addClass('active');
+                setTimeout(function() {
+                    t.removeClass('active');
+                }, 100);
+            }
         },
         playGame: function() {
             if (scope.selectedArmies.length < 2) {
                 scope.selectedArmies = _.sample(scope.armies, 2);
-                scope.title = scope.selectedArmies[0].name + ' -vs- ' +
-                    scope.selectedArmies[1].name;
             }
             engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
         },
@@ -99,9 +132,6 @@
             if (armies.length === 3) {
                 armies.shift();
             }
-            if (armies.length === 2) {
-                scope.title = armies[0].name + ' -vs- ' + armies[1].name;
-            }
             domArmies.each(function(i, el) {
                 $(el).find('a').removeClass('active red blue');
             });
@@ -109,9 +139,6 @@
                 $('#armies li[data-army-name="' + army.name + '"] a')
                     .addClass('active ' + armyColors[i]);
             });
-        },
-        toggleDebug: function () {
-            scope.debugMode = !scope.debugMode;
         }
     };
     global.scope = scope;
