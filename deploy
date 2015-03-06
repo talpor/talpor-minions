@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+`which ansible-playbook` -i playbooks/inventory playbooks/deploy_web.yml
