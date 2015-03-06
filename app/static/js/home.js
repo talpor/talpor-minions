@@ -103,7 +103,7 @@
             engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
         },
         debugStep: function(e) {
-            if (e.which == 32 && scope.debugMode) {
+            if (e.which === 32 && scope.gameSpeed === 0) {
                 e.preventDefault();
                 global.nextTurn();
             }
