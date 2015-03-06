@@ -108,6 +108,12 @@
                 global.nextTurn();
             }
         },
+        advanceTo: function(e) {
+            var values = scope.gameProgress.match(/\d+/g);
+            console.log(Math.round(e.offsetX*values[1]/440));
+            return Math.round(e.offsetX*values[1]/440);
+
+        },
         submitFile: function(event) {
             var target = event.target,
                 form = target.parentNode.parentNode;
