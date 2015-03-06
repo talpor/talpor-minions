@@ -48,7 +48,7 @@ def run_game(agent1_name, agent2_name):
 # -----------------------------------------------------------------------------
 
 @app.route('/')
-@app.route('/battle/<battle_id>')
+@app.route('/battle/<battle_id>/')
 def home(battle_id=None):
     """Returns main battle page.
 
@@ -85,7 +85,7 @@ def home(battle_id=None):
     return render_template('home.html', armies=armies)
 
 
-@app.route('/new-agent', methods=['POST'])
+@app.route('/new-agent/', methods=['POST'])
 def new_agent():
     file = request.files['file']
     if file:
@@ -96,7 +96,7 @@ def new_agent():
     return redirect(url_for('home'))
 
 
-@app.route('/play/<p1>/<p2>')
+@app.route('/play/<p1>/<p2>/')
 def play(p1, p2):
     """Play the game.
 
