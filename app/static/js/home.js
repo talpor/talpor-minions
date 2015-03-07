@@ -34,12 +34,19 @@
                     $('html, body').animate({
                         scrollTop: stage.offset().top
                     }, 700);
+                    if (scope.selectedArmies.length < 2) {
+                        scope.selectedArmies = _.sample(scope.armies, 2);
+                    }
+                    engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
                 });
             }
             else {
+                engine.stop();
+                scope.result = {};
+                scope.gameSpeed = 500;
+                scope.selectedArmies = myArmy ? [{id: myArmy, name: myArmy}] : [];
                 stage.animate({height: '300px'}, 300, function() {
                     cover.fadeIn(function() {
-                        //clearStage();
                     });
                 });
             }
@@ -66,6 +73,7 @@
                 name: el.getAttribute('data-army-name')
             };
         }),
+        result: {},
         player: {
             play: function() {
                 scope.gameSpeed = 500;
@@ -73,6 +81,9 @@
                     global.nextTurn();
                     inPause = false;
                 }
+            },
+            stop: function() {
+                scope.playing = false;
             },
             forward: function() {
                 scope.gameSpeed = 100;
@@ -97,10 +108,7 @@
             }
         },
         playGame: function() {
-            if (scope.selectedArmies.length < 2) {
-                scope.selectedArmies = _.sample(scope.armies, 2);
-            }
-            engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
+            scope.playing = true;
         },
         debugStep: function(e) {
             if (e.which === 32 && scope.gameSpeed === 0) {

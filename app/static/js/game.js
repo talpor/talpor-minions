@@ -4,9 +4,19 @@
     'use strict';
     var stateIndex = 0;
 
+    function stopEngine() {
+        stateIndex = 0;
+        vikingCraft.clean();
+        baseCraft.clean();
+    }
+
     var initEngine = function (gameUrl) {
+        var isLoaded = Boolean(Crafty.assets['/static/img/fire.png']);
         global.scope.playing = true;
-        Crafty.init(global.BOX_SIZE*20, global.BOX_SIZE*20);
+
+        if (!isLoaded) {
+            Crafty.init(global.BOX_SIZE*20, global.BOX_SIZE*20);
+        }
         $('#cr-stage').css({'height': '300px'});
         $('#cr-stage').slideDown();
 
@@ -15,11 +25,16 @@
 
             initBases(global.states[stateIndex]);
             initVikings(global.states[stateIndex]);
+            global.animationsRunning = 0;
             renderAction();
         });
 
         //the loading screen that will display while our assets load
         Crafty.scene('loading', function() {
+            if (isLoaded) {
+                initGame(gameUrl);
+                return;
+            }
             Crafty.load(
                 [
                     '/static/img/chavestias.png',
@@ -37,7 +52,7 @@
 
             // black background with some loading text
             Crafty.background('#000');
-            Crafty.e('2D, DOM, Text').attr({w: 100, h: 20, x: 150, y: 120})
+            Crafty.e('2D, DOM, Text').attr({w: 100, h: 20, x: 250, y: 120})
                 .text('Loading')
                 .css({'text-align': 'center'});
         });
@@ -63,14 +78,12 @@
                     var game = JSON.parse(
                         LZString.decompressFromUTF16(gzippedGame)
                     );
-
-                    //console.log(game.id, game.winner, game.players[0].agent, game.players[1].agent);
-                    global.scope.result = {
+                    _.extend(global.scope.result, {
                         id: game.id,
                         winner: game.winner,
                         player0: game.players[0],
                         player1: game.players[1]
-                    };
+                    });
 
                     global.states = game.states;
                     global.winner = game.winner;
@@ -197,8 +210,6 @@
             }
         });
     };
-
-    function stopEngine() {}
 
     global.onAnimationEnds = onAnimationEnds;
     global.engine = {

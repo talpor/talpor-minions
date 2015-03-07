@@ -179,7 +179,6 @@
 
         });
 
-
         player.id = vikingId;
         player.owner = playerNumber;
 

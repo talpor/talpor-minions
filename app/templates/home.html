@@ -35,8 +35,11 @@
         <div class="row">
             <div class="col-md-7 col-md-offset-1 main-battle">
                 <div rv-play-game="playing">
-                    <h2 rv-unless="result">Random Fight</h2>
-                    <h2 rv-if="result"><span class="blue"></span>{ result.player0.agent } -vs- <span class="red"></span>{ result.player1.agent }</h2>
+                    <h2 rv-hide="result.player1">Random Fight</h2>
+                    <h2 rv-show="result.player1">
+                        <span class="blue"></span>{ result.player0.agent } -vs- <span class="red"></span>{ result.player1.agent }
+                        <span class="glyphicon glyphicon-remove-sign" aria-hidden="true" rv-on-click="player.stop">    
+                    </h2>
                     <div id="cr-stage">
                         <div id="frontCover" rv-if="view | inHome" rv-on-click="playGame">
                             <span class="glyphicon glyphicon-play-circle" aria-hidden="true">
