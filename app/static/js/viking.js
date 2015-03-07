@@ -186,6 +186,14 @@
         global.vikings[vikingId] = player;
     }
 
+    function removeVikings() {
+        for (var key in global.vikings) {
+            global.vikings[key].hpBarBkgd.destroy();
+            global.vikings[key].hpBar.destroy();
+            global.vikings[key].destroy();
+        }
+    }
+
     function moveViking(viking, direction){
         global.animationsRunning++;
         viking.bind('AnimationEnd', global.onAnimationEnds);
@@ -275,6 +283,7 @@
         add: addViking,
         move: moveViking,
         attack: attackViking,
-        setWinner: winner
+        setWinner: winner,
+        clean: removeVikings
     };
 })(window);

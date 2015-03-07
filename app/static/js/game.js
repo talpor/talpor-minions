@@ -12,11 +12,9 @@
 
         Crafty.scene('main', function() {
             Crafty.background('url("/static/img/bg.png")');
-            baseCraft.add(1, 'blueHome', 15, 15);
-            baseCraft.add(2, 'redHome', (30*17-15), (30*17-15));
 
-            initBases(global.states[0]);
-            initVikings(global.states[0]);
+            initBases(global.states[stateIndex]);
+            initVikings(global.states[stateIndex]);
             renderAction();
         });
 
@@ -112,8 +110,8 @@
             global.bases[1].hp = state.bases[1];
             global.bases[2].hp = state.bases[2];
         }
-        var idles = 0;
-        var vikings = 0;
+        var idles = 0,
+            vikings = 0;
         for (var vikingkey in state.units) {
             global.vikings[vikingkey].hp = state.units[vikingkey].hp;
             var viking = state.units[vikingkey],
@@ -159,6 +157,8 @@
     global.nextTurn = renderAction.bind(null, null, true);
 
     function initBases(state0){
+        baseCraft.add(1, 'blueHome', 15, 15);
+        baseCraft.add(2, 'redHome', (30*17-15), (30*17-15));
         global.bases[1]._baseHP = state0.bases[1];
         global.bases[2]._baseHP = state0.bases[2];
     }
@@ -203,7 +203,22 @@
     global.onAnimationEnds = onAnimationEnds;
     global.engine = {
         init: initEngine,
-        stop: stopEngine
+        stop: stopEngine,
+        goToState: function(state) {
+            if (isNaN(Number(state))) return;
+            var currentSpeed = global.scope.gameSpeed;
+            global.scope.gameSpeed = 0;
+
+            vikingCraft.clean();
+            baseCraft.clean();
+            stateIndex = Number(state);
+            initBases(global.states[stateIndex]);
+            initVikings(global.states[stateIndex]);
+
+            global.animationsRunning = 0;
+            global.scope.gameSpeed = currentSpeed;
+            renderAction(null, true);
+        }
     };
 
 }(window, window.vikingCraft, window.baseCraft));

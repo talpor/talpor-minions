@@ -109,9 +109,9 @@
             }
         },
         advanceTo: function(e) {
-            var values = scope.gameProgress.match(/\d+/g);
-            console.log(Math.round(e.offsetX*values[1]/440));
-            return Math.round(e.offsetX*values[1]/440);
+            var values = scope.gameProgress.match(/\d+/g),
+                selectedState = Math.round(e.offsetX*values[1]/440);
+            engine.goToState(selectedState);
 
         },
         submitFile: function(event) {

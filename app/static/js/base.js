@@ -3,7 +3,7 @@
 (function(global) {
     'use strict';
 
-    function addBase(baseId, playerBase, xPosition, yPosition){
+    function addBase(baseId, playerBase, xPosition, yPosition) {
         // create our player entity with some premade components
         var base = Crafty.e('2D, Canvas, ' + playerBase +
                               ', SpriteAnimation, Collision')
@@ -16,16 +16,15 @@
                 });
 
         var barBaseWidth =  global.BOX_SIZE*3*(4/5);
-        base.hpBarBkgd = Crafty.e("2D, Canvas, Color")
-             .color("white")
+        base.hpBarBkgd = Crafty.e('2D, Canvas, Color')
+             .color('white')
              .attr({z:10, x: base.x-1+global.BOX_SIZE/4, y: base.y-1, w: barBaseWidth+2, h: global.BOX_SIZE/10+2});
 
-        base.hpBar = Crafty.e("2D, Canvas, Color")
-             .color("green")
+        base.hpBar = Crafty.e('2D, Canvas, Color')
+             .color('green')
              .attr({z:11, x: base.x+global.BOX_SIZE/4, y: base.y, w: barBaseWidth, h: global.BOX_SIZE/10});
 
-
-        var fire =  Crafty.e('2D, Canvas, fire, SpriteAnimation, Collision')
+        base.fire = Crafty.e('2D, Canvas, fire, SpriteAnimation, Collision')
                 .attr({
                     w: 0,
                     h: 0,
@@ -35,16 +34,16 @@
                     alpha: 0
                 }).animate('burning', [[0,0], [1,0], [2,0], [0,0]])
                .bind('EnterFrame', function() {
-                    fire.animate('burning', 1);
+                    base.fire.animate('burning', 1);
                });
-            fire.animationSpeed = 0.005;
+            base.fire.animationSpeed = 0.005;
 
-            fire.hp = 96;
-            fire._baseHP = 96;
-            fire._defaultX = xPosition;
-            fire._defaultY = yPosition;
+            base.fire.hp = 96;
+            base.fire._baseHP = 96;
+            base.fire._defaultX = xPosition;
+            base.fire._defaultY = yPosition;
 
-            fire.bind('EnterFrame', function() {
+            base.fire.bind('EnterFrame', function() {
                 base.hpBar.w = barBaseWidth*(base.hp/base._baseHP);
                            // console.log(base.hp, base._baseHP);
                 if(base.hp / base._baseHP < 0.3){
@@ -108,15 +107,14 @@
                 }).bind('EnterFrame', function() {
                     if (base.alpha > 0.01 ){
                         base.alpha -= 0.02;
-                        fire.alpha -= 0.02;
+                        base.fire.alpha -= 0.02;
                         player.hpBarBkgd.alpha -= 0.02;
 
                     } else {
                         base.alpha = 0;
-                        fire.alpha = 0;
+                        base.fire.alpha = 0;
                     }
                 })
-
                 .animate('kaboom', [[0,0], [1,0], [2,0], [3,0], [4,0], 
                                     [0,1], [1,1], [2,1], [3,1], [4,1],
                                     [0,2], [1,2], [2,2], [3,2], [4,2],
@@ -130,7 +128,20 @@
 
         global.bases[baseId] = base;
     }
+
+    function removeBases() {
+        for (var key in global.bases) {
+            global.bases[key].hpBarBkgd.destroy();
+            global.bases[key].hpBar.destroy();
+            if (global.bases[key].fire) {
+                global.bases[key].fire.destroy();
+            }
+            global.bases[key].destroy();
+        }
+    }
+
     global.baseCraft = {
         add: addBase,
+        clean: removeBases
     };
 })(window);

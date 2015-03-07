@@ -4,10 +4,6 @@ rivets.formatters.not = function(value) {
     return !value;
 };
 
-rivets.formatters.onoff = function(value) {
-  return value ? 'On' : 'Off';
-};
-
 rivets.formatters.isHundred = function(value) {
   return value === 100;
 };
