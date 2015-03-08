@@ -45,6 +45,37 @@ Unit.prototype.isDead = function () {
 };
 
 
+
+/**
+ * Child Unit
+ * ----------------------------------------------------------------------------
+ */
+
+ function ChildUnit(unit, x, y) {
+    this.id = pkAutoIncrement++;
+    this.x = x;
+    this.y = y;
+
+    var getValue = function(key) {
+        return this[key];
+    };
+
+    for (var key in unit) {
+        if (key !== 'id' && key !== 'x' && key !== 'y') {
+            if (typeof unit[key] === 'function') {
+                this[key] = unit[key].bind(unit);
+            }
+            else {
+                Object.defineProperty(this, key, {
+                    get: getValue.bind(unit, key),
+                    enumerable: true
+                });
+            }
+        }
+    }
+}
+ChildUnit.prototype.constructor = ChildUnit;
+
 /**
  * Attacking Unit
  * ----------------------------------------------------------------------------
@@ -73,5 +104,6 @@ AttackUnit.prototype.doDamage = function () {
 
 module.exports = {
     Unit: Unit,
-    AttackUnit: AttackUnit
+    AttackUnit: AttackUnit,
+    ChildUnit: ChildUnit
 };

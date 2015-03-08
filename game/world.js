@@ -1,6 +1,8 @@
-var _ = require("lodash");
+/* global require */
 
-var config = require('./config');
+var _ = require('lodash'),
+    config = require('./config'),
+    ChildUnit = require('./units/base').ChildUnit;
 
 
 function World(size) {
@@ -37,9 +39,16 @@ World.prototype.safeClone = function () {
 };
 
 
-World.prototype.addUnit = function (unitConstructor, x, y, options) {
+World.prototype.addUnit = function (UnitConstructor, x, y, options) {
     if (x < 0 || x >= config.worldSize || y < 0 || y >= config.worldSize) return null;
-    this.array[x][y] = new unitConstructor(x, y, options);
+    this.array[x][y] = new UnitConstructor(x, y, options);
+
+    if (UnitConstructor.prototype.constructor.name === 'Base') {
+        this.array[x+1][y] = new ChildUnit(this.array[x][y], x+1, y);
+        this.array[x][y+1] = new ChildUnit(this.array[x][y], x, y+1);
+        this.array[x+1][y+1] = new ChildUnit(this.array[x][y], x+1, y+1);
+    }
+
     return this.array[x][y];
 };
 
