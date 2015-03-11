@@ -12,7 +12,6 @@
 
     var initEngine = function (gameUrl) {
         var isLoaded = Boolean(Crafty.assets['/static/img/fire.png']);
-        global.scope.playing = true;
 
         if (!isLoaded) {
             Crafty.init(global.BOX_SIZE*20, global.BOX_SIZE*20);

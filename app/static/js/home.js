@@ -8,7 +8,7 @@
         domArmies = $('#armies li'),
         armyColors = ['blue', 'red'],
         myArmy = localStorage.getItem('myArmy'),
-        scope, inPause = false;
+        scope, inPause = false, gameUrl;
 
     function initApp() {
         if (myArmy) {
@@ -23,8 +23,10 @@
         }, 300);
 
         // If current location points to a battle, lets load it!
-        if (window.location.pathname.match(/^\/battle\/[a-z0-9]+\/?$/))
-            engine.init(window.location.pathname);
+        if (window.location.pathname.match(/^\/battle\/[a-z0-9]+\/?$/)) {
+            gameUrl = window.location.pathname;
+            scope.playing = true;
+        }
     }
     function initRivets() {
         rivets.binders['play-game'] = function(el, playing) {
@@ -37,7 +39,8 @@
                     if (scope.selectedArmies.length < 2) {
                         scope.selectedArmies = _.sample(scope.armies, 2);
                     }
-                    engine.init('/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
+                    engine.init(gameUrl || '/play/' + scope.selectedArmies[0].id + '/' + scope.selectedArmies[1].id);
+                    gameUrl = null;
                 });
             }
             else {
